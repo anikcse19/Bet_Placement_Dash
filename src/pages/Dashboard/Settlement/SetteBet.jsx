@@ -5,6 +5,8 @@ import { baseUrl } from "../../../../config";
 import Cookies from "js-cookie";
 import { Circles } from "react-loader-spinner";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { AiFillEdit } from "react-icons/ai";
+import axios from "axios";
 
 const SetteBet = () => {
   const [pageNo, setPagNo] = useState(1);
@@ -16,8 +18,26 @@ const SetteBet = () => {
     status: false,
     value: {},
   });
-
+  const [searchEventName, setSearchEventName] = useState("");
+  const [searchEventId, setSearchEventId] = useState("");
+  const [searchSelectionName, setSearchSelectionName] = useState("");
+  const [selectSportType, setSelectSportType] = useState("");
+  const [isBetPlaceLoading, setIsBetPlaceLoading] = useState(false);
+  const [actionModalOpen, setActionModalOpen] = useState({
+    status: false,
+    value: {},
+  });
+  const [isRefundYesChecked, setIsRefundYesChecked] = useState(false);
+  const [isRefundNoChecked, setIsRefundNoChecked] = useState(true);
+  const [isWinYesChecked, setIsWinYesChecked] = useState(true);
+  const [isWinNoChecked, setIsWinNoChecked] = useState(false);
+  const [isRefund, setIsRefund] = useState("no");
+  // const [isWin, setIsWin] = useState("yes");
+  const [result, setResult] = useState("");
+  const [OTP, setOTP] = useState(0);
+  const [isOTPSent, setIsOTPSent] = useState(false);
   const token = Cookies.get("token");
+
   const fetchUnSettledBets = async () => {
     try {
       const response = await fetch(
@@ -61,6 +81,149 @@ const SetteBet = () => {
   useEffect(() => {
     fetchUnSettledBets();
   }, [pageNo]);
+
+  const handleYesChange = () => {
+    setIsRefundYesChecked(true);
+    setIsRefundNoChecked(false);
+    setIsRefund("yes");
+  };
+
+  const handleNoChange = () => {
+    setIsRefundYesChecked(false);
+    setIsRefundNoChecked(true);
+    setIsRefund("no");
+  };
+
+  const handleWinYesChange = () => {
+    setIsWinYesChecked(true);
+    setIsWinNoChecked(false);
+    // setIsWin("yes");
+    setResult("yes");
+  };
+
+  const handleWinNoChange = () => {
+    setIsWinYesChecked(false);
+    setIsWinNoChecked(true);
+    // setIsWin("no");
+    setResult("no");
+  };
+  const handleSendOTP = async () => {
+    await axios
+      .get(`${baseUrl}/api/admin/send-otp`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+
+        if (res?.data?.status) {
+          // console.log("asce");
+          toast.success("Successfully sent the OTP. Please check your device.");
+          setIsOTPSent(true);
+        }
+      });
+  };
+
+  const handleDoSettle = async () => {
+    setIsBetPlaceLoading(true);
+    const betData = {
+      eventId: actionModalOpen.value.eventId,
+      marketId: actionModalOpen.value.marketId,
+      selectionName: actionModalOpen.value.selectionName
+        ? actionModalOpen.value.selectionName
+        : actionModalOpen.value.eventTitle,
+      isRefund: isRefund,
+      type: actionModalOpen?.value?.type,
+      gtype:
+        actionModalOpen?.value?.type === "Fancy"
+          ? actionModalOpen?.value?.gtype
+          : null,
+      result: isRefund === "yes" ? null : result,
+      otp: isRefund === "yes" && OTP,
+    };
+
+    // const response = await fetch(`${baseUrl}/api/admin/do-settle`, {
+    //   method: "POST",
+    //   body: JSON.stringify(betData),
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // });
+
+    // const data = await response.json();
+
+    try {
+      await axios
+        .post(`${baseUrl}/api/admin/do-settle`, betData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          if (res?.data?.status) {
+            toast.success("Successfull");
+
+            setActionModalOpen({
+              status: false,
+              value: {},
+            });
+            fetchUnSettledBets();
+          }
+        });
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setIsBetPlaceLoading(false);
+      setResult("");
+      setIsRefund("no");
+      setOTP(0);
+      setIsOTPSent(false);
+      setIsRefundYesChecked(false);
+      setIsRefundNoChecked(true);
+      setIsWinYesChecked(true);
+      setIsWinNoChecked(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    setIsLoading(true);
+    // Build the query string based on non-empty search inputs
+    const queryParams = new URLSearchParams();
+
+    if (searchEventName) queryParams.append("marketId", searchEventName);
+    if (searchEventId) queryParams.append("eventId", searchEventId);
+    if (searchSelectionName)
+      queryParams.append("selectionName", searchSelectionName);
+    if (selectSportType) queryParams.append("sport", selectSportType);
+
+    try {
+      const response = await fetch(
+        `${baseUrl}/api/admin/get-settle-list?page=${pageNo}&${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (data?.status) {
+        setSettleBetList(data?.data?.data);
+        setPages(data?.data?.links);
+        setLastPage(data?.data?.last_page);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="relative w-full h-full pt-6">
@@ -70,13 +233,69 @@ const SetteBet = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-3">
-          <input
-            // onChange={(e) => setSearchValue(e.target.value)}
-            type="text"
-            placeholder="Search Event Name"
-            className=" w-52 px-2 py-2 text-sm rounded-md outline-none border-2 border-black focus:border-teal-500"
-          />
+        <div className="mt-5 flex items-center gap-x-2">
+          <p>Search:</p>
+          <div className="flex items-center gap-x-4">
+            <input
+              onChange={(e) => setSearchEventName(e.target.value)}
+              value={searchEventName}
+              type="text"
+              placeholder="Search Market Id"
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+            />
+            <input
+              onChange={(e) => setSearchEventId(e.target.value)}
+              value={searchEventId}
+              type="text"
+              placeholder="Search Event Id"
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+            />
+            <input
+              onChange={(e) => setSearchSelectionName(e.target.value)}
+              value={searchSelectionName}
+              type="text"
+              placeholder="Search Selection Name"
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+            />
+            <select
+              onChange={(e) => setSelectSportType(e.target.value)}
+              value={selectSportType}
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
+            >
+              <option value="">All</option>
+              <option value="cricket">Cricket</option>
+              <option value="soccer">Soccer</option>
+              <option value="tennis">Tennis</option>
+            </select>
+
+            <p
+              style={{
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
+              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+              onClick={handleSearch}
+            >
+              Get Bets
+            </p>
+
+            <p
+              style={{
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
+              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+              onClick={() => {
+                setSearchEventName("");
+                setSearchEventId("");
+                setSearchSelectionName("");
+                setSelectSportType("");
+                fetchUnSettledBets();
+              }}
+            >
+              Clear Filter
+            </p>
+          </div>
         </div>
         {/* users table */}
         <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
@@ -150,7 +369,16 @@ const SetteBet = () => {
                     <td className="px-6 py-4 text-center text-xs">
                       {bet?.type}
                     </td>
-                    <td className="px-6 py-4 text-center text-xl"></td>
+                    <td className="px-6 py-4 text-center text-xl">
+                      <AiFillEdit
+                        onClick={() => {
+                          setActionModalOpen({
+                            status: true,
+                            value: bet,
+                          });
+                        }}
+                      />
+                    </td>
                     <td
                       onClick={() =>
                         setInfoModalOpen({
@@ -264,6 +492,241 @@ const SetteBet = () => {
                       : "-"}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* action modal */}
+        {actionModalOpen.status && (
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setActionModalOpen({ status: false, value: {} });
+              }
+            }}
+            className="w-full min-h-[100vh] bg-black bg-opacity-80 fixed top-0 right-0 flex justify-center items-center cursor-pointer"
+          >
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              className="w-[400px] h-fit pb-5 bg-white rounded"
+            >
+              <div className="py-4 px-3 flex justify-between items-center rounded bg-gray-300 text-black">
+                <p>Resettle Bet</p>
+                <p
+                  onClick={() =>
+                    setActionModalOpen({ status: false, value: {} })
+                  }
+                  className="bg-red-500 hover:bg-red-600 transition-all duration-300 ease-in px-3 py-1 rounded-md cursor-pointer text-white"
+                >
+                  Close
+                </p>
+              </div>
+
+              <div className="mt-3 px-3 flex flex-col gap-y-4 ">
+                {/* selection name */}
+                <div className="flex flex-col justify-between gap-2">
+                  <label htmlFor="username" className="text-black">
+                    Selection Name
+                  </label>
+                  <input
+                    // onChange={(e) => setAmount(e.target.value)}
+                    value={actionModalOpen?.value?.selectionName}
+                    type="text"
+                    className="border border-gray-700 w-[95%] px-5 py-2  rounded-md"
+                    placeholder="Selection Name"
+                  />
+                </div>
+                {/* refund */}
+                <div className="flex flex-col justify-between gap-1">
+                  <label
+                    htmlFor="refund"
+                    className="text-black text-sm tracking-wider"
+                  >
+                    Refund
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <input
+                        onChange={handleYesChange}
+                        className="w-3 h-3 rounded-md cursor-pointer"
+                        type="checkbox"
+                        name=""
+                        id=""
+                        checked={isRefundYesChecked}
+                      />
+                      <p>Yes</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        onChange={handleNoChange}
+                        className="w-3 h-3 rounded-md cursor-pointer"
+                        type="checkbox"
+                        name=""
+                        id=""
+                        checked={isRefundNoChecked}
+                      />
+                      <p>No</p>
+                    </div>
+                  </div>
+                </div>
+
+                {isRefund === "yes" ? (
+                  isOTPSent ? (
+                    <div className="flex flex-col justify-between gap-2">
+                      <label htmlFor="otp" className="text-black">
+                        Enter OTP
+                        <p className="text-red-500 font-bold inline">*</p>
+                      </label>
+                      <div className="bg-white flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md">
+                        <input
+                          onChange={(e) => setOTP(parseInt(e.target.value))}
+                          type="text"
+                          className="flex-grow outline-none"
+                          placeholder="Enter OTP"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col justify-between gap-2">
+                      <label htmlFor="otp" className="text-black">
+                        Send OTP
+                        <p className="text-red-500 font-bold inline">*</p>
+                      </label>
+                      <div className="bg-white flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md">
+                        <input
+                          // onChange={(e) => setOTP(parseInt(e.target.value))}
+                          type="text"
+                          className="flex-grow outline-none"
+                          placeholder=""
+                        />
+                        <p
+                          onClick={handleSendOTP}
+                          className="bg-purple-600 px-3 py-1 rounded-md text-white"
+                        >
+                          Send
+                        </p>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <div className="flex flex-col gap-y-4">
+                    {actionModalOpen.value.type === "Fancy" ? (
+                      actionModalOpen.value.gtype === "session" ? (
+                        <div className="flex flex-col justify-between gap-2">
+                          <label
+                            htmlFor="run_or_wickets"
+                            className="text-black"
+                          >
+                            Run or Wickets
+                            <p className="inline text-red-500">*</p>
+                          </label>
+                          <input
+                            type="text"
+                            onChange={(e) =>
+                              setResult(parseInt(e.target.value))
+                            }
+                            className="border border-gray-700 w-[95%] px-5 py-2 rounded-md"
+                            placeholder="Enter Runs or Wickets"
+                          />
+                        </div>
+                      ) : actionModalOpen.value.gtype === "oddeven" ||
+                        actionModalOpen.value.gtype === "fancy1" ? (
+                        <div className="flex flex-col justify-between gap-1 mt-2">
+                          <label
+                            htmlFor="refund"
+                            className="text-black tracking-wider"
+                          >
+                            IsWon?
+                          </label>
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                              <input
+                                onChange={handleWinYesChange}
+                                className="w-3 h-3 rounded-md cursor-pointer"
+                                type="checkbox"
+                                name="isWonYes"
+                                id="isWonYes"
+                                checked={isWinYesChecked}
+                              />
+                              <p>Yes</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <input
+                                onChange={handleWinNoChange}
+                                className="w-3 h-3 rounded-md cursor-pointer"
+                                type="checkbox"
+                                name="isWonNo"
+                                id="isWonNo"
+                                checked={isWinNoChecked}
+                              />
+                              <p>No</p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : null
+                    ) : null}
+
+                    {(actionModalOpen.value.type === "Match Odds" ||
+                      actionModalOpen.value.type === "Sports Book" ||
+                      actionModalOpen.value.type === "Bookmaker") && (
+                      <div className="flex flex-col justify-between gap-2">
+                        <label
+                          htmlFor="winner_team"
+                          className="text-black text-sm tracking-wider"
+                        >
+                          Select Winner Team
+                        </label>
+                        <select
+                          onChange={(e) => setResult(parseInt(e.target.value))}
+                          className="border border-gray-700 w-[95%] px-5 py-2 rounded-md"
+                          placeholder="Enter amount"
+                        >
+                          <option value="">Select Winner</option>
+                          {actionModalOpen.value.teams.map((team) => (
+                            <option key={team?._id} value={team._id}>
+                              {team.name}
+                            </option>
+                          ))}
+                          {/* <option value={actionModalOpen?.value?.teams[0].name}>
+                            {actionModalOpen?.value?.teams[0].name}
+                          </option>
+                          <option value={actionModalOpen?.value?.teams[1].name}>
+                            {actionModalOpen?.value?.teams[1].name}
+                          </option>
+                          {actionModalOpen.value?.sport === "soccer" && (
+                            <option value="draw">Draw</option>
+                          )} */}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-10 flex justify-center items-center gap-x-5">
+                <button
+                  onClick={handleDoSettle}
+                  className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
+                >
+                  {isBetPlaceLoading ? (
+                    <p className="text-white font-bold text-lg">Loading..</p>
+                  ) : isOTPSent ? (
+                    <p>Refund</p>
+                  ) : (
+                    <p>Submit</p>
+                  )}
+                </button>
+                <button
+                  onClick={() =>
+                    setActionModalOpen({ status: false, value: {} })
+                  }
+                  className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

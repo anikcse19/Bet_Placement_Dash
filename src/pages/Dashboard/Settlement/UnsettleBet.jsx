@@ -10,6 +10,7 @@ import axios from "axios";
 
 const UnsettleBet = () => {
   const [unSettleBets, setUnSettleBets] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isBetPlaceLoading, setIsBetPlaceLoading] = useState(false);
   const [actionModalOpen, setActionModalOpen] = useState({
@@ -28,6 +29,10 @@ const UnsettleBet = () => {
   const [result, setResult] = useState("");
   const [OTP, setOTP] = useState(0);
   const [isOTPSent, setIsOTPSent] = useState(false);
+  const [searchEventName, setSearchEventName] = useState("");
+  const [searchEventId, setSearchEventId] = useState("");
+  const [searchSelectionName, setSearchSelectionName] = useState("");
+  const [selectSportType, setSelectSportType] = useState("");
 
   const token = Cookies.get("token");
 
@@ -100,7 +105,6 @@ const UnsettleBet = () => {
     return localDate;
   };
 
-  console.log(result, "re");
   const handleSendOTP = async () => {
     await axios
       .get(`${baseUrl}/api/admin/send-otp`, {
@@ -120,8 +124,6 @@ const UnsettleBet = () => {
   };
 
   const handleDoSettle = async () => {
-    console.log("reslt in act", result);
-
     setIsBetPlaceLoading(true);
     const betData = {
       eventId: actionModalOpen.value.eventId,
@@ -149,8 +151,6 @@ const UnsettleBet = () => {
 
     // const data = await response.json();
 
-    console.log(betData, "result data");
-
     try {
       await axios
         .post(`${baseUrl}/api/admin/do-settle`, betData, {
@@ -163,10 +163,12 @@ const UnsettleBet = () => {
         .then((res) => {
           if (res?.data?.status) {
             toast.success("Successfull");
+
             setActionModalOpen({
               status: false,
               value: {},
             });
+            fetchUnSettledBets();
           }
         });
     } catch (error) {
@@ -183,6 +185,41 @@ const UnsettleBet = () => {
       setIsWinNoChecked(false);
     }
   };
+  const handleSearch = async () => {
+    setIsLoading(true);
+    // Build the query string based on non-empty search inputs
+    const queryParams = new URLSearchParams();
+
+    if (searchEventName) queryParams.append("marketId", searchEventName);
+    if (searchEventId) queryParams.append("eventId", searchEventId);
+    if (searchSelectionName)
+      queryParams.append("selectionName", searchSelectionName);
+    if (selectSportType) queryParams.append("sport", selectSportType);
+
+    try {
+      const response = await fetch(
+        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (data?.status) {
+        setUnSettleBets(data?.data?.data);
+        setPages(data?.data?.links);
+        setLastPage(data?.data?.last_page);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Layout>
@@ -193,14 +230,71 @@ const UnsettleBet = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-3">
-          <input
-            // onChange={(e) => setSearchValue(e.target.value)}
-            type="text"
-            placeholder="Search Event Name"
-            className=" w-52 px-2 py-2 text-sm rounded-md outline-none border-2 border-black focus:border-teal-500"
-          />
+        <div className="mt-5 flex items-center gap-x-2">
+          <p>Search:</p>
+          <div className="flex items-center gap-x-4">
+            <input
+              onChange={(e) => setSearchEventName(e.target.value)}
+              value={searchEventName}
+              type="text"
+              placeholder="Search Market Id"
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+            />
+            <input
+              onChange={(e) => setSearchEventId(e.target.value)}
+              value={searchEventId}
+              type="text"
+              placeholder="Search Event Id"
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+            />
+            <input
+              onChange={(e) => setSearchSelectionName(e.target.value)}
+              value={searchSelectionName}
+              type="text"
+              placeholder="Search Selection Name"
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+            />
+            <select
+              onChange={(e) => setSelectSportType(e.target.value)}
+              value={selectSportType}
+              className="w-52 px-3 py-2 text-sm rounded-sm outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
+            >
+              <option value="">All</option>
+              <option value="cricket">Cricket</option>
+              <option value="soccer">Soccer</option>
+              <option value="tennis">Tennis</option>
+            </select>
+
+            <p
+              style={{
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
+              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+              onClick={handleSearch}
+            >
+              Get Bets
+            </p>
+
+            <p
+              style={{
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
+              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+              onClick={() => {
+                setSearchEventName("");
+                setSearchEventId("");
+                setSearchSelectionName("");
+                setSelectSportType("");
+                fetchUnSettledBets();
+              }}
+            >
+              Clear Filter
+            </p>
+          </div>
         </div>
+
         {/* users table */}
         <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
           <table className="w-full text-sm text-left rtl:text-right text-white  ">
@@ -558,7 +652,7 @@ const UnsettleBet = () => {
                   className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
                 >
                   {isBetPlaceLoading ? (
-                    <p className="text-white font-bold text-2xl">Loading..</p>
+                    <p className="text-white font-bold text-lg">Loading..</p>
                   ) : isOTPSent ? (
                     <p>Refund</p>
                   ) : (

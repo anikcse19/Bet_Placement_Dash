@@ -5,6 +5,7 @@ import SetteBet from "../pages/Dashboard/Settlement/SetteBet";
 import UnsettleBet from "../pages/Dashboard/Settlement/UnsettleBet";
 import ResetPassowrdPage from "../pages/ResetPassowrdPage";
 import SetNewPasswordPage from "../pages/SetNewPasswordPage";
+import PrivateRoute from "./PrivateRoute";
 
 export const routes = createBrowserRouter([
   {
@@ -17,11 +18,19 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/dashboard/settlement/settle-bet",
-    element: <SetteBet />,
+    element: (
+      <PrivateRoute>
+        <SetteBet />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/dashboard/settlement/unsettle-bet",
-    element: <UnsettleBet />,
+    element: (
+      <PrivateRoute>
+        <UnsettleBet />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/reset-password",

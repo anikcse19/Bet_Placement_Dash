@@ -7,6 +7,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import toast from "react-hot-toast";
 import axios from "axios";
+import useStore from "../../../zustand/useStore";
 
 const UnsettleBet = () => {
   const [unSettleBets, setUnSettleBets] = useState([]);
@@ -35,6 +36,8 @@ const UnsettleBet = () => {
   const [selectSportType, setSelectSportType] = useState("");
 
   const token = Cookies.get("token");
+
+  const { mode } = useStore();
 
   const fetchUnSettledBets = async () => {
     try {
@@ -220,44 +223,51 @@ const UnsettleBet = () => {
       setIsLoading(false);
     }
   };
+  console.log(pageNo, "pg");
 
   return (
     <Layout>
       <div className="relative w-full h-full pt-6">
         <div className=" flex items-center justify-between">
-          <h1 className="text-xl text-rose-600 font-bold tracking-widest">
+          <h1
+            className={`text-xl  font-bold tracking-widest ${
+              mode === "light" ? "text-black" : "text-white"
+            }`}
+          >
             Unsettle Bets List
           </h1>
         </div>
         {/* search box */}
         <div className="mt-5 flex items-center gap-x-2">
-          <p>Search:</p>
+          <p className={mode === "light" ? "text-black" : "text-white"}>
+            Search:
+          </p>
           <div className="flex items-center gap-x-4">
             <input
               onChange={(e) => setSearchEventName(e.target.value)}
               value={searchEventName}
               type="text"
               placeholder="Search Market Id"
-              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
             />
             <input
               onChange={(e) => setSearchEventId(e.target.value)}
               value={searchEventId}
               type="text"
               placeholder="Search Event Id"
-              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
             />
             <input
               onChange={(e) => setSearchSelectionName(e.target.value)}
               value={searchSelectionName}
               type="text"
               placeholder="Search Selection Name"
-              className="w-52 px-3 py-2 text-sm rounded-sm outline-none border-2 border-slate-600 focus:border-teal-500"
+              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
             />
             <select
               onChange={(e) => setSelectSportType(e.target.value)}
               value={selectSportType}
-              className="w-52 px-3 py-2 text-sm rounded-sm outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
+              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent text-gray-600 outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
             >
               <option value="">All</option>
               <option value="cricket">Cricket</option>
@@ -297,31 +307,40 @@ const UnsettleBet = () => {
 
         {/* users table */}
         <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
-          <table className="w-full text-sm text-left rtl:text-right text-white  ">
-            <thead className="sticky top-0 text-xs text-black uppercase bg-red-50  border-b-2 border-t-2 border-black rounded-md">
+          <table className="w-full text-sm text-left rtl:text-right text-white  border-l-2 border-r-2 border-black">
+            <thead
+              className={`sticky top-0 text-xs  uppercase ${
+                mode === "light"
+                  ? "bg-blue-300 text-black"
+                  : "bg-black text-white"
+              }  border-b-2 border-t-2 border-black rounded-md`}
+            >
               <tr>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Sport
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Event Id
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
+                  Market Id
+                </th>
+                <th scope="col" className="px-6 py-3 text-left">
                   Market Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Event Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Selection Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Bet Type
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Action
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Info
                 </th>
               </tr>
@@ -344,30 +363,39 @@ const UnsettleBet = () => {
                   </td>
                 </tr>
               ) : (
-                unSettleBets.map((bet) => (
+                unSettleBets.map((bet, i) => (
                   <tr
                     key={bet.id}
-                    className="bg-red-50 hover:bg-red-200 text-sm cursor-pointer transition-all duration-500 ease-in text-black border-b-2 border-slate-700 "
+                    className={`${
+                      i % 2 == 0
+                        ? mode === "light"
+                          ? "bg-white text-black"
+                          : "bg-transparent text-white"
+                        : mode === "light"
+                        ? "bg-blue-100 text-black"
+                        : "bg-black text-white"
+                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
                   >
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.sport}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.eventId}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
+                      {bet?.marketId}
+                    </td>
+                    <td className="px-6 py-4 text-left text-xs">
                       {formateDate(bet?.marketDate)}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.eventTitle}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.selectionName ? bet?.selectionName : "--"}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
-                      {bet?.type}
-                    </td>
-                    <td className="px-6 py-4 text-center text-xl">
+                    <td className="px-6 py-4 text-left text-xs">{bet?.type}</td>
+                    <td className="px-6 py-4 text-left text-xl">
                       <AiFillEdit
                         onClick={() => {
                           setActionModalOpen({
@@ -375,10 +403,11 @@ const UnsettleBet = () => {
                             value: bet,
                           });
                         }}
+                        className=""
                       />
                     </td>
                     <td className="px-6 py-4 text-center text-xl">
-                      <IoMdInformationCircleOutline />
+                      <IoMdInformationCircleOutline className="" />
                     </td>
                   </tr>
                 ))
@@ -388,7 +417,7 @@ const UnsettleBet = () => {
         </div>
         {/* pagination */}
         <div className="mt-5 flex items-center justify-center gap-x-3">
-          {pageNo !== 1 && (
+          {parseInt(pageNo) !== 1 && (
             <p
               onClick={() => {
                 if (pages[0]?.url !== null) {
@@ -396,7 +425,11 @@ const UnsettleBet = () => {
                   setPagNo(pN);
                 }
               }}
-              className="border-2 border-black px-2 rounded-md cursor-pointer"
+              className={`border-2  px-2 rounded-md cursor-pointer ${
+                mode === "light"
+                  ? "border-black text-black"
+                  : "border-white  text-white"
+              }`}
             >
               Prev
             </p>
@@ -405,13 +438,17 @@ const UnsettleBet = () => {
             {pages.slice(1, -1).map((page, i) => {
               return (
                 <p
-                  className={`border-2 border-black px-2 rounded-md cursor-pointer ${
-                    pageNo == page?.label && "bg-black text-white"
+                  className={`border-2  px-2 rounded-md cursor-pointer ${
+                    pageNo == page?.label
+                      ? mode === "light"
+                        ? "bg-black text-white border-white shadow-2xl scale-105"
+                        : "bg-slate-300 text-black border-slate-200 shadow-2xl scale-105"
+                      : mode === "light"
+                      ? "text-black border-black"
+                      : "text-white"
                   }`}
                   onClick={() => {
-                    console.log(page?.label, "a");
-
-                    setPagNo(page?.label);
+                    setPagNo(parseInt(page?.label));
                   }}
                   key={i}
                 >
@@ -420,7 +457,7 @@ const UnsettleBet = () => {
               );
             })}
           </div>
-          {pageNo !== lastPage && (
+          {parseInt(pageNo) !== lastPage && (
             <p
               onClick={() => {
                 if (pages[pages.length - 1]?.url !== null) {
@@ -430,7 +467,11 @@ const UnsettleBet = () => {
                   setPagNo(pN);
                 }
               }}
-              className="border-2 border-black px-2 rounded-md cursor-pointer"
+              className={`border-2  px-2 rounded-md cursor-pointer ${
+                mode === "light"
+                  ? "border-black text-black"
+                  : "border-white  text-white"
+              }`}
             >
               Next
             </p>
@@ -451,9 +492,23 @@ const UnsettleBet = () => {
               onClick={(e) => {
                 e.stopPropagation();
               }}
-              className="w-[400px] h-fit pb-5 bg-white rounded"
+              style={{
+                boxShadow:
+                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+              }}
+              className={`w-[400px] h-fit pb-5 rounded ${
+                mode === "light"
+                  ? "bg-white"
+                  : "bg-black border-2 border-gray-400"
+              }`}
             >
-              <div className="py-4 px-3 flex justify-between items-center rounded bg-gray-300 text-black">
+              <div
+                className={`py-4 px-3 flex justify-between items-center rounded ${
+                  mode === "light"
+                    ? "bg-gray-300 text-black"
+                    : "bg-black border-b-2 border-slate-600 text-white"
+                }`}
+              >
                 <p>Settle Bet</p>
                 <p
                   onClick={() =>
@@ -468,14 +523,21 @@ const UnsettleBet = () => {
               <div className="mt-3 px-3 flex flex-col gap-y-4 ">
                 {/* selection name */}
                 <div className="flex flex-col justify-between gap-2">
-                  <label htmlFor="username" className="text-black">
+                  <label
+                    htmlFor="username"
+                    className={mode === "light" ? "text-black" : "text-white"}
+                  >
                     Selection Name
                   </label>
                   <input
                     // onChange={(e) => setAmount(e.target.value)}
                     value={actionModalOpen?.value?.selectionName}
                     type="text"
-                    className="border border-gray-700 w-[95%] px-5 py-2  rounded-md"
+                    className={`border border-gray-700 w-[95%] px-5 py-2  rounded-md ${
+                      mode === "light"
+                        ? "bg-white text-black"
+                        : "bg-slate-800 text-white"
+                    }`}
                     placeholder="Selection Name"
                   />
                 </div>
@@ -483,7 +545,9 @@ const UnsettleBet = () => {
                 <div className="flex flex-col justify-between gap-1">
                   <label
                     htmlFor="refund"
-                    className="text-black text-sm tracking-wider"
+                    className={`${
+                      mode === "light" ? "text-black" : "text-white"
+                    } text-sm tracking-wider`}
                   >
                     Refund
                   </label>
@@ -497,7 +561,13 @@ const UnsettleBet = () => {
                         id=""
                         checked={isRefundYesChecked}
                       />
-                      <p>Yes</p>
+                      <p
+                        className={
+                          mode === "light" ? "text-black" : "text-white"
+                        }
+                      >
+                        Yes
+                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <input
@@ -508,7 +578,13 @@ const UnsettleBet = () => {
                         id=""
                         checked={isRefundNoChecked}
                       />
-                      <p>No</p>
+                      <p
+                        className={
+                          mode === "light" ? "text-black" : "text-white"
+                        }
+                      >
+                        No
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -516,30 +592,56 @@ const UnsettleBet = () => {
                 {isRefund === "yes" ? (
                   isOTPSent ? (
                     <div className="flex flex-col justify-between gap-2">
-                      <label htmlFor="otp" className="text-black">
+                      <label
+                        htmlFor="otp"
+                        className={
+                          mode === "light" ? "text-black" : "text-white"
+                        }
+                      >
                         Enter OTP
                         <p className="text-red-500 font-bold inline">*</p>
                       </label>
-                      <div className="bg-white flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md">
+                      <div
+                        className={`${
+                          mode === "light" ? "bg-white" : "bg-slate-800"
+                        } flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md`}
+                      >
                         <input
                           onChange={(e) => setOTP(parseInt(e.target.value))}
                           type="text"
-                          className="flex-grow outline-none"
+                          className={`flex-grow outline-none ${
+                            mode === "light"
+                              ? "bg-white text-black"
+                              : "bg-slate-800 text-white"
+                          }`}
                           placeholder="Enter OTP"
                         />
                       </div>
                     </div>
                   ) : (
                     <div className="flex flex-col justify-between gap-2">
-                      <label htmlFor="otp" className="text-black">
+                      <label
+                        htmlFor="otp"
+                        className={
+                          mode === "light" ? "text-black" : "text-white"
+                        }
+                      >
                         Send OTP
                         <p className="text-red-500 font-bold inline">*</p>
                       </label>
-                      <div className="bg-white flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md">
+                      <div
+                        className={`${
+                          mode === "light" ? "bg-white" : "bg-slate-800"
+                        } flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md`}
+                      >
                         <input
                           // onChange={(e) => setOTP(parseInt(e.target.value))}
                           type="text"
-                          className="flex-grow outline-none"
+                          className={`flex-grow outline-none ${
+                            mode === "light"
+                              ? "bg-white text-black"
+                              : "bg-slate-800 text-white"
+                          }`}
                           placeholder=""
                         />
                         <p
@@ -558,7 +660,9 @@ const UnsettleBet = () => {
                         <div className="flex flex-col justify-between gap-2">
                           <label
                             htmlFor="run_or_wickets"
-                            className="text-black"
+                            className={
+                              mode === "light" ? "text-black" : "text-white"
+                            }
                           >
                             Run or Wickets
                             <p className="inline text-red-500">*</p>
@@ -568,7 +672,11 @@ const UnsettleBet = () => {
                             onChange={(e) =>
                               setResult(parseInt(e.target.value))
                             }
-                            className="border border-gray-700 w-[95%] px-5 py-2 rounded-md"
+                            className={`border border-gray-700 w-[95%] px-5 py-2 rounded-md ${
+                              mode === "light"
+                                ? "bg-white text-black"
+                                : "bg-slate-800 text-white"
+                            }`}
                             placeholder="Enter Runs or Wickets"
                           />
                         </div>
@@ -577,7 +685,9 @@ const UnsettleBet = () => {
                         <div className="flex flex-col justify-between gap-1 mt-2">
                           <label
                             htmlFor="refund"
-                            className="text-black tracking-wider"
+                            className={`${
+                              mode === "light" ? "text-black" : "text-white"
+                            } tracking-wider`}
                           >
                             IsWon?
                           </label>
@@ -585,24 +695,44 @@ const UnsettleBet = () => {
                             <div className="flex items-center gap-2">
                               <input
                                 onChange={handleWinYesChange}
-                                className="w-3 h-3 rounded-md cursor-pointer"
+                                className={`w-3 h-3 rounded-md cursor-pointer ${
+                                  mode === "light"
+                                    ? "bg-white text-black"
+                                    : "bg-slate-800 text-white"
+                                }`}
                                 type="checkbox"
                                 name="isWonYes"
                                 id="isWonYes"
                                 checked={isWinYesChecked}
                               />
-                              <p>Yes</p>
+                              <p
+                                className={
+                                  mode === "light" ? "text-black" : "text-white"
+                                }
+                              >
+                                Yes
+                              </p>
                             </div>
                             <div className="flex items-center gap-2">
                               <input
                                 onChange={handleWinNoChange}
-                                className="w-3 h-3 rounded-md cursor-pointer"
+                                className={`w-3 h-3 rounded-md cursor-pointer ${
+                                  mode === "light"
+                                    ? "bg-white text-black"
+                                    : "bg-slate-800 text-white"
+                                }`}
                                 type="checkbox"
                                 name="isWonNo"
                                 id="isWonNo"
                                 checked={isWinNoChecked}
                               />
-                              <p>No</p>
+                              <p
+                                className={
+                                  mode === "light" ? "text-black" : "text-white"
+                                }
+                              >
+                                No
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -615,16 +745,31 @@ const UnsettleBet = () => {
                       <div className="flex flex-col justify-between gap-2">
                         <label
                           htmlFor="winner_team"
-                          className="text-black text-sm tracking-wider"
+                          className={`${
+                            mode === "light" ? "text-black" : "text-white"
+                          } text-sm tracking-wider`}
                         >
                           Select Winner Team
                         </label>
                         <select
                           onChange={(e) => setResult(parseInt(e.target.value))}
-                          className="border border-gray-700 w-[95%] px-5 py-2 rounded-md"
+                          className={`border border-gray-700 w-[95%] px-5 py-2 rounded-md ${
+                            mode === "light"
+                              ? "bg-white text-black"
+                              : "bg-slate-800 text-white"
+                          }`}
                           placeholder="Enter amount"
                         >
-                          <option value="">Select Winner</option>
+                          <option
+                            className={
+                              mode === "light"
+                                ? "bg-white text-black"
+                                : "bg-slate-800 text-white"
+                            }
+                            value=""
+                          >
+                            Select Winner
+                          </option>
                           {actionModalOpen.value.teams.map((team) => (
                             <option key={team?._id} value={team._id}>
                               {team.name}

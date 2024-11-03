@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import useStore from "../../zustand/useStore";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
+
+  const { mode, setMode } = useStore();
 
   // get Cookies value
   const userNmae = Cookies.get("username");
@@ -38,7 +41,7 @@ const Sidebar2 = () => {
   ];
 
   const [menuItems, setMenuItems] = useState(menuItemsData);
-  const [isShowMenuItem, setIsShowMenuItem] = useState(false);
+  // const [isShowMenuItem, setIsShowMenuItem] = useState(false);
 
   useEffect(() => {
     const updatedMenuItems = menuItemsData.map((menuItem) => {
@@ -106,7 +109,11 @@ const Sidebar2 = () => {
   };
 
   return (
-    <div className="sidebar flex min-w-[230px] h-full overflow-y-auto flex-col justify-between gap-12 rounded-l-xl bg-white px-[18px] py-6 fixed ">
+    <div
+      className={`sidebar flex min-w-[230px] h-full overflow-y-auto flex-col justify-between gap-12   px-[18px] py-6 fixed ${
+        mode === "light" ? "bg-white" : "bg-[#272727] text-white"
+      }`}
+    >
       <div className="flex flex-col gap-[30px]">
         <div className="flex flex-col items-center gap-1.5 ">
           <Link className="flex items-center gap-x-2" to="/">
@@ -123,26 +130,42 @@ const Sidebar2 = () => {
         <div className="flex flex-col gap-[18px]">
           {/* Sidebar Menu */}
           <div className="flex flex-col gap-1.5">
-            <h4 className="text-[10px] font-bold text-[#929292]">MENU</h4>
+            <h4
+              className={`text-[10px] font-bold ${
+                mode === "light" ? "text-[#929292]" : "text-gray-200"
+              }`}
+            >
+              MENU
+            </h4>
             {menuItems.map((menuItem) => (
               <div key={menuItem.title} className="flex flex-col">
                 <Link
                   to={menuItem.link}
                   className={`flex w-full cursor-pointer items-center justify-between rounded-md ${
-                    menuItem.active ? "bg-[#E3E3FD]" : ""
+                    menuItem.active
+                      ? mode === "light"
+                        ? "bg-[#E3E3FD]"
+                        : "bg-slate-700"
+                      : ""
                   } px-1.5 py-2.5`}
                   onClick={() => handleMenuItemClick(menuItem.title)} // Click to toggle parent active
                 >
                   <div className="flex gap-1.5">
                     {menuItem.icon}
-                    <p className="text-xs font-bold leading-[18px] text-[#161616]">
+                    <p
+                      className={`text-xs font-bold leading-[18px] ${
+                        mode === "light" ? "text-[#161616]" : "text-white"
+                      }`}
+                    >
                       {menuItem.title}
                     </p>
                   </div>
 
                   {menuItem.subItems && (
                     <FaAngleDown
-                      className={menuItem.active ? "rotate-180" : ""}
+                      className={`${menuItem.active ? "rotate-180" : ""} ${
+                        mode === "light" ? "text-white" : ""
+                      }`}
                     />
                   )}
                 </Link>
@@ -160,12 +183,22 @@ const Sidebar2 = () => {
                       >
                         <div
                           className={`absolute left-3 top-0 h-full w-0.5 ${
-                            subItem.active ? "bg-[#000091]" : ""
+                            subItem.active
+                              ? mode === "light"
+                                ? "bg-[#000091]"
+                                : "bg-[#8282e0]"
+                              : ""
                           }`}
                         />
                         <p
                           className={`pl-5 text-xs font-bold leading-[18px] ${
-                            subItem.active ? "text-[#000091]" : "text-[#161616]"
+                            subItem.active
+                              ? mode === "light"
+                                ? "text-[#000091]"
+                                : "text-[#8282e0]"
+                              : mode === "light"
+                              ? "text-[#161616]"
+                              : "text-white"
                           }`}
                         >
                           {subItem.title}
@@ -180,13 +213,37 @@ const Sidebar2 = () => {
       </div>
 
       <div className="flex flex-col items-center gap-y-5">
+        <div
+          className={`flex items-center  rounded-2xl overflow-hidden border-2 border-slate-700 ${
+            mode === "light" ? "bg-gray-100" : "bg-slate-600"
+          }`}
+        >
+          <p
+            onClick={() => setMode("dark")}
+            className={`px-4 py-1 cursor-pointer transition-all duration-300 ease-in ${
+              mode === "dark" && "bg-blue-200 text-blue-900 font-bold "
+            }`}
+          >
+            Dark
+          </p>
+          <p
+            onClick={() => setMode("light")}
+            className={`px-4 py-1 cursor-pointer transition-all duration-300 ease-in ${
+              mode === "light" && "bg-blue-200 text-blue-900 font-bold "
+            }`}
+          >
+            Light
+          </p>
+        </div>
         <div className="flex flex-col justify-center items-center gap-y-3">
           {/* <img
             className="w-10 h-10 rounded-full"
             src="/images/profilePicIcon.png"
             alt=""
           /> */}
-          <p className="text-black">{userNmae}</p>
+          <p className={mode === "light" ? "text-black" : "text-white"}>
+            {userNmae}
+          </p>
         </div>
         <div
           onClick={() => {
@@ -194,7 +251,9 @@ const Sidebar2 = () => {
             Cookies.remove("token");
             Cookies.remove("username");
           }}
-          className="w-full bg-black opacity-90 cursor-pointer text-white font-bold flex justify-center py-2 rounded-xl"
+          className={`w-full ${
+            mode === "light" ? "bg-black text-white" : "bg-slate-500 text-white"
+          } opacity-90 cursor-pointer  font-bold flex justify-center py-2 rounded-xl`}
         >
           <p>Logout</p>
         </div>

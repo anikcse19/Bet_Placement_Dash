@@ -3,17 +3,19 @@ import { baseUrl } from "../../config";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { ThreeDots } from "react-loader-spinner";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfrimPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState("");
   const navigate = useNavigate();
   // const location = useLocation();
 
   const handleLogin = async () => {
-    if (password === confirmPassword) {
+    setIsLoading(true);
+    try {
       const loginData = {
         email,
         password,
@@ -29,15 +31,17 @@ const LoginPage = () => {
       const data = await reponse.json();
       if (data.status) {
         // localStorage.set("token", data?.data?.token);
-        Cookies.set("token", data?.data?.token);
-        Cookies.set("username", data?.data?.user_name);
+        Cookies.set("token", data?.data?.token, { expires: 0.08 });
+        Cookies.set("username", data?.data?.user_name, { expires: 0.08 });
         navigate("/dashboard/settlement/unsettle-bet");
         toast.success("Successfully Login");
+      } else {
+        toast.error(data?.message);
       }
-
-      console.log(data, "aflogn");
-    } else {
-      toast.error("Password doesnt match");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -89,7 +93,7 @@ const LoginPage = () => {
               </div>
 
               {/*confirm password */}
-              <div className="flex flex-col gap-1">
+              {/* <div className="flex flex-col gap-1">
                 <label htmlFor="password">Confirm Password</label>
                 <input
                   onChange={(e) => setConfrimPassword(e.target.value)}
@@ -100,7 +104,7 @@ const LoginPage = () => {
                   name="password"
                   id="con-password"
                 />
-              </div>
+              </div> */}
 
               {/* <div>
                 <p className="text-xs text-red-700 font-bold">{error}</p>
@@ -115,11 +119,11 @@ const LoginPage = () => {
               onClick={handleLogin}
               className="bg-primary hover:bg-purple-900  transition-all duration-500 ease-in px-6 py-1 rounded text-black hover:text-white font-bold border border-black"
             >
-              {/* {mutation.isLoading ? (
+              {isLoading ? (
                 <ThreeDots
                   visible={true}
                   height="20"
-                  width="40"
+                  width="20"
                   color="#fff"
                   radius="9"
                   ariaLabel="three-dots-loading"
@@ -128,8 +132,7 @@ const LoginPage = () => {
                 />
               ) : (
                 "Log in"
-              )} */}
-              Login
+              )}
             </button>
           </div>
 

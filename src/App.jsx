@@ -1,12 +1,13 @@
 // import DashBoardHome from "./pages/Dashboard/DashBoardHome";
 // import UnsettleBet from "./pages/Dashboard/Settlement/UnsettleBet";
-import LoginPage from "./pages/LoginPage";
+import UnsettleBet from "./pages/Dashboard/Settlement/UnsettleBet";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
-    <>
-      <LoginPage />
-    </>
+    <PrivateRoute>
+      <UnsettleBet />
+    </PrivateRoute>
   );
 }
 

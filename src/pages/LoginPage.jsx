@@ -31,8 +31,8 @@ const LoginPage = () => {
       const data = await reponse.json();
       if (data.status) {
         // localStorage.set("token", data?.data?.token);
-        Cookies.set("token", data?.data?.token, { expires: 0.08 });
-        Cookies.set("username", data?.data?.user_name, { expires: 0.08 });
+        Cookies.set("token", data?.data?.token);
+        Cookies.set("username", data?.data?.user_name);
         navigate("/dashboard/settlement/unsettle-bet");
         toast.success("Successfully Login");
       } else {

@@ -164,7 +164,7 @@ const Sidebar2 = () => {
                   {menuItem.subItems && (
                     <FaAngleDown
                       className={`${menuItem.active ? "rotate-180" : ""} ${
-                        mode === "light" ? "text-white" : ""
+                        mode === "light" ? "text-black" : "text-white"
                       }`}
                     />
                   )}

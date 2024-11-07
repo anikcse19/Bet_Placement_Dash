@@ -6,6 +6,7 @@ import { FaAngleDown } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useStore from "../../zustand/useStore";
+import { VscOutput } from "react-icons/vsc";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
@@ -37,6 +38,12 @@ const Sidebar2 = () => {
           active: false,
         },
       ],
+    },
+    {
+      title: "Bet Results",
+      icon: <VscOutput />,
+      link: "/dashboard/bet-results",
+      active: false,
     },
   ];
 

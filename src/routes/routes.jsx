@@ -6,6 +6,7 @@ import UnsettleBet from "../pages/Dashboard/Settlement/UnsettleBet";
 import ResetPassowrdPage from "../pages/ResetPassowrdPage";
 import SetNewPasswordPage from "../pages/SetNewPasswordPage";
 import PrivateRoute from "./PrivateRoute";
+import BetResults from "../pages/Dashboard/BetResults";
 
 export const routes = createBrowserRouter([
   {
@@ -29,6 +30,14 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <UnsettleBet />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/bet-results",
+    element: (
+      <PrivateRoute>
+        <BetResults />
       </PrivateRoute>
     ),
   },

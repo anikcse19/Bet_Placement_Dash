@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { baseUrl } from "../../config";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { ThreeDots } from "react-loader-spinner";
 
@@ -11,7 +11,21 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState("");
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
+
+  // Extract `redirect` from query params
+  const redirectPath =
+    new URLSearchParams(location.search).get("redirect") ||
+    "/dashboard/settlement/unsettle-bet";
+
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    if (token) {
+      // Redirect to the stored redirect path or a default page
+      navigate(redirectPath, { replace: true });
+    }
+  }, [token, navigate, redirectPath]);
 
   const handleLogin = async () => {
     setIsLoading(true);

@@ -34,6 +34,7 @@ const UnsettleBet = () => {
   const [searchEventId, setSearchEventId] = useState("");
   const [searchSelectionName, setSearchSelectionName] = useState("");
   const [selectSportType, setSelectSportType] = useState("");
+  const [queryParams, setQueryParams] = useState("");
 
   const token = Cookies.get("token");
 
@@ -42,7 +43,7 @@ const UnsettleBet = () => {
   const fetchUnSettledBets = async () => {
     try {
       const response = await fetch(
-        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}`,
+        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParams}`,
         {
           method: "GET",
           headers: {
@@ -67,6 +68,7 @@ const UnsettleBet = () => {
 
   useEffect(() => {
     fetchUnSettledBets();
+    handleSearch();
   }, [pageNo]);
 
   const handleYesChange = () => {
@@ -188,6 +190,7 @@ const UnsettleBet = () => {
       setIsWinNoChecked(false);
     }
   };
+
   const handleSearch = async () => {
     setIsLoading(true);
     // Build the query string based on non-empty search inputs
@@ -198,6 +201,8 @@ const UnsettleBet = () => {
     if (searchSelectionName)
       queryParams.append("selectionName", searchSelectionName);
     if (selectSportType) queryParams.append("sport", selectSportType);
+
+    setQueryParams(queryParams.toString());
 
     try {
       const response = await fetch(
@@ -223,7 +228,6 @@ const UnsettleBet = () => {
       setIsLoading(false);
     }
   };
-  console.log(pageNo, "pg");
 
   return (
     <Layout>

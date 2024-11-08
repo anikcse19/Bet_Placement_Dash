@@ -602,6 +602,7 @@ const SetteBet = () => {
                   <input
                     // onChange={(e) => setAmount(e.target.value)}
                     value={actionModalOpen?.value?.selectionName}
+                    readOnly
                     type="text"
                     className={`border border-gray-700 w-[95%] px-5 py-2  rounded-md ${
                       mode === "light"

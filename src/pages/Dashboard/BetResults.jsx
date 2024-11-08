@@ -10,7 +10,6 @@ import { Circles } from "react-loader-spinner";
 const BetResults = () => {
   const [betResults, setBetResults] = useState([]);
   const [filteredBetResults, setFilteredBetResults] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,7 +47,8 @@ const BetResults = () => {
     fetchBetResults();
   }, []);
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
     const filteredBets = betResults.filter(
       (bet) =>
         bet?.eventName.includes(searchValue) ||
@@ -91,36 +91,15 @@ const BetResults = () => {
         </p>
         <div className="flex items-center gap-x-4">
           <input
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
+            // onChange={(e) => setSearchValue(e.target.value)}
+            // value={searchValue}
+            onChange={(e) => {
+              handleSearch(e);
+            }}
             type="text"
             placeholder="Search Result"
             className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
           />
-          <p
-            style={{
-              boxShadow:
-                "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-            }}
-            className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-            onClick={handleSearch}
-          >
-            Get Bets
-          </p>
-
-          <p
-            style={{
-              boxShadow:
-                "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-            }}
-            className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-            onClick={() => {
-              setSearchValue("");
-              fetchBetResults();
-            }}
-          >
-            Clear Filter
-          </p>
         </div>
       </div>
 

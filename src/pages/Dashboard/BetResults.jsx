@@ -9,10 +9,9 @@ import { Circles } from "react-loader-spinner";
 
 const BetResults = () => {
   const [betResults, setBetResults] = useState([]);
-  const [searchEventName, setSearchEventName] = useState("");
-  const [searchEventId, setSearchEventId] = useState("");
-  const [searchSelectionName, setSearchSelectionName] = useState("");
-  const [selectSportType, setSelectSportType] = useState("");
+  const [filteredBetResults, setFilteredBetResults] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+
   const [isLoading, setIsLoading] = useState(true);
 
   // zustand store
@@ -33,6 +32,7 @@ const BetResults = () => {
           if (res?.data?.status) {
             toast.success(res?.data?.message);
             setBetResults(res?.data?.data);
+            setFilteredBetResults(res?.data?.data);
           } else {
             toast.error(res?.data?.message);
           }
@@ -48,16 +48,40 @@ const BetResults = () => {
     fetchBetResults();
   }, []);
 
-  console.log(betResults);
+  const handleSearch = () => {
+    const filteredBets = betResults.filter(
+      (bet) =>
+        bet?.eventName.includes(searchValue) ||
+        bet?.eventId.includes(searchValue) ||
+        bet?.marketId.includes(searchValue) ||
+        bet?.sportName.includes(searchValue)
+    );
+
+    setFilteredBetResults(filteredBets);
+  };
+
+  const formateDate = (marketDate) => {
+    const localDate = new Date(marketDate).toLocaleString(undefined, {
+      timeZoneName: "short",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return localDate;
+  };
+
   return (
     <Layout>
-      <div className=" flex items-center justify-between">
+      <div className=" flex items-center justify-between mt-16">
         <h1
           className={`text-xl  font-bold tracking-widest ${
             mode === "light" ? "text-black" : "text-white"
           }`}
         >
-          Unsettle Bets List
+          Bet Results
         </h1>
       </div>
       {/* search box */}
@@ -67,44 +91,19 @@ const BetResults = () => {
         </p>
         <div className="flex items-center gap-x-4">
           <input
-            onChange={(e) => setSearchEventName(e.target.value)}
-            value={searchEventName}
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
             type="text"
-            placeholder="Search Market Id"
+            placeholder="Search Result"
             className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
           />
-          <input
-            onChange={(e) => setSearchEventId(e.target.value)}
-            value={searchEventId}
-            type="text"
-            placeholder="Search Event Id"
-            className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
-          />
-          <input
-            onChange={(e) => setSearchSelectionName(e.target.value)}
-            value={searchSelectionName}
-            type="text"
-            placeholder="Search Selection Name"
-            className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
-          />
-          <select
-            onChange={(e) => setSelectSportType(e.target.value)}
-            value={selectSportType}
-            className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent text-gray-600 outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
-          >
-            <option value="">All</option>
-            <option value="cricket">Cricket</option>
-            <option value="soccer">Soccer</option>
-            <option value="tennis">Tennis</option>
-          </select>
-
           <p
             style={{
               boxShadow:
                 "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
             }}
             className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-            // onClick={handleSearch}
+            onClick={handleSearch}
           >
             Get Bets
           </p>
@@ -116,10 +115,7 @@ const BetResults = () => {
             }}
             className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
             onClick={() => {
-              setSearchEventName("");
-              setSearchEventId("");
-              setSearchSelectionName("");
-              setSelectSportType("");
+              setSearchValue("");
               fetchBetResults();
             }}
           >
@@ -140,66 +136,48 @@ const BetResults = () => {
           >
             <tr>
               <th
-                rowSpan={2}
                 scope="col"
                 className="px-6 py-3 text-left border-r-2 border-black"
               >
                 Sport
               </th>
               <th
-                rowSpan={2}
                 scope="col"
                 className="px-6 py-3 text-left border-r-2 border-black"
               >
                 Event Id
               </th>
               <th
-                rowSpan={2}
                 scope="col"
                 className="px-6 py-3 text-left border-r-2 border-black"
               >
                 Market Id
               </th>
               <th
-                rowSpan={2}
                 scope="col"
                 className="px-6 py-3 text-left border-r-2 border-black"
               >
                 Event Name
               </th>
+
               <th
-                rowSpan={2}
-                scope="col"
-                className="px-6 py-3 text-left border-r-2 border-black"
-              >
-                Event Time
-              </th>
-              <th
-                colSpan={2}
                 scope="col"
                 className="px-6 py-3 text-center border-r-2 border-b-2 border-black"
               >
                 Winners
               </th>
               <th
-                colSpan={2}
                 scope="col"
-                className="px-6 py-3 text-center border-b-2 border-black"
+                className="px-6 py-3 text-center border-r-2 border-black"
               >
                 Loosers
               </th>
-            </tr>
-            <tr>
-              <th className="px-6 py-3 text-center border-r-2 border-black">
-                Selection Id
+              <th
+                scope="col"
+                className="px-6 py-3 text-left border-r-2 border-black"
+              >
+                Event Time
               </th>
-              <th className="px-6 py-3 text-center border-r-2 border-black">
-                Runner Name
-              </th>
-              <th className="px-6 py-3 text-center border-r-2 border-black">
-                Selection Id
-              </th>
-              <th className="px-6 py-3 text-center">Runner Name</th>
             </tr>
           </thead>
           <tbody>
@@ -220,7 +198,7 @@ const BetResults = () => {
                 </td>
               </tr>
             ) : (
-              betResults.map((bet, i) => (
+              filteredBetResults.map((bet, i) => (
                 <tr
                   key={bet.id}
                   className={`${
@@ -233,38 +211,32 @@ const BetResults = () => {
                       : "bg-black text-white"
                   }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
                 >
-                  <td className="px-6 py-4 text-left text-xs">
+                  <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                     {bet?.sportName}
                   </td>
-                  <td className="px-6 py-4 text-left text-xs">
+                  <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                     {bet?.eventId}
                   </td>
-                  <td className="px-6 py-4 text-left text-xs">
+                  <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                     {bet?.marketId}
                   </td>
-                  <td className="px-6 py-4 text-left text-xs">
+                  <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                     {bet?.eventName}
                   </td>
+
+                  <td className="px-6 py-4 text-center text-xs border-r-2 border-black">
+                    {`${bet?.winnerDetails?.runnerName}---${bet?.winnerDetails?.selectionId}`}
+                  </td>
+
+                  <td className="px-6 py-4 text-center text-xs flex flex-col gap-y-2  border-r-2 border-black">
+                    {bet?.loserDetails.map((loser) => (
+                      <p
+                        key={loser?.selectionId}
+                      >{`${loser?.runnerName}---${loser?.selectionId}`}</p>
+                    ))}
+                  </td>
                   <td className="px-6 py-4 text-left text-xs">
-                    {bet?.eventTime}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs">
-                    {bet?.winnerDetails?.selectionId}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs">
-                    {bet?.winnerDetails?.runnerName}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs flex flex-col gap-y-2">
-                    {bet?.loserDetails.map((loser) => (
-                      <p key={loser?.selectionId}>{loser?.selectionId}</p>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4 text-center text-xs ">
-                    {bet?.loserDetails.map((loser) => (
-                      <p className="mr-3" key={loser?.selectionId}>
-                        {loser?.runnerName}
-                      </p>
-                    ))}
+                    {formateDate(bet?.eventTime)}
                   </td>
                 </tr>
               ))

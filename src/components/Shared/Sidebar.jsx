@@ -2,11 +2,14 @@ import { ProfileOutlined } from "@ant-design/icons";
 
 import { useEffect, useState } from "react";
 
-import { FaAngleDown } from "react-icons/fa";
+import { FaAngleDown, FaUsersCog } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useStore from "../../zustand/useStore";
 import { VscOutput } from "react-icons/vsc";
+import { IoMdPersonAdd } from "react-icons/io";
+import axios from "axios";
+import { baseUrl } from "../../../config";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
@@ -17,6 +20,8 @@ const Sidebar2 = () => {
 
   // get Cookies value
   const userNmae = Cookies.get("username");
+  const token = Cookies.get("token");
+  const role = parseInt(Cookies.get("role"));
 
   // Sidebar Menu Data
 
@@ -25,12 +30,12 @@ const Sidebar2 = () => {
       title: "Settlement",
       icon: <ProfileOutlined />,
       link: "/dashboard/settlement/unsettle-bet",
-      active: false,
+      active: true,
       subItems: [
         {
           title: "Unsettle Bet",
           link: "/dashboard/settlement/unsettle-bet",
-          active: false,
+          active: true,
         },
         {
           title: "Settle bet",
@@ -45,6 +50,22 @@ const Sidebar2 = () => {
       link: "/dashboard/bet-results",
       active: false,
     },
+    ...(role === 1
+      ? [
+          {
+            title: "User List",
+            icon: <FaUsersCog />,
+            link: "/dashboard/users-list",
+            active: false,
+          },
+          {
+            title: "Create User",
+            icon: <IoMdPersonAdd />,
+            link: "/dashboard/create-user",
+            active: false,
+          },
+        ]
+      : []),
   ];
 
   const [menuItems, setMenuItems] = useState(menuItemsData);
@@ -124,13 +145,13 @@ const Sidebar2 = () => {
       <div className="flex flex-col gap-[30px]">
         <div className="flex flex-col items-center gap-1.5 ">
           <Link className="flex items-center gap-x-2" to="/">
-            {/* <img
-              src="/images/logos/bondhuBuildersLogo.png"
+            <img
+              src="/logo.png"
               width={130}
               height={130}
               alt="logo"
               className="object-cover"
-            /> */}
+            />
           </Link>
         </div>
 
@@ -257,6 +278,16 @@ const Sidebar2 = () => {
             navigate("/login");
             Cookies.remove("token");
             Cookies.remove("username");
+            Cookies.remove("role");
+            axios.post(
+              `${baseUrl}/api/admin/logout`,
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
           }}
           className={`w-full ${
             mode === "light" ? "bg-black text-white" : "bg-slate-500 text-white"

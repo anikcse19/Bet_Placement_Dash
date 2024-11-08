@@ -7,6 +7,9 @@ import ResetPassowrdPage from "../pages/ResetPassowrdPage";
 import SetNewPasswordPage from "../pages/SetNewPasswordPage";
 import PrivateRoute from "./PrivateRoute";
 import BetResults from "../pages/Dashboard/BetResults";
+import CreateUser from "../pages/Dashboard/CreateUser";
+import UsersList from "../pages/Dashboard/UsersList";
+import UpdateUser from "../pages/Dashboard/UpdateUser";
 
 export const routes = createBrowserRouter([
   {
@@ -38,6 +41,30 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <BetResults />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/create-user",
+    element: (
+      <PrivateRoute>
+        <CreateUser />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/users-list",
+    element: (
+      <PrivateRoute>
+        <UsersList />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/user/:id",
+    element: (
+      <PrivateRoute>
+        <UpdateUser />
       </PrivateRoute>
     ),
   },

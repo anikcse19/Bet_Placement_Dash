@@ -33,6 +33,7 @@ const LoginPage = () => {
         // localStorage.set("token", data?.data?.token);
         Cookies.set("token", data?.data?.token);
         Cookies.set("username", data?.data?.user_name);
+        Cookies.set("role", data?.data?.user_type);
         navigate("/dashboard/settlement/unsettle-bet");
         toast.success("Successfully Login");
       } else {

@@ -4,11 +4,13 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { ThreeDots } from "react-loader-spinner";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   // const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -96,15 +98,28 @@ const LoginPage = () => {
               {/* password */}
               <div className="flex flex-col gap-1">
                 <label htmlFor="password">Password</label>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                  placeholder="********"
-                  className="px-5 py-2 outline-none rounded bg-gray-200 focus:border-2 focus:border-primary"
-                  type="password"
-                  name="password"
-                  id="password"
-                />
+                <div className="relative w-full">
+                  <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    placeholder="********"
+                    className="w-full px-5 py-2 outline-none rounded bg-gray-200 focus:border-2 focus:border-primary"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    id="password"
+                  />
+                  {showPassword ? (
+                    <FaEye
+                      onClick={() => setShowPassword(false)}
+                      className="absolute top-[50%] -translate-y-1/2 right-3 cursor-pointer text-lg"
+                    />
+                  ) : (
+                    <FaEyeSlash
+                      onClick={() => setShowPassword(true)}
+                      className="absolute top-[50%] -translate-y-1/2 right-3 cursor-pointer text-lg"
+                    />
+                  )}
+                </div>
               </div>
 
               {/*confirm password */}

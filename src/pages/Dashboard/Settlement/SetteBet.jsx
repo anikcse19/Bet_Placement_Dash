@@ -38,13 +38,14 @@ const SetteBet = () => {
   const [OTP, setOTP] = useState(0);
   const [isOTPSent, setIsOTPSent] = useState(false);
   const token = Cookies.get("token");
+  const [queryParams, setQueryParams] = useState("");
 
   const { mode } = useStore();
 
   const fetchUnSettledBets = async () => {
     try {
       const response = await fetch(
-        `${baseUrl}/api/admin/get-settle-list?page=${pageNo}`,
+        `${baseUrl}/api/admin/get-settle-list?page=${pageNo}&${queryParams}`,
         {
           method: "GET",
           headers: {
@@ -204,6 +205,8 @@ const SetteBet = () => {
       queryParams.append("selectionName", searchSelectionName);
     if (selectSportType) queryParams.append("sport", selectSportType);
 
+    setQueryParams(queryParams.toString());
+
     try {
       const response = await fetch(
         `${baseUrl}/api/admin/get-settle-list?page=${pageNo}&${queryParams.toString()}`,
@@ -218,9 +221,14 @@ const SetteBet = () => {
       const data = await response.json();
 
       if (data?.status) {
-        setSettleBetList(data?.data?.data);
-        setPages(data?.data?.links);
-        setLastPage(data?.data?.last_page);
+        if (data?.data?.data.length > 0) {
+          setSettleBetList(data?.data?.data);
+          setPages(data?.data?.links);
+          setLastPage(data?.data?.last_page);
+        } else {
+          setSettleBetList(data?.data?.data);
+          setPages([]);
+        }
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -229,6 +237,21 @@ const SetteBet = () => {
     }
   };
 
+  const handleClear = () => {
+    setQueryParams("");
+    setSearchEventName("");
+    setSearchEventId("");
+    setSearchSelectionName("");
+    setSelectSportType("");
+    fetchUnSettledBets(); // or call this in an effect
+  };
+
+  useEffect(() => {
+    // Run any effect needed when `queryParams` changes.
+    if (!queryParams) {
+      fetchUnSettledBets();
+    }
+  }, [queryParams]);
   return (
     <Layout>
       <div className="relative w-full h-full pt-6">
@@ -252,26 +275,34 @@ const SetteBet = () => {
               value={searchEventName}
               type="text"
               placeholder="Search Market Id"
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             />
             <input
               onChange={(e) => setSearchEventId(e.target.value)}
               value={searchEventId}
               type="text"
               placeholder="Search Event Id"
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             />
             <input
               onChange={(e) => setSearchSelectionName(e.target.value)}
               value={searchSelectionName}
               type="text"
               placeholder="Search Selection Name"
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             />
             <select
               onChange={(e) => setSelectSportType(e.target.value)}
               value={selectSportType}
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent text-gray-600 outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             >
               <option value="">All</option>
               <option value="cricket">Cricket</option>
@@ -296,13 +327,7 @@ const SetteBet = () => {
                   "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
               }}
               className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={() => {
-                setSearchEventName("");
-                setSearchEventId("");
-                setSearchSelectionName("");
-                setSelectSportType("");
-                fetchUnSettledBets();
-              }}
+              onClick={handleClear}
             >
               Clear Filter
             </p>
@@ -319,28 +344,31 @@ const SetteBet = () => {
               }  border-b-2 border-t-2 border-black rounded-md`}
             >
               <tr>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Sport
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Event Id
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Market Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Event Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Selection Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Bet Type
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
+                  Result
+                </th>
+                <th scope="col" className="px-6 py-3 text-left">
                   Resettle
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
+                <th scope="col" className="px-6 py-3 text-left">
                   Info
                 </th>
               </tr>
@@ -348,7 +376,7 @@ const SetteBet = () => {
             <tbody>
               {isLoading ? (
                 <tr className="text-center text-sm">
-                  <td colSpan={12} align="center">
+                  <td colSpan={9} align="center">
                     <div className="my-5 flex flex-col justify-center items-center">
                       <Circles
                         height="50"
@@ -360,6 +388,18 @@ const SetteBet = () => {
                         visible={true}
                       />
                     </div>
+                  </td>
+                </tr>
+              ) : settleBetList.length <= 0 ? (
+                <tr className="text-center text-sm">
+                  <td colSpan={9} align="center">
+                    <p
+                      className={`py-3 text-lg ${
+                        mode === "light" ? "text-black" : "text-white"
+                      }`}
+                    >
+                      No data to show
+                    </p>
                   </td>
                 </tr>
               ) : (
@@ -376,33 +416,41 @@ const SetteBet = () => {
                         : "bg-black text-white"
                     }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
                   >
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.sport}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.eventId}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {formateDate(bet?.marketDate)}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.eventTitle}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
+                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.selectionName ? bet?.selectionName : "--"}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs">
-                      {bet?.type}
+                    <td className="px-6 py-4 text-left text-xs">{bet?.type}</td>
+                    <td className="px-6 py-4 text-left text-xs">
+                      {bet?.type === "Fancy"
+                        ? bet?.result?.result
+                        : bet?.result?.winnerName}
                     </td>
-                    <td className="px-6 py-4 text-center text-xl">
-                      <AiFillEdit
-                        onClick={() => {
-                          setActionModalOpen({
-                            status: true,
-                            value: bet,
-                          });
-                        }}
-                      />
+
+                    <td className="px-6 py-4 text-left text-xl">
+                      {bet?.isResettleAllow ? (
+                        <AiFillEdit
+                          onClick={() => {
+                            setActionModalOpen({
+                              status: true,
+                              value: bet,
+                            });
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </td>
                     <td
                       onClick={() =>
@@ -411,7 +459,7 @@ const SetteBet = () => {
                           value: bet,
                         })
                       }
-                      className="px-6 py-4 text-center text-xl"
+                      className="px-6 py-4 text-left text-xl"
                     >
                       <IoMdInformationCircleOutline />
                     </td>
@@ -421,68 +469,71 @@ const SetteBet = () => {
             </tbody>
           </table>
         </div>
+
         {/* pagination */}
-        <div className="mt-5 flex items-center justify-center gap-x-3">
-          {parseInt(pageNo) !== 1 && (
-            <p
-              onClick={() => {
-                if (pages[0]?.url !== null) {
-                  const pN = parseInt(pages[0]?.url.split("=")[1]);
-                  setPagNo(pN);
-                }
-              }}
-              className={`border-2  px-2 rounded-md cursor-pointer ${
-                mode === "light"
-                  ? "border-black text-black"
-                  : "border-white  text-white"
-              }`}
-            >
-              Prev
-            </p>
-          )}
-          <div className="flex items-center gap-3">
-            {pages.slice(1, -1).map((page, i) => {
-              return (
-                <p
-                  className={`border-2  px-2 rounded-md cursor-pointer ${
-                    pageNo == page?.label
-                      ? mode === "light"
-                        ? "bg-black text-white border-white shadow-2xl scale-105"
-                        : "bg-slate-300 text-black border-slate-200 shadow-2xl scale-105"
-                      : mode === "light"
-                      ? "text-black border-black"
-                      : "text-white"
-                  }`}
-                  onClick={() => {
-                    setPagNo(parseInt(page?.label));
-                  }}
-                  key={i}
-                >
-                  {page?.label}
-                </p>
-              );
-            })}
+        {pages && pages.length > 0 && (
+          <div className="mt-5 flex items-center justify-center gap-x-3">
+            {parseInt(pageNo) !== 1 && (
+              <p
+                onClick={() => {
+                  if (pages[0]?.url !== null) {
+                    const pN = parseInt(pages[0]?.url.split("=")[1]);
+                    setPagNo(pN);
+                  }
+                }}
+                className={`border-2  px-2 rounded-md cursor-pointer ${
+                  mode === "light"
+                    ? "border-black text-black"
+                    : "border-white  text-white"
+                }`}
+              >
+                Prev
+              </p>
+            )}
+            <div className="flex items-center gap-3">
+              {pages.slice(1, -1).map((page, i) => {
+                return (
+                  <p
+                    className={`border-2  px-2 rounded-md cursor-pointer ${
+                      pageNo == page?.label
+                        ? mode === "light"
+                          ? "bg-black text-white border-white shadow-2xl scale-105"
+                          : "bg-slate-300 text-black border-slate-200 shadow-2xl scale-105"
+                        : mode === "light"
+                        ? "text-black border-black"
+                        : "text-white"
+                    }`}
+                    onClick={() => {
+                      setPagNo(parseInt(page?.label));
+                    }}
+                    key={i}
+                  >
+                    {page?.label}
+                  </p>
+                );
+              })}
+            </div>
+            {parseInt(pageNo) !== lastPage && (
+              <p
+                onClick={() => {
+                  if (pages[pages.length - 1]?.url !== null) {
+                    const pN = parseInt(
+                      pages[pages.length - 1]?.url.split("=")[1]
+                    );
+                    setPagNo(pN);
+                  }
+                }}
+                className={`border-2  px-2 rounded-md cursor-pointer ${
+                  mode === "light"
+                    ? "border-black text-black"
+                    : "border-white  text-white"
+                }`}
+              >
+                Next
+              </p>
+            )}
           </div>
-          {parseInt(pageNo) !== lastPage && (
-            <p
-              onClick={() => {
-                if (pages[pages.length - 1]?.url !== null) {
-                  const pN = parseInt(
-                    pages[pages.length - 1]?.url.split("=")[1]
-                  );
-                  setPagNo(pN);
-                }
-              }}
-              className={`border-2  px-2 rounded-md cursor-pointer ${
-                mode === "light"
-                  ? "border-black text-black"
-                  : "border-white  text-white"
-              }`}
-            >
-              Next
-            </p>
-          )}
-        </div>
+        )}
 
         {/* info modal */}
         {infoModalOpen.status && (
@@ -539,7 +590,9 @@ const SetteBet = () => {
                   </div>
                   <div className="w-full text-left">
                     {infoModalOpen?.value?.result?.result
-                      ? infoModalOpen?.value?.result?.result
+                      ? infoModalOpen?.value?.type === "Fancy"
+                        ? infoModalOpen?.value?.result?.result
+                        : infoModalOpen?.value?.result?.winnerName
                       : "-"}
                   </div>
                 </div>

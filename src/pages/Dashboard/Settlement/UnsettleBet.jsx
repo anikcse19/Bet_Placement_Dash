@@ -40,7 +40,12 @@ const UnsettleBet = () => {
 
   const { mode } = useStore();
 
+  console.log(queryParams, "pp");
+
   const fetchUnSettledBets = async () => {
+    console.log("hello vai");
+    console.log(queryParams);
+
     try {
       const response = await fetch(
         `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParams}`,
@@ -55,6 +60,8 @@ const UnsettleBet = () => {
       const data = await response.json();
 
       if (data?.status) {
+        console.log(data?.data?.data, "res");
+
         setUnSettleBets(data?.data?.data);
         setPages(data?.data?.links);
         setLastPage(data?.data?.last_page);
@@ -218,9 +225,14 @@ const UnsettleBet = () => {
       const data = await response.json();
 
       if (data?.status) {
-        setUnSettleBets(data?.data?.data);
-        setPages(data?.data?.links);
-        setLastPage(data?.data?.last_page);
+        if (data?.data?.data.length <= 0) {
+          setUnSettleBets(data?.data?.data);
+          setPages([]);
+        } else {
+          setUnSettleBets(data?.data?.data);
+          setPages(data?.data?.links);
+          setLastPage(data?.data?.last_page);
+        }
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -228,6 +240,22 @@ const UnsettleBet = () => {
       setIsLoading(false);
     }
   };
+
+  const handleClear = () => {
+    setQueryParams("");
+    setSearchEventName("");
+    setSearchEventId("");
+    setSearchSelectionName("");
+    setSelectSportType("");
+    fetchUnSettledBets(); // or call this in an effect
+  };
+
+  useEffect(() => {
+    // Run any effect needed when `queryParams` changes.
+    if (!queryParams) {
+      fetchUnSettledBets();
+    }
+  }, [queryParams]);
 
   return (
     <Layout>
@@ -252,26 +280,34 @@ const UnsettleBet = () => {
               value={searchEventName}
               type="text"
               placeholder="Search Market Id"
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             />
             <input
               onChange={(e) => setSearchEventId(e.target.value)}
               value={searchEventId}
               type="text"
               placeholder="Search Event Id"
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             />
             <input
               onChange={(e) => setSearchSelectionName(e.target.value)}
               value={searchSelectionName}
               type="text"
               placeholder="Search Selection Name"
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             />
             <select
               onChange={(e) => setSelectSportType(e.target.value)}
               value={selectSportType}
-              className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent text-gray-600 outline-none cursor-pointer border-2 border-slate-600 focus:border-teal-500"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
             >
               <option value="">All</option>
               <option value="cricket">Cricket</option>
@@ -296,13 +332,7 @@ const UnsettleBet = () => {
                   "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
               }}
               className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={() => {
-                setSearchEventName("");
-                setSearchEventId("");
-                setSearchSelectionName("");
-                setSelectSportType("");
-                fetchUnSettledBets();
-              }}
+              onClick={handleClear}
             >
               Clear Filter
             </p>
@@ -311,13 +341,13 @@ const UnsettleBet = () => {
 
         {/* users table */}
         <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
-          <table className="w-full text-sm text-left rtl:text-right text-white  border-l-2 border-r-2 border-black">
+          <table className="w-full text-sm text-left rtl:text-right text-white  ">
             <thead
               className={`sticky top-0 text-xs  uppercase ${
                 mode === "light"
                   ? "bg-blue-300 text-black"
                   : "bg-black text-white"
-              }  border-b-2 border-t-2 border-black rounded-md`}
+              }  border-b-2 border-t-2 border-black rounded-md border-l-2 border-r-2 border-black`}
             >
               <tr>
                 <th scope="col" className="px-6 py-3 text-left">
@@ -366,6 +396,18 @@ const UnsettleBet = () => {
                     </div>
                   </td>
                 </tr>
+              ) : unSettleBets.length <= 0 ? (
+                <tr className="text-center text-sm">
+                  <td colSpan={12} align="center">
+                    <p
+                      className={`py-3 text-lg ${
+                        mode === "light" ? "text-black" : "text-white"
+                      }`}
+                    >
+                      No data to show
+                    </p>
+                  </td>
+                </tr>
               ) : (
                 unSettleBets.map((bet, i) => (
                   <tr
@@ -378,7 +420,7 @@ const UnsettleBet = () => {
                         : mode === "light"
                         ? "bg-blue-100 text-black"
                         : "bg-black text-white"
-                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
+                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700 border-l-2 border-r-2 border-black`}
                   >
                     <td className="px-6 py-4 text-left text-xs">
                       {bet?.sport}
@@ -419,68 +461,71 @@ const UnsettleBet = () => {
             </tbody>
           </table>
         </div>
+
         {/* pagination */}
-        <div className="mt-5 flex items-center justify-center gap-x-3">
-          {parseInt(pageNo) !== 1 && (
-            <p
-              onClick={() => {
-                if (pages[0]?.url !== null) {
-                  const pN = parseInt(pages[0]?.url.split("=")[1]);
-                  setPagNo(pN);
-                }
-              }}
-              className={`border-2  px-2 rounded-md cursor-pointer ${
-                mode === "light"
-                  ? "border-black text-black"
-                  : "border-white  text-white"
-              }`}
-            >
-              Prev
-            </p>
-          )}
-          <div className="flex items-center gap-3">
-            {pages.slice(1, -1).map((page, i) => {
-              return (
-                <p
-                  className={`border-2  px-2 rounded-md cursor-pointer ${
-                    pageNo == page?.label
-                      ? mode === "light"
-                        ? "bg-black text-white border-white shadow-2xl scale-105"
-                        : "bg-slate-300 text-black border-slate-200 shadow-2xl scale-105"
-                      : mode === "light"
-                      ? "text-black border-black"
-                      : "text-white"
-                  }`}
-                  onClick={() => {
-                    setPagNo(parseInt(page?.label));
-                  }}
-                  key={i}
-                >
-                  {page?.label}
-                </p>
-              );
-            })}
+        {pages && pages.length < 0 && (
+          <div className="mt-5 flex items-center justify-center gap-x-3">
+            {parseInt(pageNo) !== 1 && (
+              <p
+                onClick={() => {
+                  if (pages[0]?.url !== null) {
+                    const pN = parseInt(pages[0]?.url.split("=")[1]);
+                    setPagNo(pN);
+                  }
+                }}
+                className={`border-2  px-2 rounded-md cursor-pointer ${
+                  mode === "light"
+                    ? "border-black text-black"
+                    : "border-white  text-white"
+                }`}
+              >
+                Prev
+              </p>
+            )}
+            <div className="flex items-center gap-3">
+              {pages.slice(1, -1).map((page, i) => {
+                return (
+                  <p
+                    className={`border-2  px-2 rounded-md cursor-pointer ${
+                      pageNo == page?.label
+                        ? mode === "light"
+                          ? "bg-black text-white border-white shadow-2xl scale-105"
+                          : "bg-slate-300 text-black border-slate-200 shadow-2xl scale-105"
+                        : mode === "light"
+                        ? "text-black border-black"
+                        : "text-white"
+                    }`}
+                    onClick={() => {
+                      setPagNo(parseInt(page?.label));
+                    }}
+                    key={i}
+                  >
+                    {page?.label}
+                  </p>
+                );
+              })}
+            </div>
+            {parseInt(pageNo) !== lastPage && (
+              <p
+                onClick={() => {
+                  if (pages[pages.length - 1]?.url !== null) {
+                    const pN = parseInt(
+                      pages[pages.length - 1]?.url.split("=")[1]
+                    );
+                    setPagNo(pN);
+                  }
+                }}
+                className={`border-2  px-2 rounded-md cursor-pointer ${
+                  mode === "light"
+                    ? "border-black text-black"
+                    : "border-white  text-white"
+                }`}
+              >
+                Next
+              </p>
+            )}
           </div>
-          {parseInt(pageNo) !== lastPage && (
-            <p
-              onClick={() => {
-                if (pages[pages.length - 1]?.url !== null) {
-                  const pN = parseInt(
-                    pages[pages.length - 1]?.url.split("=")[1]
-                  );
-                  setPagNo(pN);
-                }
-              }}
-              className={`border-2  px-2 rounded-md cursor-pointer ${
-                mode === "light"
-                  ? "border-black text-black"
-                  : "border-white  text-white"
-              }`}
-            >
-              Next
-            </p>
-          )}
-        </div>
+        )}
 
         {/* action modal */}
         {actionModalOpen.status && (

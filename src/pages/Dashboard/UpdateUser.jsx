@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import useStore from "../../zustand/useStore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaLeftLong } from "react-icons/fa6";
 
 const UpdateUser = () => {
   const [currentState, setCurrentState] = useState("update");
@@ -145,19 +146,37 @@ const UpdateUser = () => {
                   : "bg-slate-600  border-2 border-white"
               }`}
             >
-              <div className="flex justify-end">
+              <div className="flex justify-between">
                 <p
                   onClick={() => {
-                    setCurrentState("changePassword");
+                    if (currentState === "update") {
+                      navigate("/dashboard/users-list");
+                    } else {
+                      setCurrentState("update");
+                    }
                   }}
-                  className={
+                  className={`w-8 h-8 rounded-full flex items-center justify-center cursor-pointer ${
                     mode === "light"
-                      ? "text-black border-2 border-black px-2 py-0.5 cursor-pointer"
-                      : "text-white border-2 border-white px-2 py-0.5 cursor-pointer"
-                  }
+                      ? "bg-blue-200 text-black"
+                      : " bg-black text-white"
+                  }`}
                 >
-                  Change Password
+                  <FaLeftLong />
                 </p>
+                {currentState === "update" && (
+                  <p
+                    onClick={() => {
+                      setCurrentState("changePassword");
+                    }}
+                    className={
+                      mode === "light"
+                        ? "text-black border-2 border-black px-2 py-0.5 rounded-md hover:bg-blue-300  transition-all duration-300 ease-in cursor-pointer"
+                        : "text-white border-2 border-white px-2 py-0.5 cursor-pointer"
+                    }
+                  >
+                    Change Password
+                  </p>
+                )}
               </div>
               <div className="flex justify-center">
                 <h1

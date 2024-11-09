@@ -5,6 +5,7 @@ import Sidebar2 from "../Shared/Sidebar";
 
 const Layout = ({ children }) => {
   const { mode } = useStore();
+  // const mode = localStorage.getItem("mode");
   return (
     <div className="flex">
       <Sidebar2 />

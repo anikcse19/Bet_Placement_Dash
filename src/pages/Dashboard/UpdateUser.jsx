@@ -29,7 +29,9 @@ const UpdateUser = () => {
   const { id } = params;
 
   const token = Cookies.get("token");
+
   const { mode } = useStore();
+  // const mode = localStorage.getItem("mode");
 
   useEffect(() => {
     axios

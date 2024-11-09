@@ -41,6 +41,7 @@ const SetteBet = () => {
   const [queryParams, setQueryParams] = useState("");
 
   const { mode } = useStore();
+  // const mode = localStorage.getItem("mode");
 
   const fetchUnSettledBets = async () => {
     try {
@@ -254,10 +255,10 @@ const SetteBet = () => {
   }, [queryParams]);
   return (
     <Layout>
-      <div className="relative w-full h-full pt-6">
+      <div className="relative w-full h-full mt-16">
         <div className=" flex items-center justify-between">
           <h1
-            className={`text-xl  font-bold tracking-widest ${
+            className={`text-xl  font-bold border-l-8 border-purple-600 px-3 py-2 ${
               mode === "light" ? "text-black" : "text-white"
             }`}
           >

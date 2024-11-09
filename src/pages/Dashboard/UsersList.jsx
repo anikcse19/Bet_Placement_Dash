@@ -14,7 +14,9 @@ const UsersList = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+
   const { mode } = useStore();
+  // const mode = localStorage.getItem("mode");
 
   // get cookies value
   const token = Cookies.get("token");

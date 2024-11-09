@@ -1,12 +1,21 @@
-// useStore.js
-import { create } from "zustand";
+// src/zustand/useModeStore.js
+import { create } from "zustand"; // Import as a named import
 
 const useStore = create((set) => ({
-  mode: "light",
-  setMode: (value) => set(() => ({ mode: value })),
-  // increase: () => set((state) => ({ count: state.count + 1 })),
-  // decrease: () => set((state) => ({ count: state.count - 1 })),
-  // reset: () => set({ count: 0 }),
+  mode: localStorage.getItem("mode") || "light",
+
+  toggleMode: () =>
+    set((state) => {
+      const newMode = state.mode === "light" ? "dark" : "light";
+      localStorage.setItem("mode", newMode);
+      return { mode: newMode };
+    }),
+
+  setMode: (newMode) =>
+    set(() => {
+      localStorage.setItem("mode", newMode);
+      return { mode: newMode };
+    }),
 }));
 
 export default useStore;

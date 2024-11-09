@@ -15,7 +15,9 @@ const CreateUser = () => {
 
   const navigate = useNavigate();
   const token = Cookies.get("token");
+
   const { mode } = useStore();
+  // const mode = localStorage.getItem("mode");
 
   const handleCreateUser = async () => {
     try {

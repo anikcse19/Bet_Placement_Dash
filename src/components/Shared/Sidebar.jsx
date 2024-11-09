@@ -5,18 +5,19 @@ import { useEffect, useState } from "react";
 import { FaAngleDown, FaUsersCog } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useStore from "../../zustand/useStore";
+// import useStore from "../../zustand/useStore";
 import { VscOutput } from "react-icons/vsc";
 import { IoMdPersonAdd } from "react-icons/io";
 import axios from "axios";
 import { baseUrl } from "../../../config";
+import useStore from "../../zustand/useStore";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
 
-  const { mode, setMode } = useStore();
+  const { mode, toggleMode } = useStore();
 
   // get Cookies value
   const userNmae = Cookies.get("username");
@@ -45,7 +46,7 @@ const Sidebar2 = () => {
       ],
     },
     {
-      title: "Bet Results",
+      title: "Match Results",
       icon: <VscOutput />,
       link: "/dashboard/bet-results",
       active: false,
@@ -247,7 +248,11 @@ const Sidebar2 = () => {
           }`}
         >
           <p
-            onClick={() => setMode("dark")}
+            onClick={() => {
+              // localStorage.setItem("mode", "dark");
+              // setMode("dark");
+              toggleMode();
+            }}
             className={`px-4 py-1 cursor-pointer transition-all duration-300 ease-in ${
               mode === "dark" && "bg-blue-200 text-blue-900 font-bold "
             }`}
@@ -255,7 +260,11 @@ const Sidebar2 = () => {
             Dark
           </p>
           <p
-            onClick={() => setMode("light")}
+            onClick={() => {
+              // localStorage.setItem("mode", "light");
+              // setMode("light");
+              toggleMode();
+            }}
             className={`px-4 py-1 cursor-pointer transition-all duration-300 ease-in ${
               mode === "light" && "bg-blue-200 text-blue-900 font-bold "
             }`}

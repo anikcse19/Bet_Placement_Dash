@@ -39,6 +39,7 @@ const UnsettleBet = () => {
   const token = Cookies.get("token");
 
   const { mode } = useStore();
+  // const mode = localStorage.getItem("mode");
 
   console.log(queryParams, "pp");
 
@@ -60,7 +61,7 @@ const UnsettleBet = () => {
       const data = await response.json();
 
       if (data?.status) {
-        console.log(data?.data?.data, "res");
+        console.log(data?.data, "res");
 
         setUnSettleBets(data?.data?.data);
         setPages(data?.data?.links);
@@ -225,11 +226,10 @@ const UnsettleBet = () => {
       const data = await response.json();
 
       if (data?.status) {
+        setUnSettleBets(data?.data?.data);
         if (data?.data?.data.length <= 0) {
-          setUnSettleBets(data?.data?.data);
           setPages([]);
         } else {
-          setUnSettleBets(data?.data?.data);
           setPages(data?.data?.links);
           setLastPage(data?.data?.last_page);
         }
@@ -240,6 +240,7 @@ const UnsettleBet = () => {
       setIsLoading(false);
     }
   };
+  console.log(pages, "pages");
 
   const handleClear = () => {
     setQueryParams("");
@@ -259,10 +260,10 @@ const UnsettleBet = () => {
 
   return (
     <Layout>
-      <div className="relative w-full h-full pt-6">
+      <div className="relative w-full h-full mt-16">
         <div className=" flex items-center justify-between">
           <h1
-            className={`text-xl  font-bold tracking-widest ${
+            className={`text-xl  font-bold border-l-8 border-purple-600 px-3 py-2 ${
               mode === "light" ? "text-black" : "text-white"
             }`}
           >
@@ -347,7 +348,7 @@ const UnsettleBet = () => {
                 mode === "light"
                   ? "bg-blue-300 text-black"
                   : "bg-black text-white"
-              }  border-b-2 border-t-2 border-black rounded-md border-l-2 border-r-2 border-black`}
+              }  border-b-2 border-t-2 border-black rounded-md border-l-2 border-r-2 `}
             >
               <tr>
                 <th scope="col" className="px-6 py-3 text-left">
@@ -463,7 +464,7 @@ const UnsettleBet = () => {
         </div>
 
         {/* pagination */}
-        {pages && pages.length < 0 && (
+        {pages && pages.length > 0 && (
           <div className="mt-5 flex items-center justify-center gap-x-3">
             {parseInt(pageNo) !== 1 && (
               <p

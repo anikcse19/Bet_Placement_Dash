@@ -48,7 +48,7 @@ const Sidebar2 = () => {
     {
       title: "Match Results",
       icon: <VscOutput />,
-      link: "/dashboard/bet-results",
+      link: "/dashboard/match-results",
       active: false,
     },
     ...(role === 1
@@ -139,13 +139,13 @@ const Sidebar2 = () => {
 
   return (
     <div
-      className={`sidebar flex min-w-[230px] h-full overflow-y-auto flex-col justify-between gap-12   px-[18px] py-6 fixed ${
+      className={`sidebar flex  min-w-[230px] h-full overflow-y-auto flex-col justify-between gap-12   px-[18px] py-6 fixed ${
         mode === "light" ? "bg-white" : "bg-[#272727] text-white"
       }`}
     >
       <div className="flex flex-col gap-[30px]">
         <div className="flex flex-col items-center gap-1.5 ">
-          <Link className="flex items-center gap-x-2" to="/">
+          <Link className="flex items-center gap-x-2" to="">
             <img
               src="/logo.png"
               width={130}

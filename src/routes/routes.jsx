@@ -40,7 +40,7 @@ export const routes = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard/bet-results",
+    path: "/dashboard/match-results",
     element: (
       <PrivateRoute>
         <BetResults />

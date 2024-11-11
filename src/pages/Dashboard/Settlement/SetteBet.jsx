@@ -85,6 +85,7 @@ const SetteBet = () => {
 
   useEffect(() => {
     fetchUnSettledBets();
+    handleSearch();
   }, [pageNo]);
 
   const handleYesChange = () => {
@@ -112,7 +113,6 @@ const SetteBet = () => {
     // setIsWin("no");
     setResult("no");
   };
-  console.log("result", result);
 
   const handleSendOTP = async () => {
     await axios
@@ -149,16 +149,6 @@ const SetteBet = () => {
       result: isRefund === "yes" ? null : result,
       otp: isRefund === "yes" && OTP,
     };
-
-    // const response = await fetch(`${baseUrl}/api/admin/do-settle`, {
-    //   method: "POST",
-    //   body: JSON.stringify(betData),
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // });
-
-    // const data = await response.json();
 
     try {
       await axios
@@ -301,8 +291,10 @@ const SetteBet = () => {
             <select
               onChange={(e) => setSelectSportType(e.target.value)}
               value={selectSportType}
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
+              className={`w-52 px-3 py-2 text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light"
+                  ? "text-black bg-transparent"
+                  : "text-white bg-[#201F1F]"
               }`}
             >
               <option value="">All</option>
@@ -352,7 +344,7 @@ const SetteBet = () => {
                   Event Id
                 </th>
                 <th scope="col" className="px-6 py-3 text-left">
-                  Market Date
+                  Market Id
                 </th>
                 <th scope="col" className="px-6 py-3 text-left">
                   Event Name
@@ -424,7 +416,7 @@ const SetteBet = () => {
                       {bet?.eventId}
                     </td>
                     <td className="px-6 py-4 text-left text-xs">
-                      {formateDate(bet?.marketDate)}
+                      {bet?.marketId}
                     </td>
                     <td className="px-6 py-4 text-left text-xs">
                       {bet?.eventTitle}

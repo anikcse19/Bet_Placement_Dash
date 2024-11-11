@@ -41,12 +41,7 @@ const UnsettleBet = () => {
   const { mode } = useStore();
   // const mode = localStorage.getItem("mode");
 
-  console.log(queryParams, "pp");
-
   const fetchUnSettledBets = async () => {
-    console.log("hello vai");
-    console.log(queryParams);
-
     try {
       const response = await fetch(
         `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParams}`,
@@ -61,8 +56,6 @@ const UnsettleBet = () => {
       const data = await response.json();
 
       if (data?.status) {
-        console.log(data?.data, "res");
-
         setUnSettleBets(data?.data?.data);
         setPages(data?.data?.links);
         setLastPage(data?.data?.last_page);
@@ -105,18 +98,18 @@ const UnsettleBet = () => {
     setResult("no");
   };
 
-  const formateDate = (marketDate) => {
-    const localDate = new Date(marketDate).toLocaleString(undefined, {
-      timeZoneName: "short",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  // const formateDate = (marketDate) => {
+  //   const localDate = new Date(marketDate).toLocaleString(undefined, {
+  //     timeZoneName: "short",
+  //     year: "numeric",
+  //     month: "long",
+  //     day: "numeric",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
 
-    return localDate;
-  };
+  //   return localDate;
+  // };
 
   const handleSendOTP = async () => {
     await axios
@@ -240,7 +233,6 @@ const UnsettleBet = () => {
       setIsLoading(false);
     }
   };
-  console.log(pages, "pages");
 
   const handleClear = () => {
     setQueryParams("");
@@ -260,7 +252,7 @@ const UnsettleBet = () => {
 
   return (
     <Layout>
-      <div className="relative w-full h-full mt-16">
+      <div className="relative w-full h-full mt-6 lg:mt-16">
         <div className=" flex items-center justify-between">
           <h1
             className={`text-xl  font-bold border-l-8 border-purple-600 px-3 py-2 ${
@@ -271,77 +263,85 @@ const UnsettleBet = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-5 flex items-center gap-x-2">
+        <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
           <p className={mode === "light" ? "text-black" : "text-white"}>
             Search:
           </p>
-          <div className="flex items-center gap-x-4">
-            <input
-              onChange={(e) => setSearchEventName(e.target.value)}
-              value={searchEventName}
-              type="text"
-              placeholder="Search Market Id"
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            />
-            <input
-              onChange={(e) => setSearchEventId(e.target.value)}
-              value={searchEventId}
-              type="text"
-              placeholder="Search Event Id"
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            />
-            <input
-              onChange={(e) => setSearchSelectionName(e.target.value)}
-              value={searchSelectionName}
-              type="text"
-              placeholder="Search Selection Name"
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            />
-            <select
-              onChange={(e) => setSelectSportType(e.target.value)}
-              value={selectSportType}
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            >
-              <option value="">All</option>
-              <option value="cricket">Cricket</option>
-              <option value="soccer">Soccer</option>
-              <option value="tennis">Tennis</option>
-            </select>
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <input
+                onChange={(e) => setSearchEventName(e.target.value)}
+                value={searchEventName}
+                type="text"
+                placeholder="Search Market Id"
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+              <input
+                onChange={(e) => setSearchEventId(e.target.value)}
+                value={searchEventId}
+                type="text"
+                placeholder="Search Event Id"
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <input
+                onChange={(e) => setSearchSelectionName(e.target.value)}
+                value={searchSelectionName}
+                type="text"
+                placeholder="Search Selection Name"
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+              <select
+                onChange={(e) => setSelectSportType(e.target.value)}
+                value={selectSportType}
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light"
+                    ? "text-black bg-transparent"
+                    : "text-white bg-[#201F1F]"
+                }`}
+              >
+                <option value="">All</option>
+                <option value="cricket">Cricket</option>
+                <option value="soccer">Soccer</option>
+                <option value="tennis">Tennis</option>
+              </select>
+            </div>
 
-            <p
-              style={{
-                boxShadow:
-                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-              }}
-              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={handleSearch}
-            >
-              Get Bets
-            </p>
-
-            <p
-              style={{
-                boxShadow:
-                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-              }}
-              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={handleClear}
-            >
-              Clear Filter
-            </p>
+            <div className="flex items-center gap-2">
+              {" "}
+              <p
+                style={{
+                  boxShadow:
+                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                }}
+                className="inline bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+                onClick={handleSearch}
+              >
+                Get Bets
+              </p>
+              <p
+                style={{
+                  boxShadow:
+                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                }}
+                className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+                onClick={handleClear}
+              >
+                Clear Filter
+              </p>
+            </div>
           </div>
         </div>
 
         {/* users table */}
-        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
+        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5 ">
           <table className="w-full text-sm text-left rtl:text-right text-white  ">
             <thead
               className={`sticky top-0 text-xs  uppercase ${
@@ -360,9 +360,7 @@ const UnsettleBet = () => {
                 <th scope="col" className="px-6 py-3 text-left">
                   Market Id
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Market Date
-                </th>
+
                 <th scope="col" className="px-6 py-3 text-left">
                   Event Name
                 </th>
@@ -433,9 +431,6 @@ const UnsettleBet = () => {
                       {bet?.marketId}
                     </td>
                     <td className="px-6 py-4 text-left text-xs">
-                      {formateDate(bet?.marketDate)}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
                       {bet?.eventTitle}
                     </td>
                     <td className="px-6 py-4 text-left text-xs">
@@ -465,7 +460,7 @@ const UnsettleBet = () => {
 
         {/* pagination */}
         {pages && pages.length > 0 && (
-          <div className="mt-5 flex items-center justify-center gap-x-3">
+          <div className="mt-5 flex items-center gap-3 max-w-[calc(100vw-350px)] flex-wrap justify-center self-center">
             {parseInt(pageNo) !== 1 && (
               <p
                 onClick={() => {

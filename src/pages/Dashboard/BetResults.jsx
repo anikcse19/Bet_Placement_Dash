@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Layout from "../../components/Layout/Layout";
 import useStore from "../../zustand/useStore";
 import { Circles } from "react-loader-spinner";
+import { FaCaretSquareRight } from "react-icons/fa";
 
 const BetResults = () => {
   const [betResults, setBetResults] = useState([]);
@@ -112,7 +113,9 @@ const BetResults = () => {
             onChange={handleSearch}
             type="text"
             placeholder="Search Result"
-            className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
+            className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+              mode === "light" ? "text-black" : "text-white"
+            }`}
           />
         </div>
       </div>
@@ -188,7 +191,27 @@ const BetResults = () => {
                     {bet?.marketId}
                   </td>
                   <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                    {bet?.eventName}
+                    <div className="flex justify-between items-center">
+                      <p>
+                        {`${bet?.eventName}   ${
+                          bet?.score !== null
+                            ? bet?.score?.nscore !== null
+                              ? ` || ${bet?.score?.nscore}`
+                              : ""
+                            : ""
+                        }`}
+                      </p>
+                      {bet?.score !== null && bet?.score?.iscoreLink && (
+                        <p>
+                          <FaCaretSquareRight
+                            onClick={() =>
+                              window.open(bet?.score?.iscoreLink, "_blank")
+                            }
+                            className="text-lg"
+                          />
+                        </p>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black">
                     {`${bet?.winnerDetails?.runnerName} (${bet?.winnerDetails?.selectionId})`}
@@ -212,7 +235,8 @@ const BetResults = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-5 flex items-center justify-center gap-x-3">
+        <div className="mt-5 flex items-center gap-3 max-w-[calc(100vw-350px)] flex-wrap justify-center self-center">
+          {/* Previous button */}
           {pageNo > 1 && (
             <p
               onClick={() => setPageNo(pageNo - 1)}
@@ -225,23 +249,48 @@ const BetResults = () => {
               Prev
             </p>
           )}
-          {[...Array(totalPages)].map((_, index) => (
-            <p
-              key={index}
-              onClick={() => setPageNo(index + 1)}
-              className={`border-2 px-2 rounded-md cursor-pointer ${
-                pageNo === index + 1
-                  ? mode === "light"
-                    ? "bg-black text-white"
-                    : "bg-slate-300 text-black"
-                  : mode === "light"
-                  ? "text-black border-black"
-                  : "text-white"
-              }`}
-            >
-              {index + 1}
-            </p>
-          ))}
+
+          {/* Page numbers */}
+          {(() => {
+            // Determine the range of page numbers to display
+            let startPage = Math.max(1, pageNo - 5);
+            let endPage = Math.min(totalPages, pageNo + 4);
+
+            // Adjust start and end pages to always show 10 pages when possible
+            if (endPage - startPage < 9) {
+              if (startPage === 1) {
+                endPage = Math.min(totalPages, startPage + 9);
+              } else if (endPage === totalPages) {
+                startPage = Math.max(1, endPage - 9);
+              }
+            }
+
+            return Array.from(
+              { length: endPage - startPage + 1 },
+              (_, index) => {
+                const page = startPage + index;
+                return (
+                  <p
+                    key={page}
+                    onClick={() => setPageNo(page)}
+                    className={`border-2 px-2 rounded-md cursor-pointer ${
+                      pageNo === page
+                        ? mode === "light"
+                          ? "bg-black text-white"
+                          : "bg-slate-300 text-black"
+                        : mode === "light"
+                        ? "text-black border-black"
+                        : "text-white"
+                    }`}
+                  >
+                    {page}
+                  </p>
+                );
+              }
+            );
+          })()}
+
+          {/* Next button */}
           {pageNo < totalPages && (
             <p
               onClick={() => setPageNo(pageNo + 1)}

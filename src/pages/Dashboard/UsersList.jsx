@@ -45,7 +45,7 @@ const UsersList = () => {
     fetchUsersList();
   }, []);
 
-  console.log(usersList, "users");
+  // console.log(usersList, "users");
 
   const formateDate = (marketDate) => {
     const localDate = new Date(marketDate).toLocaleString(undefined, {

@@ -44,6 +44,8 @@ const SetteBet = () => {
   // const mode = localStorage.getItem("mode");
 
   const fetchUnSettledBets = async () => {
+    // console.log("sea");
+
     try {
       const response = await fetch(
         `${baseUrl}/api/admin/get-settle-list?page=${pageNo}&${queryParams}`,
@@ -122,7 +124,7 @@ const SetteBet = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         if (res?.data?.status) {
           // console.log("asce");
@@ -234,7 +236,10 @@ const SetteBet = () => {
     setSearchEventId("");
     setSearchSelectionName("");
     setSelectSportType("");
-    fetchUnSettledBets(); // or call this in an effect
+
+    setTimeout(() => {
+      fetchUnSettledBets(); // or call this in an effect
+    }, 1000);
   };
 
   useEffect(() => {
@@ -320,7 +325,9 @@ const SetteBet = () => {
                   "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
               }}
               className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={handleClear}
+              onClick={() => {
+                handleClear();
+              }}
             >
               Clear Filter
             </p>

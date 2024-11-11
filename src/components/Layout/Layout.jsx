@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
 
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  console.log(isMobileNavOpen, "mb");
+  // console.log(isMobileNavOpen, "mb");
 
   return (
     <div className="flex bg-red-700 relative w-full h-full">

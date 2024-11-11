@@ -119,7 +119,7 @@ const UnsettleBet = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         if (res?.data?.status) {
           // console.log("asce");
@@ -240,6 +240,7 @@ const UnsettleBet = () => {
     setSearchEventId("");
     setSearchSelectionName("");
     setSelectSportType("");
+
     fetchUnSettledBets(); // or call this in an effect
   };
 

@@ -236,10 +236,7 @@ const SetteBet = () => {
     setSearchEventId("");
     setSearchSelectionName("");
     setSelectSportType("");
-
-    setTimeout(() => {
-      fetchUnSettledBets(); // or call this in an effect
-    }, 1000);
+    fetchUnSettledBets(); // or call this in an effect
   };
 
   useEffect(() => {

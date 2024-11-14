@@ -349,188 +349,168 @@ const UnsettleBet = () => {
           </div>
         </div>
 
-        {/* users table */}
-        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5 w-[400px]">
-          <table className="w-full text-sm text-left rtl:text-right text-white  ">
-            <thead
-              className={`sticky top-0 text-xs  uppercase ${
-                mode === "light"
-                  ? "bg-blue-300 text-black"
-                  : "bg-black text-white"
-              }  border-b-2 border-t-2 border-black rounded-md border-l-2 border-r-2 `}
-            >
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Sport
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Event Id
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Market Id
-                </th>
-
-                <th scope="col" className="px-6 py-3 text-left">
-                  Event Name
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Selection Name
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Bet Type
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Action
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Info
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr className="text-center text-sm">
-                  <td colSpan={12} align="center">
-                    <div className="my-5 flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center w-full px-4 md:px-8">
+          {/* Users table */}
+          <div className="relative overflow-x-auto max-h-screen my-5 w-full">
+            <table className="w-full text-xs sm:text-sm text-left text-white">
+              <thead
+                className={`sticky top-0 uppercase ${
+                  mode === "light"
+                    ? "bg-blue-300 text-black"
+                    : "bg-black text-white"
+                } border-b-2 border-t-2 border-black`}
+              >
+                <tr>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Sport
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Event Id
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Market Id
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Event Name
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Selection Name
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Bet Type
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Action
+                  </th>
+                  <th scope="col" className="px-3 sm:px-6 py-2">
+                    Info
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={8} className="py-5 text-center">
                       <Circles
                         height="50"
                         width="50"
                         color="#4fa94d"
                         ariaLabel="circles-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
                       />
-                    </div>
-                  </td>
-                </tr>
-              ) : unSettleBets.length <= 0 ? (
-                <tr className="text-center text-sm">
-                  <td colSpan={12} align="center">
-                    <p
-                      className={`py-3 text-lg ${
-                        mode === "light" ? "text-black" : "text-white"
-                      }`}
-                    >
-                      No data to show
-                    </p>
-                  </td>
-                </tr>
-              ) : (
-                unSettleBets.map((bet, i) => (
-                  <tr
-                    key={bet.id}
-                    className={`${
-                      i % 2 == 0
-                        ? mode === "light"
-                          ? "bg-white text-black"
-                          : "bg-transparent text-white"
-                        : mode === "light"
-                        ? "bg-blue-100 text-black"
-                        : "bg-black text-white"
-                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700 border-l-2 border-r-2 border-black`}
-                  >
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.sport}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.eventId}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.marketId}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.eventTitle}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.selectionName ? bet?.selectionName : "--"}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">{bet?.type}</td>
-                    <td className="px-6 py-4 text-left text-xl">
-                      <AiFillEdit
-                        onClick={() => {
-                          setActionModalOpen({
-                            status: true,
-                            value: bet,
-                          });
-                        }}
-                        className=""
-                      />
-                    </td>
-                    <td className="px-6 py-4 text-center text-xl">
-                      <IoMdInformationCircleOutline className="" />
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : unSettleBets.length <= 0 ? (
+                  <tr>
+                    <td colSpan={8} className="py-5 text-center">
+                      <p
+                        className={`${
+                          mode === "light" ? "text-black" : "text-white"
+                        }`}
+                      >
+                        No data to show
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  unSettleBets.map((bet, i) => (
+                    <tr
+                      key={bet.id}
+                      className={`${
+                        i % 2 === 0
+                          ? mode === "light"
+                            ? "bg-white text-black"
+                            : "bg-transparent text-white"
+                          : mode === "light"
+                          ? "bg-blue-100 text-black"
+                          : "bg-black text-white"
+                      } text-xs sm:text-sm transition-all duration-500 ease-in border-b-2 border-slate-700`}
+                    >
+                      <td className="px-3 sm:px-6 py-4">{bet?.sport}</td>
+                      <td className="px-3 sm:px-6 py-4">{bet?.eventId}</td>
+                      <td className="px-3 sm:px-6 py-4">{bet?.marketId}</td>
+                      <td className="px-3 sm:px-6 py-4">{bet?.eventTitle}</td>
+                      <td className="px-3 sm:px-6 py-4">
+                        {bet?.selectionName || "--"}
+                      </td>
+                      <td className="px-3 sm:px-6 py-4">{bet?.type}</td>
+                      <td className="px-3 sm:px-6 py-4 text-xl">
+                        <AiFillEdit
+                          onClick={() =>
+                            setActionModalOpen({ status: true, value: bet })
+                          }
+                        />
+                      </td>
+                      <td className="px-3 sm:px-6 py-4 text-center text-xl">
+                        <IoMdInformationCircleOutline />
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
 
-        {/* pagination */}
-        {pages && pages.length > 0 && (
-          <div className="mt-5 flex items-center gap-3 max-w-[calc(100vw-350px)] flex-wrap justify-center self-center">
-            {parseInt(pageNo) !== 1 && (
-              <p
-                onClick={() => {
-                  if (pages[0]?.url !== null) {
-                    const pN = parseInt(pages[0]?.url.split("=")[1]);
-                    setPagNo(pN);
-                  }
-                }}
-                className={`border-2  px-2 rounded-md cursor-pointer ${
-                  mode === "light"
-                    ? "border-black text-black"
-                    : "border-white  text-white"
-                }`}
-              >
-                Prev
-              </p>
-            )}
-            <div className="flex items-center gap-3">
-              {pages.slice(1, -1).map((page, i) => {
-                return (
+          {/* Pagination */}
+          {pages && pages.length > 0 && (
+            <div className="mt-5 flex items-center gap-2 flex-wrap justify-center">
+              {parseInt(pageNo) !== 1 && (
+                <p
+                  onClick={() => {
+                    if (pages[0]?.url) {
+                      const pN = parseInt(pages[0]?.url.split("=")[1]);
+                      setPagNo(pN);
+                    }
+                  }}
+                  className={`border px-2 rounded-md cursor-pointer ${
+                    mode === "light"
+                      ? "border-black text-black"
+                      : "border-white text-white"
+                  }`}
+                >
+                  Prev
+                </p>
+              )}
+              <div className="flex items-center gap-2">
+                {pages.slice(1, -1).map((page, i) => (
                   <p
-                    className={`border-2  px-2 rounded-md cursor-pointer ${
+                    key={i}
+                    onClick={() => setPagNo(parseInt(page?.label))}
+                    className={`border px-2 rounded-md cursor-pointer ${
                       pageNo == page?.label
                         ? mode === "light"
-                          ? "bg-black text-white border-white shadow-2xl scale-105"
-                          : "bg-slate-300 text-black border-slate-200 shadow-2xl scale-105"
+                          ? "bg-black text-white border-white shadow-xl"
+                          : "bg-slate-300 text-black border-slate-200 shadow-xl"
                         : mode === "light"
                         ? "text-black border-black"
-                        : "text-white"
+                        : "text-white border-white"
                     }`}
-                    onClick={() => {
-                      setPagNo(parseInt(page?.label));
-                    }}
-                    key={i}
                   >
                     {page?.label}
                   </p>
-                );
-              })}
+                ))}
+              </div>
+              {parseInt(pageNo) !== lastPage && (
+                <p
+                  onClick={() => {
+                    if (pages[pages.length - 1]?.url) {
+                      const pN = parseInt(
+                        pages[pages.length - 1]?.url.split("=")[1]
+                      );
+                      setPagNo(pN);
+                    }
+                  }}
+                  className={`border px-2 rounded-md cursor-pointer ${
+                    mode === "light"
+                      ? "border-black text-black"
+                      : "border-white text-white"
+                  }`}
+                >
+                  Next
+                </p>
+              )}
             </div>
-            {parseInt(pageNo) !== lastPage && (
-              <p
-                onClick={() => {
-                  if (pages[pages.length - 1]?.url !== null) {
-                    const pN = parseInt(
-                      pages[pages.length - 1]?.url.split("=")[1]
-                    );
-                    setPagNo(pN);
-                  }
-                }}
-                className={`border-2  px-2 rounded-md cursor-pointer ${
-                  mode === "light"
-                    ? "border-black text-black"
-                    : "border-white  text-white"
-                }`}
-              >
-                Next
-              </p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
 
         {/* action modal */}
         {actionModalOpen.status && (

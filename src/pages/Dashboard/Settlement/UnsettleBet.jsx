@@ -30,11 +30,11 @@ const UnsettleBet = () => {
   const [result, setResult] = useState("");
   const [OTP, setOTP] = useState(0);
   const [isOTPSent, setIsOTPSent] = useState(false);
-  const [searchEventName, setSearchEventName] = useState("");
+  const [searchMarketId, setSearchMarketId] = useState("");
   const [searchEventId, setSearchEventId] = useState("");
   const [searchSelectionName, setSearchSelectionName] = useState("");
   const [selectSportType, setSelectSportType] = useState("");
-  const [queryParams, setQueryParams] = useState("");
+  const [queryParamss, setQueryParamss] = useState("");
 
   const token = Cookies.get("token");
 
@@ -44,7 +44,7 @@ const UnsettleBet = () => {
   const fetchUnSettledBets = async () => {
     try {
       const response = await fetch(
-        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParams}`,
+        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParamss}`,
         {
           method: "GET",
           headers: {
@@ -193,17 +193,23 @@ const UnsettleBet = () => {
   };
 
   const handleSearch = async () => {
+    // e.preventDefault();
     setIsLoading(true);
+
+    console.log(selectSportType, "s type");
+
     // Build the query string based on non-empty search inputs
     const queryParams = new URLSearchParams();
 
-    if (searchEventName) queryParams.append("marketId", searchEventName);
+    console.log(queryParams, "init");
+
+    if (searchMarketId) queryParams.append("marketId", searchMarketId);
     if (searchEventId) queryParams.append("eventId", searchEventId);
     if (searchSelectionName)
       queryParams.append("selectionName", searchSelectionName);
-    if (selectSportType) queryParams.append("sport", selectSportType);
+    if (selectSportType !== "") queryParams.append("sport", selectSportType);
 
-    setQueryParams(queryParams.toString());
+    setQueryParamss(queryParams.toString());
 
     try {
       const response = await fetch(
@@ -235,8 +241,10 @@ const UnsettleBet = () => {
   };
 
   const handleClear = () => {
-    setQueryParams("");
-    setSearchEventName("");
+    // e.preventDefault();
+
+    setQueryParamss("");
+    setSearchMarketId("");
     setSearchEventId("");
     setSearchSelectionName("");
     setSelectSportType("");
@@ -246,10 +254,10 @@ const UnsettleBet = () => {
 
   useEffect(() => {
     // Run any effect needed when `queryParams` changes.
-    if (!queryParams) {
+    if (!queryParamss) {
       fetchUnSettledBets();
     }
-  }, [queryParams]);
+  }, [queryParamss]);
 
   return (
     <Layout>
@@ -271,8 +279,8 @@ const UnsettleBet = () => {
           <div className="flex flex-col lg:flex-row lg:items-center gap-4">
             <div className="flex items-center gap-3">
               <input
-                onChange={(e) => setSearchEventName(e.target.value)}
-                value={searchEventName}
+                onChange={(e) => setSearchMarketId(e.target.value)}
+                value={searchMarketId}
                 type="text"
                 placeholder="Search Market Id"
                 className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
@@ -315,8 +323,8 @@ const UnsettleBet = () => {
               </select>
             </div>
 
+            {selectSportType}
             <div className="flex items-center gap-2">
-              {" "}
               <p
                 style={{
                   boxShadow:
@@ -342,7 +350,7 @@ const UnsettleBet = () => {
         </div>
 
         {/* users table */}
-        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5 ">
+        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5 w-[400px]">
           <table className="w-full text-sm text-left rtl:text-right text-white  ">
             <thead
               className={`sticky top-0 text-xs  uppercase ${

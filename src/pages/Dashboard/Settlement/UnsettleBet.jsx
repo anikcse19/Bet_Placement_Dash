@@ -272,7 +272,7 @@ const UnsettleBet = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
+        {/* <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
           <p className={mode === "light" ? "text-black" : "text-white"}>
             Search:
           </p>
@@ -347,11 +347,11 @@ const UnsettleBet = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex flex-col items-center w-full px-4 md:px-8">
+        <div className="flex flex-col items-center overflow-x-auto pb-3">
           {/* Users table */}
-          <div className="relative overflow-x-auto max-h-screen my-5 w-full">
+          <div className="self-start relative overflow-x-auto my-5">
             <table className="w-full text-xs sm:text-sm text-left text-white">
               <thead
                 className={`sticky top-0 uppercase ${
@@ -361,28 +361,52 @@ const UnsettleBet = () => {
                 } border-b-2 border-t-2 border-black`}
               >
                 <tr>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Sport
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Event Id
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Market Id
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Event Name
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Selection Name
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Bet Type
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Action
                   </th>
-                  <th scope="col" className="px-3 sm:px-6 py-2">
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Info
                   </th>
                 </tr>
@@ -428,7 +452,7 @@ const UnsettleBet = () => {
                       <td className="px-3 sm:px-6 py-4">{bet?.sport}</td>
                       <td className="px-3 sm:px-6 py-4">{bet?.eventId}</td>
                       <td className="px-3 sm:px-6 py-4">{bet?.marketId}</td>
-                      <td className="px-3 sm:px-6 py-4">{bet?.eventTitle}</td>
+                      <td className="px-3 sm:px-6 py-4 ">{bet?.eventTitle}</td>
                       <td className="px-3 sm:px-6 py-4">
                         {bet?.selectionName || "--"}
                       </td>
@@ -452,7 +476,7 @@ const UnsettleBet = () => {
 
           {/* Pagination */}
           {pages && pages.length > 0 && (
-            <div className="mt-5 flex items-center gap-2 flex-wrap justify-center">
+            <div className="mt-5 flex flex-wrap items-center gap-2 flex-wrap justify-center">
               {parseInt(pageNo) !== 1 && (
                 <p
                   onClick={() => {

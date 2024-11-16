@@ -19,7 +19,7 @@ const SetteBet = () => {
     status: false,
     value: {},
   });
-  const [searchEventName, setSearchEventName] = useState("");
+  const [searchMarketId, setSearchMarketId] = useState("");
   const [searchEventId, setSearchEventId] = useState("");
   const [searchSelectionName, setSearchSelectionName] = useState("");
   const [selectSportType, setSelectSportType] = useState("");
@@ -192,7 +192,7 @@ const SetteBet = () => {
     // Build the query string based on non-empty search inputs
     const queryParams = new URLSearchParams();
 
-    if (searchEventName) queryParams.append("marketId", searchEventName);
+    if (searchMarketId) queryParams.append("marketId", searchMarketId);
     if (searchEventId) queryParams.append("eventId", searchEventId);
     if (searchSelectionName)
       queryParams.append("selectionName", searchSelectionName);
@@ -232,7 +232,7 @@ const SetteBet = () => {
 
   const handleClear = () => {
     setQueryParams("");
-    setSearchEventName("");
+    setSearchMarketId("");
     setSearchEventId("");
     setSearchSelectionName("");
     setSelectSportType("");
@@ -247,7 +247,7 @@ const SetteBet = () => {
   }, [queryParams]);
   return (
     <Layout>
-      <div className="relative w-full h-full mt-16">
+      <div className="relative w-full h-full mt-6 lg:mt-16">
         <div className=" flex items-center justify-between">
           <h1
             className={`text-xl  font-bold border-l-8 border-purple-600 px-3 py-2 ${
@@ -258,81 +258,85 @@ const SetteBet = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-5 flex items-center gap-x-2">
+        <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
           <p className={mode === "light" ? "text-black" : "text-white"}>
             Search:
           </p>
-          <div className="flex items-center gap-x-4">
-            <input
-              onChange={(e) => setSearchEventName(e.target.value)}
-              value={searchEventName}
-              type="text"
-              placeholder="Search Market Id"
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            />
-            <input
-              onChange={(e) => setSearchEventId(e.target.value)}
-              value={searchEventId}
-              type="text"
-              placeholder="Search Event Id"
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            />
-            <input
-              onChange={(e) => setSearchSelectionName(e.target.value)}
-              value={searchSelectionName}
-              type="text"
-              placeholder="Search Selection Name"
-              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light" ? "text-black" : "text-white"
-              }`}
-            />
-            <select
-              onChange={(e) => setSelectSportType(e.target.value)}
-              value={selectSportType}
-              className={`w-52 px-3 py-2 text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                mode === "light"
-                  ? "text-black bg-transparent"
-                  : "text-white bg-[#201F1F]"
-              }`}
-            >
-              <option value="">All</option>
-              <option value="cricket">Cricket</option>
-              <option value="soccer">Soccer</option>
-              <option value="tennis">Tennis</option>
-            </select>
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <input
+                onChange={(e) => setSearchMarketId(e.target.value)}
+                value={searchMarketId}
+                type="text"
+                placeholder="Search Market Id"
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+              <input
+                onChange={(e) => setSearchEventId(e.target.value)}
+                value={searchEventId}
+                type="text"
+                placeholder="Search Event Id"
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <input
+                onChange={(e) => setSearchSelectionName(e.target.value)}
+                value={searchSelectionName}
+                type="text"
+                placeholder="Search Selection Name"
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+              <select
+                onChange={(e) => setSelectSportType(e.target.value)}
+                value={selectSportType}
+                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light"
+                    ? "text-black bg-transparent"
+                    : "text-white bg-[#201F1F]"
+                }`}
+              >
+                <option value="">All</option>
+                <option value="cricket">Cricket</option>
+                <option value="soccer">Soccer</option>
+                <option value="tennis">Tennis</option>
+              </select>
+            </div>
 
-            <p
-              style={{
-                boxShadow:
-                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-              }}
-              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={handleSearch}
-            >
-              Get Bets
-            </p>
-
-            <p
-              style={{
-                boxShadow:
-                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-              }}
-              className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-              onClick={() => {
-                handleClear();
-              }}
-            >
-              Clear Filter
-            </p>
+            {selectSportType}
+            <div className="flex items-center gap-2">
+              <p
+                style={{
+                  boxShadow:
+                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                }}
+                className="inline bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+                onClick={handleSearch}
+              >
+                Get Bets
+              </p>
+              <p
+                style={{
+                  boxShadow:
+                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                }}
+                className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+                onClick={handleClear}
+              >
+                Clear Filter
+              </p>
+            </div>
           </div>
         </div>
         {/* users table */}
-        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
-          <table className="w-full text-sm text-left rtl:text-right text-white  ">
+        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5 w-full">
+          <table className="w-[400px] lg:w-full overflow-x-auto text-sm text-left rtl:text-right text-white  ">
             <thead
               className={`sticky top-0 text-xs  uppercase ${
                 mode === "light"

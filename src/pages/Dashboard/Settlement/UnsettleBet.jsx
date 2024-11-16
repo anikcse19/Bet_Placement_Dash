@@ -40,10 +40,12 @@ const UnsettleBet = () => {
   const { mode } = useStore();
   // const mode = localStorage.getItem("mode");
 
-  const fetchUnSettledBets = async () => {
+  const fetchUnSettledBets = async (withClear) => {
     try {
       const response = await fetch(
-        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParamss}`,
+        `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${
+          withClear ? "" : queryParamss
+        }`,
         {
           method: "GET",
           headers: {
@@ -239,8 +241,8 @@ const UnsettleBet = () => {
     }
   };
 
-  const handleClear = () => {
-    // e.preventDefault();
+  const handleClear = (e) => {
+    e.preventDefault();
 
     setQueryParamss("");
     setSearchMarketId("");
@@ -248,15 +250,15 @@ const UnsettleBet = () => {
     setSearchSelectionName("");
     setSelectSportType("");
 
-    fetchUnSettledBets(); // or call this in an effect
+    fetchUnSettledBets(true); // or call this in an effect
   };
 
-  useEffect(() => {
-    // Run any effect needed when `queryParams` changes.
-    if (!queryParamss) {
-      fetchUnSettledBets();
-    }
-  }, [queryParamss]);
+  // useEffect(() => {
+  //   // Run any effect needed when `queryParams` changes.
+  //   if (!queryParamss) {
+  //     fetchUnSettledBets();
+  //   }
+  // }, [queryParamss]);
 
   return (
     <Layout>
@@ -275,7 +277,7 @@ const UnsettleBet = () => {
           <p
             className={`${
               mode === "light" ? "text-black" : "text-white"
-            } self-start`}
+            } self-start lg:self-center`}
           >
             Search:
           </p>
@@ -343,7 +345,9 @@ const UnsettleBet = () => {
                     "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
                 }}
                 className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-                onClick={handleClear}
+                onClick={(e) => {
+                  handleClear(e);
+                }}
               >
                 Clear Filter
               </p>
@@ -413,16 +417,21 @@ const UnsettleBet = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="w-full">
                 {isLoading ? (
-                  <tr>
-                    <td colSpan={8} className="py-5 text-center">
-                      <Circles
-                        height="50"
-                        width="50"
-                        color="#4fa94d"
-                        ariaLabel="circles-loading"
-                      />
+                  <tr className="text-center text-sm">
+                    <td colSpan={9} align="center">
+                      <div className="my-5 flex flex-col justify-center items-center">
+                        <Circles
+                          height="50"
+                          width="50"
+                          color="#4fa94d"
+                          ariaLabel="circles-loading"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ) : unSettleBets.length <= 0 ? (

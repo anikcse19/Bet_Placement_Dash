@@ -43,12 +43,14 @@ const SetteBet = () => {
   const { mode } = useStore();
   // const mode = localStorage.getItem("mode");
 
-  const fetchUnSettledBets = async () => {
+  const fetchUnSettledBets = async (withClear) => {
     // console.log("sea");
 
     try {
       const response = await fetch(
-        `${baseUrl}/api/admin/get-settle-list?page=${pageNo}&${queryParams}`,
+        `${baseUrl}/api/admin/get-settle-list?page=${pageNo}&${
+          withClear ? "" : queryParams
+        }`,
         {
           method: "GET",
           headers: {
@@ -236,7 +238,7 @@ const SetteBet = () => {
     setSearchEventId("");
     setSearchSelectionName("");
     setSelectSportType("");
-    fetchUnSettledBets(); // or call this in an effect
+    fetchUnSettledBets(true); // or call this in an effect
   };
 
   useEffect(() => {
@@ -507,7 +509,7 @@ const SetteBet = () => {
 
           {/* pagination */}
           {pages && pages.length > 0 && (
-            <div className="mt-5 self-start flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-5 self-start lg:self-center flex flex-wrap items-center justify-center gap-3">
               {parseInt(pageNo) !== 1 && (
                 <p
                   onClick={() => {

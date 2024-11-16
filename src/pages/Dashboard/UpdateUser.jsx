@@ -142,7 +142,7 @@ const UpdateUser = () => {
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
               }}
-              className={`flex flex-col gap-y-5 h-fit p-10 rounded-md  w-[500px] ${
+              className={`flex flex-col gap-y-5 h-fit p-3 lg:p-10 rounded-md w-[300px] md:w-[400px] lg:w-[500px] ${
                 mode === "light"
                   ? "bg-blue-50  border-2 border-black"
                   : "bg-slate-600  border-2 border-white"
@@ -206,7 +206,7 @@ const UpdateUser = () => {
                     onChange={(e) => setFullName(e.target.value)}
                     value={fullName}
                     type="text"
-                    className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                    className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                       mode === "light"
                         ? "bg-white border-2 border-black"
                         : "bg-slate-500 text-white border-2 border-white"
@@ -228,7 +228,7 @@ const UpdateUser = () => {
                       onChange={(e) => setOldPass(e.target.value)}
                       value={oldPass}
                       type={showedOldPass ? "text" : "password"}
-                      className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                      className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                         mode === "light"
                           ? "bg-white border-2 border-black"
                           : "bg-slate-500 text-white border-2 border-white"
@@ -237,12 +237,12 @@ const UpdateUser = () => {
                     {showedOldPass ? (
                       <FaEye
                         onClick={() => setShowedOldPass(false)}
-                        className="absolute right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
+                        className="absolute right-2 lg:right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
                       />
                     ) : (
                       <FaEyeSlash
                         onClick={() => setShowedOldPass(true)}
-                        className="absolute right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
+                        className="absolute right-2 lg:right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
                       />
                     )}
                   </div>
@@ -263,7 +263,7 @@ const UpdateUser = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                     type="email"
-                    className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                    className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                       mode === "light"
                         ? "bg-white border-2 border-black"
                         : "bg-slate-500 text-white border-2 border-white"
@@ -285,7 +285,7 @@ const UpdateUser = () => {
                       onChange={(e) => setNewPass(e.target.value)}
                       value={newPass}
                       type={showedNewPass ? "text" : "password"}
-                      className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                      className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                         mode === "light"
                           ? "bg-white border-2 border-black"
                           : "bg-slate-500 text-white border-2 border-white"
@@ -294,12 +294,12 @@ const UpdateUser = () => {
                     {showedNewPass ? (
                       <FaEye
                         onClick={() => setShowedNewPass(false)}
-                        className="absolute right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
+                        className="absolute right-2 lg:right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
                       />
                     ) : (
                       <FaEyeSlash
                         onClick={() => setShowedNewPass(true)}
-                        className="absolute right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
+                        className="absolute right-2 lg:right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
                       />
                     )}
                   </div>
@@ -331,7 +331,7 @@ const UpdateUser = () => {
                     value={role}
                     name=""
                     id="role"
-                    className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                    className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                       mode === "light"
                         ? "bg-white border-2 border-black"
                         : "bg-slate-500 text-white border-2 border-white"
@@ -343,7 +343,7 @@ const UpdateUser = () => {
                   </select>
                 </div>
               ) : (
-                <div className="flex flex-col gap-y-2 ">
+                <div className="flex flex-col gap-y-2 w-full">
                   <label
                     htmlFor="con_new_pass"
                     className={`font-bold ${
@@ -357,7 +357,7 @@ const UpdateUser = () => {
                       onChange={(e) => setConNewPass(e.target.value)}
                       value={conNewPass}
                       type={showedConNewPass ? "text" : "password"}
-                      className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                      className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                         mode === "light"
                           ? "bg-white border-2 border-black"
                           : "bg-slate-500 text-white border-2 border-white"
@@ -366,12 +366,12 @@ const UpdateUser = () => {
                     {showedConNewPass ? (
                       <FaEye
                         onClick={() => setShowedConNewPass(false)}
-                        className="absolute right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
+                        className="absolute right-2 lg:right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
                       />
                     ) : (
                       <FaEyeSlash
                         onClick={() => setShowedConNewPass(true)}
-                        className="absolute right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
+                        className="absolute right-2 lg:right-14 top-[50%] -translate-y-1/2 text-white cursor-pointer"
                       />
                     )}
                   </div>

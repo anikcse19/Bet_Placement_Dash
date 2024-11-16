@@ -42,17 +42,17 @@ const Layout = ({ children }) => {
       <div
         className={`${
           mode === "light" ? "bg-gray-100" : "bg-slate-800"
-        } absolute z-[1000] h-full w-60 transition-all duration-300 ease-in ${
+        } absolute z-[1000] h-full w-60  transition-all duration-300 ease-in  ${
           isMobileNavOpen ? "left-0" : "-left-full"
         }`}
       >
-        <div className="m-2 flex justify-end">
+        <div className="flex fixed justify-end w-60 z-[2000] p-2">
           <FaWindowClose
             className={mode === "light" ? "text-black" : "text-white"}
             onClick={() => setIsMobileNavOpen(false)}
           />
         </div>
-        <div className="block lg:hidden h-[calc(100vh-16px)]">
+        <div className="block lg:hidden w-60 h-full py-3 fixed">
           <MobileNav />
         </div>
       </div>

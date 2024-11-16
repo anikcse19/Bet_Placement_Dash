@@ -79,7 +79,7 @@ const CreateUser = () => {
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
               }}
-              className={`flex flex-col gap-y-5 h-fit p-10 rounded-md  w-[500px] ${
+              className={`flex flex-col gap-y-5 h-fit p-3 lg:p-10 rounded-md w-[300px] md:w-[400px]  lg:w-[500px] ${
                 mode === "light"
                   ? "bg-blue-50  border-2 border-black"
                   : "bg-slate-600  border-2 border-white"
@@ -107,7 +107,7 @@ const CreateUser = () => {
                   onChange={(e) => setFullName(e.target.value)}
                   value={fullName}
                   type="text"
-                  className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                  className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                     mode === "light"
                       ? "bg-white border-2 border-black"
                       : "bg-slate-500 text-white border-2 border-white"
@@ -128,7 +128,7 @@ const CreateUser = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
                   type="email"
-                  className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                  className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                     mode === "light"
                       ? "bg-white border-2 border-black"
                       : "bg-slate-500 text-white border-2 border-white"
@@ -149,7 +149,7 @@ const CreateUser = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                   type="password"
-                  className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                  className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                     mode === "light"
                       ? "bg-white border-2 border-black"
                       : "bg-slate-500 text-white border-2 border-white"
@@ -171,7 +171,7 @@ const CreateUser = () => {
                   value={role}
                   name=""
                   id="role"
-                  className={`w-[90%] py-3 px-3 rounded-md outline-none  ${
+                  className={`w-full lg:w-[90%] py-3 px-3 rounded-md outline-none  ${
                     mode === "light"
                       ? "bg-white border-2 border-black"
                       : "bg-slate-500 text-white border-2 border-white"

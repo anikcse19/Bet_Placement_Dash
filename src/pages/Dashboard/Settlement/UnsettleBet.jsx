@@ -197,12 +197,8 @@ const UnsettleBet = () => {
     // e.preventDefault();
     setIsLoading(true);
 
-    console.log(selectSportType, "s type");
-
     // Build the query string based on non-empty search inputs
     const queryParams = new URLSearchParams();
-
-    console.log(queryParams, "init");
 
     if (searchMarketId) queryParams.append("marketId", searchMarketId);
     if (searchEventId) queryParams.append("eventId", searchEventId);

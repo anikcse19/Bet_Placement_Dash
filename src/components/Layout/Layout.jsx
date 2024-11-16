@@ -13,10 +13,8 @@ const Layout = ({ children }) => {
 
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  console.log(isMobileNavOpen, "mb");
-
   return (
-    <div className="flex bg-red-700 relative w-full h-full">
+    <div className="flex relative w-full h-full">
       <div className="hidden lg:block z-[100] lg:w-[230px]">
         <Sidebar2 />
       </div>
@@ -54,7 +52,7 @@ const Layout = ({ children }) => {
             onClick={() => setIsMobileNavOpen(false)}
           />
         </div>
-        <div className="block lg:hidden h-full">
+        <div className="block lg:hidden h-[calc(100vh-16px)]">
           <MobileNav />
         </div>
       </div>

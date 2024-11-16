@@ -259,10 +259,14 @@ const SetteBet = () => {
         </div>
         {/* search box */}
         <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
-          <p className={mode === "light" ? "text-black" : "text-white"}>
+          <p
+            className={`${
+              mode === "light" ? "text-black" : "text-white"
+            } self-start`}
+          >
             Search:
           </p>
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+          <div className="flex flex-col xl:flex-row xl:items-center  gap-4">
             <div className="flex items-center gap-3">
               <input
                 onChange={(e) => setSearchMarketId(e.target.value)}
@@ -309,7 +313,6 @@ const SetteBet = () => {
               </select>
             </div>
 
-            {selectSportType}
             <div className="flex items-center gap-2">
               <p
                 style={{
@@ -334,164 +337,194 @@ const SetteBet = () => {
             </div>
           </div>
         </div>
-        {/* users table */}
-        <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5 w-full">
-          <table className="w-[400px] lg:w-full overflow-x-auto text-sm text-left rtl:text-right text-white  ">
-            <thead
-              className={`sticky top-0 text-xs  uppercase ${
-                mode === "light"
-                  ? "bg-blue-300 text-black"
-                  : "bg-black text-white"
-              }  border-b-2 border-t-2 border-black rounded-md`}
-            >
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Sport
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Event Id
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Market Id
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Event Name
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Selection Name
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Bet Type
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Result
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Resettle
-                </th>
-                <th scope="col" className="px-6 py-3 text-left">
-                  Info
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr className="text-center text-sm">
-                  <td colSpan={9} align="center">
-                    <div className="my-5 flex flex-col justify-center items-center">
-                      <Circles
-                        height="50"
-                        width="50"
-                        color="#4fa94d"
-                        ariaLabel="circles-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ) : settleBetList.length <= 0 ? (
-                <tr className="text-center text-sm">
-                  <td colSpan={9} align="center">
-                    <p
-                      className={`py-3 text-lg ${
-                        mode === "light" ? "text-black" : "text-white"
-                      }`}
-                    >
-                      No data to show
-                    </p>
-                  </td>
-                </tr>
-              ) : (
-                settleBetList.map((bet, i) => (
-                  <tr
-                    key={bet.id}
-                    className={`${
-                      i % 2 == 0
-                        ? mode === "light"
-                          ? "bg-white text-black"
-                          : "bg-transparent text-white"
-                        : mode === "light"
-                        ? "bg-blue-100 text-black"
-                        : "bg-black text-white"
-                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
-                  >
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.sport}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.eventId}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.marketId}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.eventTitle}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.selectionName ? bet?.selectionName : "--"}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">{bet?.type}</td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {bet?.type === "Fancy"
-                        ? bet?.result?.result
-                        : bet?.result?.winnerName}
-                    </td>
 
-                    <td className="px-6 py-4 text-left text-xl">
-                      {bet?.isResettleAllow ? (
-                        <AiFillEdit
-                          onClick={() => {
-                            setActionModalOpen({
-                              status: true,
-                              value: bet,
-                            });
-                          }}
+        <div className="flex flex-col items-center  overflow-hidden pb-3">
+          {/* users table */}
+          <div className="relative overflow-x-auto overflow-y-auto my-5 w-full">
+            <table className="w-[400px] lg:w-full overflow-x-auto text-sm text-left rtl:text-right text-white  ">
+              <thead
+                className={`sticky top-0 text-xs  uppercase ${
+                  mode === "light"
+                    ? "bg-blue-300 text-black"
+                    : "bg-black text-white"
+                }  border-b-2 border-t-2 border-black rounded-md`}
+              >
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Sport
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Event Id
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Market Id
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Event Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Selection Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Bet Type
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Result
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Resettle
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left whitespace-nowrap"
+                  >
+                    Info
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr className="text-center text-sm">
+                    <td colSpan={9} align="center">
+                      <div className="my-5 flex flex-col justify-center items-center">
+                        <Circles
+                          height="50"
+                          width="50"
+                          color="#4fa94d"
+                          ariaLabel="circles-loading"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
                         />
-                      ) : (
-                        ""
-                      )}
-                    </td>
-                    <td
-                      onClick={() =>
-                        setInfoModalOpen({
-                          status: true,
-                          value: bet,
-                        })
-                      }
-                      className="px-6 py-4 text-left text-xl"
-                    >
-                      <IoMdInformationCircleOutline />
+                      </div>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : settleBetList.length <= 0 ? (
+                  <tr className="text-center text-sm">
+                    <td colSpan={9} align="center">
+                      <p
+                        className={`py-3 text-lg ${
+                          mode === "light" ? "text-black" : "text-white"
+                        }`}
+                      >
+                        No data to show
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  settleBetList.map((bet, i) => (
+                    <tr
+                      key={bet.id}
+                      className={`${
+                        i % 2 == 0
+                          ? mode === "light"
+                            ? "bg-white text-black"
+                            : "bg-transparent text-white"
+                          : mode === "light"
+                          ? "bg-blue-100 text-black"
+                          : "bg-black text-white"
+                      }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
+                    >
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.sport}
+                      </td>
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.eventId}
+                      </td>
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.marketId}
+                      </td>
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.eventTitle}
+                      </td>
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.selectionName ? bet?.selectionName : "--"}
+                      </td>
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.type}
+                      </td>
+                      <td className="px-6 py-4 text-left text-xs">
+                        {bet?.type === "Fancy"
+                          ? bet?.result?.result
+                          : bet?.result?.winnerName}
+                      </td>
 
-        {/* pagination */}
-        {pages && pages.length > 0 && (
-          <div className="mt-5 flex items-center justify-center gap-x-3">
-            {parseInt(pageNo) !== 1 && (
-              <p
-                onClick={() => {
-                  if (pages[0]?.url !== null) {
-                    const pN = parseInt(pages[0]?.url.split("=")[1]);
-                    setPagNo(pN);
-                  }
-                }}
-                className={`border-2  px-2 rounded-md cursor-pointer ${
-                  mode === "light"
-                    ? "border-black text-black"
-                    : "border-white  text-white"
-                }`}
-              >
-                Prev
-              </p>
-            )}
-            <div className="flex items-center gap-3">
+                      <td className="px-6 py-4 text-left text-xl">
+                        {bet?.isResettleAllow ? (
+                          <AiFillEdit
+                            onClick={() => {
+                              setActionModalOpen({
+                                status: true,
+                                value: bet,
+                              });
+                            }}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                      <td
+                        onClick={() =>
+                          setInfoModalOpen({
+                            status: true,
+                            value: bet,
+                          })
+                        }
+                        className="px-6 py-4 text-left text-xl"
+                      >
+                        <IoMdInformationCircleOutline />
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* pagination */}
+          {pages && pages.length > 0 && (
+            <div className="mt-5 self-start flex flex-wrap items-center justify-center gap-3">
+              {parseInt(pageNo) !== 1 && (
+                <p
+                  onClick={() => {
+                    if (pages[0]?.url !== null) {
+                      const pN = parseInt(pages[0]?.url.split("=")[1]);
+                      setPagNo(pN);
+                    }
+                  }}
+                  className={`border-2  px-2 rounded-md cursor-pointer ${
+                    mode === "light"
+                      ? "border-black text-black"
+                      : "border-white  text-white"
+                  }`}
+                >
+                  Prev
+                </p>
+              )}
               {pages.slice(1, -1).map((page, i) => {
                 return (
                   <p
@@ -513,28 +546,28 @@ const SetteBet = () => {
                   </p>
                 );
               })}
+              {parseInt(pageNo) !== lastPage && (
+                <p
+                  onClick={() => {
+                    if (pages[pages.length - 1]?.url !== null) {
+                      const pN = parseInt(
+                        pages[pages.length - 1]?.url.split("=")[1]
+                      );
+                      setPagNo(pN);
+                    }
+                  }}
+                  className={`border-2  px-2 rounded-md cursor-pointer ${
+                    mode === "light"
+                      ? "border-black text-black"
+                      : "border-white  text-white"
+                  }`}
+                >
+                  Next
+                </p>
+              )}
             </div>
-            {parseInt(pageNo) !== lastPage && (
-              <p
-                onClick={() => {
-                  if (pages[pages.length - 1]?.url !== null) {
-                    const pN = parseInt(
-                      pages[pages.length - 1]?.url.split("=")[1]
-                    );
-                    setPagNo(pN);
-                  }
-                }}
-                className={`border-2  px-2 rounded-md cursor-pointer ${
-                  mode === "light"
-                    ? "border-black text-black"
-                    : "border-white  text-white"
-                }`}
-              >
-                Next
-              </p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
 
         {/* info modal */}
         {infoModalOpen.status && (

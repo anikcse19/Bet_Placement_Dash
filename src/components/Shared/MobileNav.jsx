@@ -73,7 +73,7 @@ const MobileNav = () => {
       : []),
   ];
   return (
-    <div className="flex flex-col gap-y-5 h-[100%]">
+    <div className="flex flex-col gap-y-5 h-full">
       {/* logo */}
       <div className="flex flex-col items-center gap-1.5 ">
         <Link className="flex items-center gap-x-2" to="">
@@ -87,7 +87,7 @@ const MobileNav = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col justify-between h-[80%] ">
+      <div className="flex-grow flex flex-col justify-between">
         {/* menu */}
         <div className="flex flex-col gap-y-3 p-2">
           {menuItemsData?.map((menu) => (

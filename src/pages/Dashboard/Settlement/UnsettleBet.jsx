@@ -11,7 +11,6 @@ import useStore from "../../../zustand/useStore";
 
 const UnsettleBet = () => {
   const [unSettleBets, setUnSettleBets] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [isBetPlaceLoading, setIsBetPlaceLoading] = useState(false);
   const [actionModalOpen, setActionModalOpen] = useState({
@@ -272,11 +271,15 @@ const UnsettleBet = () => {
           </h1>
         </div>
         {/* search box */}
-        {/* <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
-          <p className={mode === "light" ? "text-black" : "text-white"}>
+        <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
+          <p
+            className={`${
+              mode === "light" ? "text-black" : "text-white"
+            } self-start`}
+          >
             Search:
           </p>
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+          <div className="flex flex-col xl:flex-row xl:items-center  gap-4">
             <div className="flex items-center gap-3">
               <input
                 onChange={(e) => setSearchMarketId(e.target.value)}
@@ -323,7 +326,6 @@ const UnsettleBet = () => {
               </select>
             </div>
 
-            {selectSportType}
             <div className="flex items-center gap-2">
               <p
                 style={{
@@ -347,11 +349,11 @@ const UnsettleBet = () => {
               </p>
             </div>
           </div>
-        </div> */}
+        </div>
 
-        <div className="flex flex-col items-center overflow-x-auto pb-3">
+        <div className="flex flex-col items-center overflow-hidden pb-3">
           {/* Users table */}
-          <div className="self-start relative overflow-x-auto my-5">
+          <div className="self-start relative overflow-x-auto my-5 w-full">
             <table className="w-full text-xs sm:text-sm text-left text-white">
               <thead
                 className={`sticky top-0 uppercase ${
@@ -476,7 +478,7 @@ const UnsettleBet = () => {
 
           {/* Pagination */}
           {pages && pages.length > 0 && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 flex-wrap justify-center">
+            <div className="mt-5 self-start lg:self-center flex items-center gap-2 flex-wrap justify-center">
               {parseInt(pageNo) !== 1 && (
                 <p
                   onClick={() => {
@@ -494,25 +496,23 @@ const UnsettleBet = () => {
                   Prev
                 </p>
               )}
-              <div className="flex items-center gap-2">
-                {pages.slice(1, -1).map((page, i) => (
-                  <p
-                    key={i}
-                    onClick={() => setPagNo(parseInt(page?.label))}
-                    className={`border px-2 rounded-md cursor-pointer ${
-                      pageNo == page?.label
-                        ? mode === "light"
-                          ? "bg-black text-white border-white shadow-xl"
-                          : "bg-slate-300 text-black border-slate-200 shadow-xl"
-                        : mode === "light"
-                        ? "text-black border-black"
-                        : "text-white border-white"
-                    }`}
-                  >
-                    {page?.label}
-                  </p>
-                ))}
-              </div>
+              {pages.slice(1, -1).map((page, i) => (
+                <p
+                  key={i}
+                  onClick={() => setPagNo(parseInt(page?.label))}
+                  className={`border px-2 rounded-md cursor-pointer ${
+                    pageNo == page?.label
+                      ? mode === "light"
+                        ? "bg-black text-white border-white shadow-xl"
+                        : "bg-slate-300 text-black border-slate-200 shadow-xl"
+                      : mode === "light"
+                      ? "text-black border-black"
+                      : "text-white border-white"
+                  }`}
+                >
+                  {page?.label}
+                </p>
+              ))}
               {parseInt(pageNo) !== lastPage && (
                 <p
                   onClick={() => {

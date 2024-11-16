@@ -52,3 +52,28 @@
 
   filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#C9DEF4", endColorstr="#F5CCD4", GradientType=1 );
 }
+
+/* scrollbar */
+
+/* Target the entire scrollbar */
+::-webkit-scrollbar {
+  width: 10px; /* Width for vertical scrollbar */
+  height: 10px; /* Height for horizontal scrollbar */
+}
+
+/* Track (the background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light gray background */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Handle (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Darker gray for thumb */
+  border-radius: 10px;
+}
+
+/* Handle hover state */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Even darker on hover */
+}

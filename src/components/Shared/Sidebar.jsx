@@ -46,6 +46,24 @@ const Sidebar2 = () => {
       ],
     },
     {
+      title: "Bets",
+      icon: <ProfileOutlined />,
+      link: "/dashboard/bets/bet-list",
+      active: true,
+      subItems: [
+        {
+          title: "Bet List",
+          link: "/dashboard/bets/bet-list",
+          active: true,
+        },
+        {
+          title: "Live Bet",
+          link: "/dashboard/bets/live-bet",
+          active: false,
+        },
+      ],
+    },
+    {
       title: "Match Results",
       icon: <VscOutput />,
       link: "/dashboard/match-results",
@@ -139,7 +157,7 @@ const Sidebar2 = () => {
 
   return (
     <div
-      className={`sidebar flex w-full h-full overflow-y-auto flex-col justify-between gap-12 px-[18px] py-6 ${
+      className={`sidebar fixed flex lg:w-[230px] h-full overflow-y-auto flex-col justify-between gap-12 px-[18px] py-6 ${
         mode === "light" ? "bg-white" : "bg-[#272727] text-white"
       }`}
     >

@@ -9,6 +9,8 @@ import BetResults from "../pages/Dashboard/BetResults";
 import CreateUser from "../pages/Dashboard/CreateUser";
 import UsersList from "../pages/Dashboard/UsersList";
 import UpdateUser from "../pages/Dashboard/UpdateUser";
+import BetList from "../pages/Dashboard/Bets/BetList";
+import LiveBet from "../pages/Dashboard/Bets/LiveBet";
 
 export const routes = createBrowserRouter([
   {
@@ -28,6 +30,22 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <SetteBet />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/bets/bet-list",
+    element: (
+      <PrivateRoute>
+        <BetList />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/bets/live-bet",
+    element: (
+      <PrivateRoute>
+        <LiveBet />
       </PrivateRoute>
     ),
   },

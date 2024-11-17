@@ -47,6 +47,25 @@ const MobileNav = () => {
       ],
     },
     {
+      title: "Bets",
+      label: "bets",
+      icon: <ProfileOutlined />,
+      link: "/dashboard/bets/bet-list",
+      active: true,
+      subItems: [
+        {
+          title: "Bet List",
+          link: "/dashboard/bets/bet-list",
+          active: true,
+        },
+        {
+          title: "Live Bet",
+          link: "/dashboard/bets/live-bet",
+          active: false,
+        },
+      ],
+    },
+    {
       title: "Match Results",
       label: "match-results",
       icon: <VscOutput />,
@@ -98,15 +117,13 @@ const MobileNav = () => {
                   mode === "light"
                     ? `text-black ${
                         pathname
-                          .toLocaleLowerCase()
-                          .includes(menu?.label.toLocaleLowerCase()) &&
-                        "bg-gray-400"
+                          .toLowerCase()
+                          .includes(menu?.label.toLowerCase()) && "bg-gray-400"
                       } `
                     : `text-white ${
                         pathname
-                          .toLocaleLowerCase()
-                          .includes(menu?.label.toLocaleLowerCase()) &&
-                        "bg-slate-700"
+                          .toLowerCase()
+                          .includes(menu?.label.toLowerCase()) && "bg-slate-700"
                       } `
                 } flex items-center justify-between p-2 rounded-md`}
               >

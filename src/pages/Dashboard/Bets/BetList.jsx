@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "../../../components/Layout/Layout";
 import { baseUrl } from "../../../../config";
 import Cookies from "js-cookie";
 import { Circles } from "react-loader-spinner";
-import { AiFillEdit } from "react-icons/ai";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import toast from "react-hot-toast";
-import axios from "axios";
 import useStore from "../../../zustand/useStore";
+import InputDate from "../../../components/Shared/InputDate";
+import { FaCalendarAlt } from "react-icons/fa";
 
 const BetList = () => {
   const [betList, setBetList] = useState([]);
@@ -28,16 +27,38 @@ const BetList = () => {
   // const [result, setResult] = useState("");
   // const [OTP, setOTP] = useState(0);
   // const [isOTPSent, setIsOTPSent] = useState(false);
-  // const [searchMarketId, setSearchMarketId] = useState("");
-  // const [searchEventId, setSearchEventId] = useState("");
-  // const [searchSelectionName, setSearchSelectionName] = useState("");
-  // const [selectSportType, setSelectSportType] = useState("");
+
+  const [initialStartDate, setInitialStartDate] = useState("");
+  const [selectedBetStatus, setSelectedBetStatus] = useState("");
+  const [selectedSportType, setSelectedSportType] = useState("");
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [startDate2, setStartDate2] = useState(new Date());
+  const [singleDate, setSingleDate] = useState("");
+  const [searchBetId, setSearchBetId] = useState("");
+  const [searchSettledAt, setSearchSettledAt] = useState("");
+  const [searchSelectionName, setSearchSelectionName] = useState("");
+  const [searchMarketId, setSearchMarketId] = useState("");
+  const [searchBetType, setSearchBetType] = useState("");
+  const [searchEventTitle, setSearchEventTitle] = useState("");
+
+  const [datePeriod, setDatePeriod] = useState("");
   const [queryParamss, setQueryParamss] = useState("");
 
+  const inputDateRef1 = useRef();
+  const inputDateRef2 = useRef();
+
+  // get cookies value
   const token = Cookies.get("token");
 
   const { mode } = useStore();
   // const mode = localStorage.getItem("mode");
+
+  const getInitialStartDate = () => {
+    const newDate = new Date();
+    newDate.setDate(newDate.getDate() - 7);
+    setInitialStartDate(newDate);
+    setStartDate(newDate);
+  };
 
   const fetchBetList = async (withClear) => {
     try {
@@ -69,8 +90,12 @@ const BetList = () => {
 
   useEffect(() => {
     fetchBetList();
-    // handleSearch();
+    handleSearch();
   }, [pageNo]);
+
+  useEffect(() => {
+    getInitialStartDate();
+  }, []);
 
   // const handleYesChange = () => {
   //   setIsRefundYesChecked(true);
@@ -98,18 +123,12 @@ const BetList = () => {
   //   setResult("no");
   // };
 
-  // const formateDate = (marketDate) => {
-  //   const localDate = new Date(marketDate).toLocaleString(undefined, {
-  //     timeZoneName: "short",
-  //     year: "numeric",
-  //     month: "long",
-  //     day: "numeric",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   });
-
-  //   return localDate;
-  // };
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   // const handleSendOTP = async () => {
   //   await axios
@@ -192,59 +211,94 @@ const BetList = () => {
   //   }
   // };
 
-  // const handleSearch = async () => {
-  //   setIsLoading(true);
+  console.log(
+    "stardate",
+    startDate,
+    "enddate",
+    startDate2,
+    "today",
+    singleDate
+  );
 
-  //   const queryParams = new URLSearchParams();
+  const handleSearch = async () => {
+    setIsLoading(true);
 
-  //   if (searchMarketId) queryParams.append("marketId", searchMarketId);
-  //   if (searchEventId) queryParams.append("eventId", searchEventId);
-  //   if (searchSelectionName)
-  //     queryParams.append("selectionName", searchSelectionName);
-  //   if (selectSportType !== "") queryParams.append("sport", selectSportType);
+    const queryParams = new URLSearchParams();
 
-  //   setQueryParamss(queryParams.toString());
+    if (selectedSportType !== "")
+      queryParams.append("sport", selectedSportType);
+    if (selectedBetStatus !== "")
+      queryParams.append("status", selectedBetStatus);
+    if (searchMarketId) queryParams.append("marketId", searchMarketId);
+    if (singleDate !== "")
+      queryParams.append("singleDate", formatDate(singleDate));
+    if (startDate !== "") queryParams.append("starDate", formatDate(startDate));
+    if (startDate2 !== "")
+      queryParams.append("endDate", formatDate(startDate2));
+    if (searchEventTitle) queryParams.append("eventTitle", searchEventTitle);
+    if (searchBetId) queryParams.append("betId", searchBetId);
+    if (searchSettledAt) queryParams.append("betSettledAt", searchSettledAt);
+    if (searchBetType) queryParams.append("type", searchBetType);
+    if (searchSelectionName)
+      queryParams.append("selectionName", searchSelectionName);
 
-  //   try {
-  //     const response = await fetch(
-  //       `${baseUrl}/api/admin/get-unsettle-list?page=${pageNo}&${queryParams.toString()}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     const data = await response.json();
+    setQueryParamss(queryParams.toString());
 
-  //     if (data?.status) {
-  //       setUnSettleBets(data?.data?.data);
-  //       if (data?.data?.data.length <= 0) {
-  //         setPages([]);
-  //       } else {
-  //         setPages(data?.data?.links);
-  //         setLastPage(data?.data?.last_page);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     toast.error(error?.response?.data?.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+    try {
+      const response = await fetch(
+        `${baseUrl}/api/admin/get-bet-lists?page=${pageNo}&${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
 
-  // const handleClear = (e) => {
-  //   e.preventDefault();
+      if (data?.status) {
+        console.log(data?.data);
 
-  //   setQueryParamss("");
-  //   setSearchMarketId("");
-  //   setSearchEventId("");
-  //   setSearchSelectionName("");
-  //   setSelectSportType("");
+        setBetList(data?.data?.data);
+        if (data?.data?.data.length <= 0) {
+          setPages([]);
+        } else {
+          setPages(data?.data?.links);
+          setLastPage(data?.data?.last_page);
+        }
+      } else {
+        setBetList(data?.data?.data);
+        setPages([]);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  //   fetchUnSettledBets(true);
-  // };
+  const handleClear = (e) => {
+    e.preventDefault();
+
+    setQueryParamss("");
+    setSearchMarketId("");
+    setSearchEventTitle("");
+    setSearchSelectionName("");
+    setSelectedSportType("");
+    setSelectedBetStatus("");
+    setStartDate("");
+    setStartDate2("");
+    setSingleDate("");
+    setDatePeriod("");
+    setSearchBetId("");
+    setSelectedSportType("");
+    setSearchBetId("");
+    setSearchBetType("");
+    setSearchSettledAt("");
+
+    fetchBetList(true);
+  };
 
   return (
     <Layout>
@@ -259,63 +313,317 @@ const BetList = () => {
           </h1>
         </div>
         {/* search box */}
-        {/* <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
-          <p
-            className={`${
-              mode === "light" ? "text-black" : "text-white"
-            } self-start lg:self-center`}
-          >
-            Search:
-          </p>
-          <div className="flex flex-col xl:flex-row xl:items-center  gap-4">
-            <div className="flex items-center gap-3">
-              <input
-                onChange={(e) => setSearchMarketId(e.target.value)}
-                value={searchMarketId}
-                type="text"
-                placeholder="Search Market Id"
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                  mode === "light" ? "text-black" : "text-white"
-                }`}
-              />
-              <input
-                onChange={(e) => setSearchEventId(e.target.value)}
-                value={searchEventId}
-                type="text"
-                placeholder="Search Event Id"
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                  mode === "light" ? "text-black" : "text-white"
-                }`}
-              />
+        <div className="mt-5 flex flex-col gap-4 bg-blue-50 p-5 rounded">
+          {/* sport type */}
+          <div>
+            <div className="flex items-center gap-4">
+              {/* all sport */}
+              <div className="flex items-center gap-x-2">
+                <div
+                  onClick={() => setSelectedSportType("")}
+                  className={`w-5 h-5 rounded-full border border-black flex justify-center items-center cursor-pointer ${
+                    selectedSportType === "" && "bg-red-700"
+                  }`}
+                >
+                  {selectedSportType === "" && (
+                    <button
+                      className={`w-2 h-2 rounded-3xl border border-black bg-white`}
+                    />
+                  )}
+                </div>
+                <p>All</p>
+              </div>
+              {/* cricket */}
+              <div className="flex items-center gap-x-2">
+                <div
+                  onClick={() => setSelectedSportType("Cricket")}
+                  className={`w-5 h-5 rounded-full border border-black flex justify-center items-center cursor-pointer ${
+                    selectedSportType === "Cricket" && "bg-red-700"
+                  }`}
+                >
+                  {selectedSportType === "Cricket" && (
+                    <button
+                      className={`w-2 h-2 rounded-3xl border border-black bg-white`}
+                    />
+                  )}
+                </div>
+                <p>Cricket</p>
+              </div>
+              {/* soccer */}
+              <div className="flex items-center gap-x-2">
+                <div
+                  onClick={() => setSelectedSportType("Soccer")}
+                  className={`w-5 h-5 rounded-full border border-black flex justify-center items-center cursor-pointer ${
+                    selectedSportType === "Soccer" && "bg-red-700"
+                  }`}
+                >
+                  {selectedSportType === "Soccer" && (
+                    <button
+                      className={`w-2 h-2 rounded-3xl border border-black bg-white`}
+                    />
+                  )}
+                </div>
+                <p>Soccer</p>
+              </div>
+              {/* Tennis */}
+              <div className="flex items-center gap-x-2">
+                <div
+                  onClick={() => setSelectedSportType("Tennis")}
+                  className={`w-5 h-5 rounded-full border border-black flex justify-center items-center cursor-pointer ${
+                    selectedSportType === "Tennis" && "bg-red-700"
+                  }`}
+                >
+                  {selectedSportType === "Tennis" && (
+                    <button
+                      className={`w-2 h-2 rounded-3xl border border-black bg-white`}
+                    />
+                  )}
+                </div>
+                <p>Tennis</p>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <input
-                onChange={(e) => setSearchSelectionName(e.target.value)}
-                value={searchSelectionName}
-                type="text"
-                placeholder="Search Selection Name"
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                  mode === "light" ? "text-black" : "text-white"
-                }`}
-              />
-              <select
-                onChange={(e) => setSelectSportType(e.target.value)}
-                value={selectSportType}
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                  mode === "light"
-                    ? "text-black bg-transparent"
-                    : "text-white bg-[#201F1F]"
-                }`}
-              >
-                <option value="">All</option>
-                <option value="cricket">Cricket</option>
-                <option value="soccer">Soccer</option>
-                <option value="tennis">Tennis</option>
-              </select>
+          </div>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-row flex-wrap xl:items-center gap-3">
+              {/* bet status */}
+              <div className="flex items-center gap-x-2">
+                <label htmlFor="bet_status">Bet Status</label>
+                <select
+                  onChange={(e) => setSelectedBetStatus(e.target.value)}
+                  value={selectedBetStatus}
+                  className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                    mode === "light"
+                      ? "text-black bg-transparent"
+                      : "text-white bg-[#201F1F]"
+                  }`}
+                >
+                  <option value="">Select Bet Status</option>
+                  <option value="Unmatched">Unmatched</option>
+                  <option value="Matched">Matched</option>
+                  <option value="Settled">Settled</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="Voided">Voided</option>
+                </select>
+              </div>
+              {/* date period */}
+              <div className="flex flex-row flex-wrap lg:items-center gap-3">
+                {/* start */}
+                <div className="flex items-center gap-x-2">
+                  <p>Period:</p>
+                  <div
+                    onClick={() => {
+                      setDatePeriod("period");
+                    }}
+                    className="flex items-center gap-3 relative"
+                  >
+                    <InputDate
+                      ref={inputDateRef1}
+                      startDate={startDate}
+                      setStartDate={setStartDate}
+                    />
+                    <FaCalendarAlt
+                      onClick={() => {
+                        if (inputDateRef1.current) {
+                          inputDateRef1.current.click(); // Trigger the input field's click event
+                        }
+                      }}
+                      className="absolute right-4 top-[50%] -translate-y-1/2 cursor-pointer"
+                    />
+                  </div>
+                  <div
+                    className={`w-21 lg:w-33 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 flex justify-between items-center  ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                  >
+                    <input
+                      type="text"
+                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
+                      placeholder="HH"
+                    />
+                    <input
+                      type="text"
+                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
+                      placeholder="MM"
+                    />
+                    <input
+                      type="text"
+                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
+                      placeholder="SS"
+                    />
+                  </div>
+                </div>
+                {/* end */}
+                <div className="flex items-center gap-x-3">
+                  <p>to</p>
+                  <div
+                    onClick={() => {
+                      setDatePeriod("period");
+                    }}
+                    className="flex items-center gap-3 relative"
+                  >
+                    <InputDate
+                      ref={inputDateRef2}
+                      startDate={startDate2}
+                      setStartDate={setStartDate2}
+                    />
+                    <FaCalendarAlt
+                      onClick={() => {
+                        if (inputDateRef2.current) {
+                          inputDateRef2.current.click(); // Trigger the input field's click event
+                        }
+                      }}
+                      className="absolute right-4 top-[50%] -translate-y-1/2 cursor-pointer"
+                    />
+                  </div>
+                  <div
+                    className={`w-21 lg:w-33 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 flex justify-between items-center  ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                  >
+                    <input
+                      type="text"
+                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
+                      placeholder="HH"
+                    />
+                    <input
+                      type="text"
+                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
+                      placeholder="MM"
+                    />
+                    <input
+                      type="text"
+                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
+                      placeholder="SS"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-x-2">
+                  {/* Just for today button */}
+                  <div>
+                    <button
+                      onClick={() => {
+                        setStartDate("");
+                        setStartDate2("");
+                        setDatePeriod("today");
+                        setSingleDate(new Date());
+                      }}
+                      className={`${
+                        datePeriod === "today"
+                          ? "bg-teal-400"
+                          : "border-2 border-teal-400"
+                      } px-5 py-2 rounded`}
+                    >
+                      Just For Today
+                    </button>
+                  </div>
+                  {/* Yesterday button */}
+                  <div>
+                    <button
+                      onClick={() => {
+                        setSingleDate("");
+                        setDatePeriod("yesterday");
+                        const yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        setStartDate(yesterday);
+                        setStartDate2(new Date());
+                      }}
+                      className={`${
+                        datePeriod === "yesterday"
+                          ? "bg-teal-400"
+                          : "border-2 border-teal-400"
+                      } px-5 py-2 rounded`}
+                    >
+                      From Yesterday
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center flex-wrap gap-3">
+                {/* search bet id */}
+                <div>
+                  <input
+                    onChange={(e) => setSearchBetId(e.target.value)}
+                    value={searchBetId}
+                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                    placeholder="Search Bet Id"
+                    type="text"
+                  />
+                </div>
+                {/* bet settled at */}
+                <div>
+                  <input
+                    onChange={(e) => setSearchSettledAt(e.target.value)}
+                    value={searchSettledAt}
+                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                    placeholder="Search Settled Time"
+                    type="text"
+                  />
+                </div>
+                {/* selection name */}
+                <div>
+                  <input
+                    onChange={(e) => setSearchSelectionName(e.target.value)}
+                    value={searchSelectionName}
+                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                    placeholder="Search Selection Name"
+                    type="text"
+                  />
+                </div>
+
+                {/* bet type */}
+                <div>
+                  <select
+                    onChange={(e) => setSearchBetType(e.target.value)}
+                    value={searchBetType}
+                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                  >
+                    <option value="">Selec Market</option>
+                    <option value="Match Odds">Match Odds</option>
+                    <option value="Fancy">Fancy</option>
+                    <option value="Bookmaker">Bookmaker</option>
+                    <option value="Sports Book">Sports Book</option>
+                  </select>
+                </div>
+                {/* event title */}
+                <div>
+                  <input
+                    onChange={(e) => setSearchEventTitle(e.target.value)}
+                    value={searchEventTitle}
+                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      mode === "light"
+                        ? "text-black bg-transparent"
+                        : "text-white bg-[#201F1F]"
+                    }`}
+                    placeholder="Search Event Title"
+                    type="text"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <p
+              <button
                 style={{
                   boxShadow:
                     "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
@@ -323,9 +631,9 @@ const BetList = () => {
                 className="inline bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
                 onClick={handleSearch}
               >
-                Get Bets
-              </p>
-              <p
+                Get P & L
+              </button>
+              <button
                 style={{
                   boxShadow:
                     "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
@@ -336,14 +644,14 @@ const BetList = () => {
                 }}
               >
                 Clear Filter
-              </p>
+              </button>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <div className="flex flex-col items-center overflow-hidden pb-3">
           {/* Users table */}
-          <div className="self-start relative max-h-screen overflow-x-auto my-5 w-full">
+          <div className="self-start relative h-[800px] overflow-y-auto overflow-x-auto my-5 w-full">
             <table className="w-full text-xs sm:text-sm text-left text-white">
               <thead
                 className={`sticky top-0 uppercase ${

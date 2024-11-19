@@ -41,9 +41,16 @@ const LiveBet = () => {
   const [searchMarketId, setSearchMarketId] = useState("");
   const [searchBetType, setSearchBetType] = useState("");
   const [searchEventTitle, setSearchEventTitle] = useState("");
-
   const [datePeriod, setDatePeriod] = useState("");
   const [queryParamss, setQueryParamss] = useState("");
+  const [hoverOnVoidIcon, setHoverOnVoidIcon] = useState({
+    status: false,
+    id: "",
+  });
+  const [hoverOnDeleteIcon, setHoverOnDeleteIcon] = useState({
+    status: false,
+    id: "",
+  });
 
   const inputDateRef1 = useRef();
   const inputDateRef2 = useRef();
@@ -844,8 +851,46 @@ const LiveBet = () => {
                       </td>
                       <td className="px-2 py-4 whitespace-nowrap text-xs">
                         <div className="flex items-center gap-x-3">
-                          <RiDeleteBin6Line className="w-6 h-6 bg-yellow-500 p-1 rounded-md text-white" />
-                          <RiDeleteBin6Line className="w-6 h-6 bg-red-500 p-1 rounded-md text-white" />
+                          <div className="relative">
+                            <RiDeleteBin6Line
+                              onMouseEnter={() =>
+                                setHoverOnVoidIcon({
+                                  status: true,
+                                  id: bet?.id,
+                                })
+                              }
+                              onMouseLeave={() =>
+                                setHoverOnVoidIcon({ status: false, id: "" })
+                              }
+                              className="w-6 h-6 bg-yellow-500 p-1 rounded-md text-white cursor-pointer"
+                            />
+                            {hoverOnVoidIcon.status &&
+                              hoverOnVoidIcon.id === bet?.id && (
+                                <p className="absolute -top-7 -left-3 transition-all duration-300 ease-in bg-slate-700 text-white text-xs px-3 py-1 rounded-md">
+                                  Void
+                                </p>
+                              )}
+                          </div>
+                          <div className="relative">
+                            <RiDeleteBin6Line
+                              onMouseEnter={() =>
+                                setHoverOnDeleteIcon({
+                                  status: true,
+                                  id: bet?.id,
+                                })
+                              }
+                              onMouseLeave={() =>
+                                setHoverOnDeleteIcon({ status: false, id: "" })
+                              }
+                              className="w-6 h-6 bg-red-500 p-1 rounded-md text-white cursor-pointer"
+                            />
+                            {hoverOnDeleteIcon.status &&
+                              hoverOnDeleteIcon.id === bet?.id && (
+                                <p className="absolute -top-7 -right-5 transition-all duration-300 ease-in bg-slate-700 text-white text-xs px-3 py-1 rounded-md">
+                                  Delete
+                                </p>
+                              )}
+                          </div>
                         </div>
                       </td>
                     </tr>

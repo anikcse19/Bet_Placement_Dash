@@ -11,6 +11,8 @@ import { IoMdPersonAdd } from "react-icons/io";
 import axios from "axios";
 import { baseUrl } from "../../../config";
 import useStore from "../../zustand/useStore";
+import { FaUsersViewfinder } from "react-icons/fa6";
+import { TbUsersPlus } from "react-icons/tb";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
@@ -81,6 +83,18 @@ const Sidebar2 = () => {
             title: "Create User",
             icon: <IoMdPersonAdd />,
             link: "/dashboard/create-user",
+            active: false,
+          },
+          {
+            title: "Client List",
+            icon: <FaUsersViewfinder />,
+            link: "/dashboard/client-list",
+            active: false,
+          },
+          {
+            title: "Create Client",
+            icon: <TbUsersPlus />,
+            link: "/dashboard/create-client",
             active: false,
           },
         ]

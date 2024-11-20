@@ -13,6 +13,8 @@ import BetList from "../pages/Dashboard/Bets/BetList";
 import LiveBet from "../pages/Dashboard/Bets/LiveBet";
 import ClientList from "../pages/Dashboard/ClientList";
 import CreateClient from "../pages/Dashboard/CreateClient";
+import UpdateClient from "../pages/Dashboard/UpdateClient";
+import TrashList from "../pages/Dashboard/Trashlist";
 
 export const routes = createBrowserRouter([
   {
@@ -100,10 +102,27 @@ export const routes = createBrowserRouter([
     ),
   },
   {
+    path: "/dashboard/client/update/:id",
+    element: (
+      <PrivateRoute>
+        <UpdateClient />
+      </PrivateRoute>
+    ),
+  },
+  {
     path: "/dashboard/user/:id",
     element: (
       <PrivateRoute>
         <UpdateUser />
+      </PrivateRoute>
+    ),
+  },
+
+  {
+    path: "/dashboard/trash-list",
+    element: (
+      <PrivateRoute>
+        <TrashList />
       </PrivateRoute>
     ),
   },

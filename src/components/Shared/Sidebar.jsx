@@ -2,7 +2,7 @@ import { ProfileOutlined } from "@ant-design/icons";
 
 import { useEffect, useState } from "react";
 
-import { FaAngleDown, FaUsersCog } from "react-icons/fa";
+import { FaAngleDown, FaTrash, FaUsersCog } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import useStore from "../../zustand/useStore";
@@ -95,6 +95,12 @@ const Sidebar2 = () => {
             title: "Create Client",
             icon: <TbUsersPlus />,
             link: "/dashboard/create-client",
+            active: false,
+          },
+          {
+            title: "Trash List",
+            icon: <FaTrash />,
+            link: "/dashboard/trash-list",
             active: false,
           },
         ]

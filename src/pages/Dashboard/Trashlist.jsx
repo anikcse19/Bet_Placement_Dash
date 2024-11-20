@@ -8,12 +8,12 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
-const ClientList = () => {
-  const [clientList, setClientList] = useState([]);
+const TrashList = () => {
+  const [trashedClientList, setTrashedClientList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState({
+  const [isRestoreModalOpen, setIsRestoreModalOpen] = useState({
     status: false,
-    vlaue: {},
+    value: {},
   });
 
   const navigate = useNavigate();
@@ -24,17 +24,17 @@ const ClientList = () => {
   // get cookies value
   const token = Cookies.get("token");
 
-  const fetchClientList = async () => {
+  const fetchTrashedClientList = async () => {
     try {
       axios
-        .get(`${baseUrl}/api/admin/clients`, {
+        .get(`${baseUrl}/api/admin/trashed-clients`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
           if (res?.data?.status) {
-            setClientList(res?.data?.data);
+            setTrashedClientList(res?.data?.data);
           }
         });
     } catch (error) {
@@ -45,7 +45,7 @@ const ClientList = () => {
   };
 
   useEffect(() => {
-    fetchClientList();
+    fetchTrashedClientList();
   }, []);
 
   // console.log(usersList, "users");
@@ -62,24 +62,32 @@ const ClientList = () => {
 
     return localDate;
   };
+  console.log(isRestoreModalOpen);
 
   // delete client
-  const handleClientDelete = async () => {
+  const handleClientRestore = async () => {
     try {
-      axios
-        .delete(`${baseUrl}/api/admin/clients/${isDeleteModalOpen.value.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+      console.log("hi", isRestoreModalOpen.value.id);
+
+      await axios
+        .get(
+          `${baseUrl}/api/admin/restore-client/${isRestoreModalOpen.value.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((res) => {
           if (res?.data?.status) {
-            setIsDeleteModalOpen({ status: false, value: {} });
-            toast.success("Successfully Deleted Client");
-            fetchClientList();
+            setIsRestoreModalOpen({ status: false, value: {} });
+            toast.success("Successfully Restored Client");
+            fetchTrashedClientList();
           }
         });
     } catch (error) {
+      console.log("hi2");
+
       toast.error(error?.response?.data?.message);
     }
   };
@@ -93,19 +101,19 @@ const ClientList = () => {
               mode === "light" ? "text-black" : "text-white"
             }`}
           >
-            All Client List
+            Trashed Client List
           </h1>
         </div>
 
         {/* users table */}
         <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
-          <table className="w-full text-sm text-left rtl:text-right text-white  border-l-2 border-r-2 border-black">
+          <table className="w-full text-sm text-left rtl:text-right text-white  ">
             <thead
               className={`sticky top-0 text-xs  uppercase ${
                 mode === "light"
                   ? "bg-blue-300 text-black"
                   : "bg-black text-white"
-              }  border-b-2 border-t-2 border-black rounded-md`}
+              }  border-2  border-black rounded-md`}
             >
               <tr>
                 <th scope="col" className="px-6 py-3 text-left">
@@ -149,10 +157,24 @@ const ClientList = () => {
                     </div>
                   </td>
                 </tr>
+              ) : trashedClientList.length <= 0 ? (
+                <tr className="text-center text-sm">
+                  <td colSpan={7} align="center">
+                    <div className="my-5 flex flex-col justify-center items-center ">
+                      <p
+                        className={
+                          mode === "light" ? "text-black" : "text-white"
+                        }
+                      >
+                        No data to show
+                      </p>
+                    </div>
+                  </td>
+                </tr>
               ) : (
-                clientList &&
-                clientList?.length > 0 &&
-                clientList?.map((user, i) => (
+                trashedClientList &&
+                trashedClientList?.length > 0 &&
+                trashedClientList?.map((user, i) => (
                   <tr
                     key={user.id}
                     className={`${
@@ -163,7 +185,7 @@ const ClientList = () => {
                         : mode === "light"
                         ? "bg-blue-100 text-black"
                         : "bg-black text-white"
-                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
+                    }  text-sm cursor-pointer transition-all duration-500 ease-in  border-2 border-slate-700`}
                   >
                     <td className="px-6 py-4 text-left text-xs">{i + 1}</td>
                     <td className="px-6 py-4 text-left text-xs">
@@ -184,24 +206,14 @@ const ClientList = () => {
                     </td>
 
                     <td className="px-6 py-4 flex justify-center text-sm">
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() =>
-                            navigate(`/dashboard/client/update/${user.id}`)
-                          }
-                          className="bg-blue-200 hover:bg-blue-300 text-blue-600 px-3 py-0.5 rounded-md"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() =>
-                            setIsDeleteModalOpen({ status: true, value: user })
-                          }
-                          className="bg-red-200 hover:bg-red-300 text-red-600 px-3 py-0.5 rounded-md"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                      <button
+                        onClick={() =>
+                          setIsRestoreModalOpen({ status: true, value: user })
+                        }
+                        className="bg-teal-300 hover:bg-teal-400 text-teal-800 px-3 py-0.5 rounded-md"
+                      >
+                        Restore
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -210,8 +222,8 @@ const ClientList = () => {
           </table>
         </div>
 
-        {/* delete modal */}
-        {isDeleteModalOpen.status && (
+        {/* restore modal */}
+        {isRestoreModalOpen.status && (
           <div
             style={{
               boxShadow:
@@ -231,14 +243,14 @@ const ClientList = () => {
             <div className="mt-10 flex justify-center">
               <div className="flex items-center gap-10">
                 <button
-                  onClick={handleClientDelete}
+                  onClick={handleClientRestore}
                   className="bg-green-500 px-6 py-1 rounded-md text-white"
                 >
                   Yes
                 </button>
                 <button
                   onClick={() =>
-                    setIsDeleteModalOpen({ status: false, value: {} })
+                    setIsRestoreModalOpen({ status: false, value: {} })
                   }
                   className="bg-red-500 px-6 py-1 rounded-md text-white"
                 >
@@ -253,4 +265,4 @@ const ClientList = () => {
   );
 };
 
-export default ClientList;
+export default TrashList;

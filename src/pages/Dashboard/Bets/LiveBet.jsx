@@ -313,7 +313,7 @@ const LiveBet = () => {
         <div className="mt-5 flex flex-col gap-4 bg-blue-50 p-5 rounded">
           {/* sport type */}
           <div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {/* all sport */}
               <div className="flex items-center gap-x-2">
                 <div

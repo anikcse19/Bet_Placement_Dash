@@ -87,7 +87,7 @@ const ClientList = () => {
   return (
     <Layout>
       <div className="relative">
-        <div className="mt-16">
+        <div className="mt-6 lg:mt-16">
           <h1
             className={`text-xl  font-bold tracking-widest ${
               mode === "light" ? "text-black" : "text-white"
@@ -108,23 +108,41 @@ const ClientList = () => {
               }  border-b-2 border-t-2 border-black rounded-md`}
             >
               <tr>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   SL No
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Client ID
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Client Secret
                 </th>
 
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Client IP
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Created At
                 </th>
                 <th scope="col" className="px-6 py-3 text-center">
@@ -179,7 +197,7 @@ const ClientList = () => {
                       {user?.clientIp}
                     </td>
 
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {formateDate(user?.created_at)}
                     </td>
 

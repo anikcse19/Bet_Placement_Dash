@@ -211,15 +211,6 @@ const BetList = () => {
   //   }
   // };
 
-  console.log(
-    "stardate",
-    startDate,
-    "enddate",
-    startDate2,
-    "today",
-    singleDate
-  );
-
   const handleSearch = async () => {
     setIsLoading(true);
 
@@ -258,8 +249,6 @@ const BetList = () => {
       const data = await response.json();
 
       if (data?.status) {
-        console.log(data?.data);
-
         setBetList(data?.data?.data);
         if (data?.data?.data.length <= 0) {
           setPages([]);

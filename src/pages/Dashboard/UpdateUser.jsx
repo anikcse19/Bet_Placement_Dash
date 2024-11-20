@@ -122,7 +122,7 @@ const UpdateUser = () => {
           style={{
             boxShadow: "rgba(0.35, 0, 0, 0.35) 0px 5px 15px",
           }}
-          className={`p-3  flex flex-col h-fit rounded-md ${
+          className={`p-3  flex flex-col h-fit rounded-md w-[90%] md:w-[400px] lg:w-[500px] ${
             mode === "light"
               ? "bg-blue-200 border-2 border-black"
               : "bg-slate-800 border-2 border-white"
@@ -132,7 +132,7 @@ const UpdateUser = () => {
             style={{
               boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
             }}
-            className={`p-3  flex flex-col h-fit rounded-md ${
+            className={`p-3  flex flex-col h-fit rounded-md w-full ${
               mode === "light"
                 ? "bg-blue-200 border-2 border-black"
                 : "bg-slate-800 border-2 border-white"
@@ -142,7 +142,7 @@ const UpdateUser = () => {
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
               }}
-              className={`flex flex-col gap-y-5 h-fit p-3 lg:p-10 rounded-md w-[300px] md:w-[400px] lg:w-[500px] ${
+              className={`flex flex-col gap-y-5 h-fit p-3 lg:p-10 rounded-md w-full ${
                 mode === "light"
                   ? "bg-blue-50  border-2 border-black"
                   : "bg-slate-600  border-2 border-white"

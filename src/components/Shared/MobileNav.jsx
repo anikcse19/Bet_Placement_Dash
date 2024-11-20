@@ -2,12 +2,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { ProfileOutlined } from "@ant-design/icons";
 import { VscOutput } from "react-icons/vsc";
-import { FaChevronDown, FaChevronUp, FaUsersCog } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaTrash,
+  FaUsersCog,
+} from "react-icons/fa";
 import { IoMdPersonAdd } from "react-icons/io";
 import useStore from "../../zustand/useStore";
 import { useState } from "react";
 import axios from "axios";
 import { baseUrl } from "../../../config";
+import { FaUsersViewfinder } from "react-icons/fa6";
+import { TbUsersPlus } from "react-icons/tb";
 
 const MobileNav = () => {
   const [isOpenSubMenuItem, setIsOpenSubMenuItem] = useState({
@@ -86,6 +93,27 @@ const MobileNav = () => {
             label: "create-user",
             icon: <IoMdPersonAdd />,
             link: "/dashboard/create-user",
+            active: false,
+          },
+          {
+            title: "Client List",
+            label: "client-list",
+            icon: <FaUsersViewfinder />,
+            link: "/dashboard/client-list",
+            active: false,
+          },
+          {
+            title: "Create Client",
+            label: "create-client",
+            icon: <TbUsersPlus />,
+            link: "/dashboard/create-client",
+            active: false,
+          },
+          {
+            title: "Trash List",
+            label: "trash-list",
+            icon: <FaTrash />,
+            link: "/dashboard/trash-list",
             active: false,
           },
         ]

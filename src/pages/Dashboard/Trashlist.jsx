@@ -4,7 +4,6 @@ import { baseUrl } from "../../../config";
 import Layout from "../../components/Layout/Layout";
 import useStore from "../../zustand/useStore";
 import { Circles } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
@@ -15,8 +14,6 @@ const TrashList = () => {
     status: false,
     value: {},
   });
-
-  const navigate = useNavigate();
 
   const { mode } = useStore();
   // const mode = localStorage.getItem("mode");
@@ -62,13 +59,10 @@ const TrashList = () => {
 
     return localDate;
   };
-  console.log(isRestoreModalOpen);
 
   // delete client
   const handleClientRestore = async () => {
     try {
-      console.log("hi", isRestoreModalOpen.value.id);
-
       await axios
         .get(
           `${baseUrl}/api/admin/restore-client/${isRestoreModalOpen.value.id}`,
@@ -86,8 +80,6 @@ const TrashList = () => {
           }
         });
     } catch (error) {
-      console.log("hi2");
-
       toast.error(error?.response?.data?.message);
     }
   };
@@ -95,7 +87,7 @@ const TrashList = () => {
   return (
     <Layout>
       <div className="relative">
-        <div className="mt-16">
+        <div className="mt-6 lg:mt-16">
           <h1
             className={`text-xl  font-bold tracking-widest ${
               mode === "light" ? "text-black" : "text-white"
@@ -116,23 +108,41 @@ const TrashList = () => {
               }  border-2  border-black rounded-md`}
             >
               <tr>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   SL No
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Client ID
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Client Secret
                 </th>
 
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Client IP
                 </th>
-                <th scope="col" className="px-6 py-3 text-left">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left whitespace-nowrap"
+                >
                   Created At
                 </th>
                 <th scope="col" className="px-6 py-3 text-center">
@@ -187,21 +197,23 @@ const TrashList = () => {
                         : "bg-black text-white"
                     }  text-sm cursor-pointer transition-all duration-500 ease-in  border-2 border-slate-700`}
                   >
-                    <td className="px-6 py-4 text-left text-xs">{i + 1}</td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
+                      {i + 1}
+                    </td>
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.name}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.clientId}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.clientSecret}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.clientIp}
                     </td>
 
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {formateDate(user?.created_at)}
                     </td>
 

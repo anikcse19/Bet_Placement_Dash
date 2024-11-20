@@ -219,15 +219,6 @@ const LiveBet = () => {
   //   }
   // };
 
-  console.log(
-    "stardate",
-    startDate,
-    "enddate",
-    startDate2,
-    "today",
-    singleDate
-  );
-
   const handleSearch = async () => {
     setIsLoading(true);
 
@@ -266,8 +257,6 @@ const LiveBet = () => {
       const data = await response.json();
 
       if (data?.status) {
-        console.log(data?.data);
-
         setLiveBetList(data?.data?.data);
         if (data?.data?.data.length <= 0) {
           setPages([]);

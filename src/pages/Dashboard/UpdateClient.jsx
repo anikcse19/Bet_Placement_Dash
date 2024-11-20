@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import useStore from "../../zustand/useStore";
 import { useNavigate, useParams } from "react-router-dom";
-import { BiLeftArrow } from "react-icons/bi";
 import { FaAngleLeft } from "react-icons/fa";
 
 const UpdateClient = () => {
@@ -82,7 +81,7 @@ const UpdateClient = () => {
             boxShadow:
               "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
           }}
-          className={`w-[30%] mx-auto h-fit  border-4 rounded-lg ${
+          className={`w-[90%] lg:w-[50%] xl:w-[30%] mx-auto h-fit  border-4 rounded-lg ${
             mode === "light"
               ? "border-slate-600 bg-white"
               : "bg-slate-600 border-white"

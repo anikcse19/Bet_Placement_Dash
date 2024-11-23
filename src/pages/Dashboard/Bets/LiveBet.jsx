@@ -6,7 +6,6 @@ import { Circles } from "react-loader-spinner";
 import toast from "react-hot-toast";
 import useStore from "../../../zustand/useStore";
 import InputDate from "../../../components/Shared/InputDate";
-import { FaCalendarAlt } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const LiveBet = () => {
@@ -462,106 +461,152 @@ const LiveBet = () => {
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex flex-row flex-wrap xl:items-center gap-3">
-              {/* date period */}
-              <div className="flex flex-row flex-wrap lg:items-center gap-3">
-                {/* start */}
-                <div className="flex items-center gap-x-2">
-                  <p>Period:</p>
-                  <div
-                    onClick={() => {
-                      setDatePeriod("period");
-                    }}
-                    className="flex items-center gap-3 relative"
-                  >
-                    <InputDate
-                      ref={inputDateRef1}
-                      startDate={startDate}
-                      setStartDate={setStartDate}
-                    />
-                    <FaCalendarAlt
-                      onClick={() => {
-                        if (inputDateRef1.current) {
-                          inputDateRef1.current.click(); // Trigger the input field's click event
-                        }
-                      }}
-                      className="absolute right-4 top-[50%] -translate-y-1/2 cursor-pointer"
+              <div className="flex flex-col xl:flex-row xl:flex-wrap gap-2 w-full">
+                <div className="flex items-center gap-2 w-full xl:w-fit">
+                  {/* bet status */}
+                  <div className="w-full">
+                    <select
+                      onChange={(e) => setSelectedBetStatus(e.target.value)}
+                      value={selectedBetStatus}
+                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                        mode === "light"
+                          ? "text-black bg-transparent"
+                          : "text-white bg-[#201F1F]"
+                      }`}
+                    >
+                      <option value="">Select Bet Status</option>
+                      <option value="Unmatched">Unmatched</option>
+                      <option value="Matched">Matched</option>
+                      <option value="Settled">Settled</option>
+                      <option value="Cancelled">Cancelled</option>
+                      <option value="Voided">Voided</option>
+                    </select>
+                  </div>
+                  {/* bet type */}
+                  <div className="w-full">
+                    <select
+                      onChange={(e) => setSearchBetType(e.target.value)}
+                      value={searchBetType}
+                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                        mode === "light"
+                          ? "text-black bg-transparent"
+                          : "text-white bg-[#201F1F]"
+                      }`}
+                    >
+                      <option value="">Select Market</option>
+                      <option value="Match Odds">Match Odds</option>
+                      <option value="Fancy">Fancy</option>
+                      <option value="Bookmaker">Bookmaker</option>
+                      <option value="Sports Book">Sports Book</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 w-full xl:w-fit">
+                  {/* search bet id */}
+                  <div className="w-full xl:w-fit">
+                    <input
+                      onChange={(e) => setSearchBetId(e.target.value)}
+                      value={searchBetId}
+                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                        mode === "light"
+                          ? "text-black bg-transparent"
+                          : "text-white bg-[#201F1F]"
+                      }`}
+                      placeholder="Search Bet Id"
+                      type="text"
                     />
                   </div>
-                  <div
-                    className={`w-21 lg:w-33 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 flex justify-between items-center  ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
-                  >
+                  {/* bet settled at */}
+                  <div className="w-full xl:w-fit">
                     <input
+                      onChange={(e) => setSearchSettledAt(e.target.value)}
+                      value={searchSettledAt}
+                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                        mode === "light"
+                          ? "text-black bg-transparent"
+                          : "text-white bg-[#201F1F]"
+                      }`}
+                      placeholder="Search Settled Time"
                       type="text"
-                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
-                      placeholder="HH"
-                    />
-                    <input
-                      type="text"
-                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
-                      placeholder="MM"
-                    />
-                    <input
-                      type="text"
-                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
-                      placeholder="SS"
                     />
                   </div>
                 </div>
-                {/* end */}
-                <div className="flex items-center gap-x-3">
-                  <p>to</p>
-                  <div
-                    onClick={() => {
-                      setDatePeriod("period");
-                    }}
-                    className="flex items-center gap-3 relative"
-                  >
-                    <InputDate
-                      ref={inputDateRef2}
-                      startDate={startDate2}
-                      setStartDate={setStartDate2}
-                    />
-                    <FaCalendarAlt
-                      onClick={() => {
-                        if (inputDateRef2.current) {
-                          inputDateRef2.current.click(); // Trigger the input field's click event
-                        }
-                      }}
-                      className="absolute right-4 top-[50%] -translate-y-1/2 cursor-pointer"
+                <div className="flex items-center gap-2 w-full xl:w-fit">
+                  {/* selection name */}
+                  <div className="w-full xl:w-fit">
+                    <input
+                      onChange={(e) => setSearchSelectionName(e.target.value)}
+                      value={searchSelectionName}
+                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                        mode === "light"
+                          ? "text-black bg-transparent"
+                          : "text-white bg-[#201F1F]"
+                      }`}
+                      placeholder="Search Selection Name"
+                      type="text"
                     />
                   </div>
-                  <div
-                    className={`w-21 lg:w-33 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 flex justify-between items-center  ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
-                  >
+                  {/* event title */}
+                  <div className="w-full xl:w-fit">
                     <input
+                      onChange={(e) => setSearchEventTitle(e.target.value)}
+                      value={searchEventTitle}
+                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                        mode === "light"
+                          ? "text-black bg-transparent"
+                          : "text-white bg-[#201F1F]"
+                      }`}
+                      placeholder="Search Event Title"
                       type="text"
-                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
-                      placeholder="HH"
                     />
-                    <input
-                      type="text"
-                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
-                      placeholder="MM"
-                    />
-                    <input
-                      type="text"
-                      className="bg-transparent w-6 lg:w-10 outline-none text-center"
-                      placeholder="SS"
-                    />
+                  </div>
+                </div>
+              </div>
+              {/* date period */}
+              <div className="flex flex-col xl:flex-row xl:items-center gap-2 w-full">
+                <div className="flex items-center gap-2 w-full">
+                  {/* start */}
+                  <div className="flex flex-col xl:flex-row xl:items-center xl:border-2 xl:border-slate-600 xl:px-3 2xl:justify-between gap-2 w-full">
+                    <p className="xl:w-full">Period</p>
+                    {/* date */}
+                    <div
+                      onClick={() => {
+                        setDatePeriod("period");
+                      }}
+                      className="w-full"
+                    >
+                      <div className="w-full">
+                        <InputDate
+                          className="w-full"
+                          ref={inputDateRef1}
+                          startDate={startDate}
+                          setStartDate={setStartDate}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* end */}
+                  <div className="flex flex-col xl:flex-row xl:items-center xl:border-2 xl:border-slate-600 xl:px-3 2xl:justify-between gap-2 w-full">
+                    <p className="xl:w-full">To</p>
+                    {/* date */}
+                    <div
+                      onClick={() => {
+                        setDatePeriod("period");
+                      }}
+                      className="relative w-full"
+                    >
+                      <InputDate
+                        ref={inputDateRef2}
+                        startDate={startDate2}
+                        setStartDate={setStartDate2}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-2 w-full xl:w-fit">
                   {/* Just for today button */}
-                  <div>
+                  <div className="w-full xl:w-fit">
                     <button
                       onClick={() => {
                         setStartDate("");
@@ -573,13 +618,13 @@ const LiveBet = () => {
                         datePeriod === "today"
                           ? "bg-teal-400"
                           : "border-2 border-teal-400"
-                      } px-5 py-2 rounded`}
+                      } w-full xl:w-40 px-2 py-1 rounded`}
                     >
                       Just For Today
                     </button>
                   </div>
                   {/* Yesterday button */}
-                  <div>
+                  <div className="w-full xl:w-fit">
                     <button
                       onClick={() => {
                         setSingleDate("");
@@ -593,115 +638,39 @@ const LiveBet = () => {
                         datePeriod === "yesterday"
                           ? "bg-teal-400"
                           : "border-2 border-teal-400"
-                      } px-5 py-2 rounded`}
+                      } w-full xl:w-40 px-2 py-1 rounded`}
                     >
                       From Yesterday
                     </button>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center flex-wrap gap-3">
-                {/* search bet id */}
-                <div>
-                  <input
-                    onChange={(e) => setSearchBetId(e.target.value)}
-                    value={searchBetId}
-                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
-                    placeholder="Search Bet Id"
-                    type="text"
-                  />
-                </div>
-                {/* bet settled at */}
-                <div>
-                  <input
-                    onChange={(e) => setSearchSettledAt(e.target.value)}
-                    value={searchSettledAt}
-                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
-                    placeholder="Search Settled Time"
-                    type="text"
-                  />
-                </div>
-                {/* selection name */}
-                <div>
-                  <input
-                    onChange={(e) => setSearchSelectionName(e.target.value)}
-                    value={searchSelectionName}
-                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
-                    placeholder="Search Selection Name"
-                    type="text"
-                  />
-                </div>
 
-                {/* bet type */}
-                <div>
-                  <select
-                    onChange={(e) => setSearchBetType(e.target.value)}
-                    value={searchBetType}
-                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
+                {/* buttons */}
+                <div className="flex items-center gap-2 w-full">
+                  <button
+                    style={{
+                      boxShadow:
+                        "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                    }}
+                    className="inline bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+                    onClick={handleSearch}
                   >
-                    <option value="">Select Market</option>
-                    <option value="Match Odds">Match Odds</option>
-                    <option value="Fancy">Fancy</option>
-                    <option value="Bookmaker">Bookmaker</option>
-                    <option value="Sports Book">Sports Book</option>
-                  </select>
-                </div>
-                {/* event title */}
-                <div>
-                  <input
-                    onChange={(e) => setSearchEventTitle(e.target.value)}
-                    value={searchEventTitle}
-                    className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
-                      mode === "light"
-                        ? "text-black bg-transparent"
-                        : "text-white bg-[#201F1F]"
-                    }`}
-                    placeholder="Search Event Title"
-                    type="text"
-                  />
+                    Get P & L
+                  </button>
+                  <button
+                    style={{
+                      boxShadow:
+                        "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                    }}
+                    className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
+                    onClick={(e) => {
+                      handleClear(e);
+                    }}
+                  >
+                    Clear Filter
+                  </button>
                 </div>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                style={{
-                  boxShadow:
-                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-                }}
-                className="inline bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-                onClick={handleSearch}
-              >
-                Get P & L
-              </button>
-              <button
-                style={{
-                  boxShadow:
-                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-                }}
-                className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-                onClick={(e) => {
-                  handleClear(e);
-                }}
-              >
-                Clear Filter
-              </button>
             </div>
           </div>
         </div>
@@ -891,7 +860,7 @@ const LiveBet = () => {
 
           {/* Pagination */}
           {pages && pages.length > 0 && (
-            <div className="mt-5 self-start lg:self-center flex items-center gap-2 flex-wrap justify-center">
+            <div className="mt-5 self-center lg:self-center flex items-center gap-2 flex-wrap justify-center">
               {parseInt(pageNo) !== 1 && (
                 <p
                   onClick={() => {

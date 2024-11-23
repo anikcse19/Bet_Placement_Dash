@@ -137,6 +137,12 @@ const SetteBet = () => {
   };
 
   const handleDoSettle = async () => {
+    if (isRefund === "no" && result === "") {
+      toast.error("Filled all field first", {
+        duration: 3000,
+      });
+      return;
+    }
     setIsBetPlaceLoading(true);
     const betData = {
       eventId: actionModalOpen.value.eventId,
@@ -166,11 +172,6 @@ const SetteBet = () => {
         .then((res) => {
           if (res?.data?.status) {
             toast.success("Successfull");
-
-            setActionModalOpen({
-              status: false,
-              value: {},
-            });
             fetchUnSettledBets();
           }
         });
@@ -186,6 +187,10 @@ const SetteBet = () => {
       setIsRefundNoChecked(true);
       setIsWinYesChecked(true);
       setIsWinNoChecked(false);
+      setActionModalOpen({
+        status: false,
+        value: {},
+      });
     }
   };
 
@@ -478,11 +483,18 @@ const SetteBet = () => {
                       <td className="px-6 py-4 text-left text-xl">
                         {bet?.isResettleAllow ? (
                           <AiFillEdit
+                            className="cursor-pointer"
                             onClick={() => {
                               setActionModalOpen({
                                 status: true,
                                 value: bet,
                               });
+                              setResult(
+                                bet?.type === "Fancy" &&
+                                  bet?.gtype !== "session"
+                                  ? "yes"
+                                  : ""
+                              );
                             }}
                           />
                         ) : (
@@ -496,7 +508,7 @@ const SetteBet = () => {
                             value: bet,
                           })
                         }
-                        className="px-6 py-4 text-left text-xl"
+                        className="px-6 py-4 text-left text-xl cursor-pointer"
                       >
                         <IoMdInformationCircleOutline />
                       </td>
@@ -641,301 +653,284 @@ const SetteBet = () => {
         {actionModalOpen.status && (
           <div
             onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setActionModalOpen({ status: false, value: {} });
-              }
+              e.stopPropagation();
             }}
-            className="w-full min-h-[100vh] bg-black bg-opacity-80 fixed top-0 right-0 flex justify-center items-center cursor-pointer"
+            style={{
+              boxShadow:
+                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+            }}
+            className={`w-[400px] h-fit pb-5 rounded fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 ${
+              mode === "light"
+                ? "bg-white"
+                : "bg-black border-2 border-gray-400"
+            }`}
           >
             <div
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              style={{
-                boxShadow:
-                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-              }}
-              className={`w-[400px] h-fit pb-5 rounded ${
+              className={`py-4 px-3 flex justify-between items-center rounded ${
                 mode === "light"
-                  ? "bg-white"
-                  : "bg-black border-2 border-gray-400"
+                  ? "bg-gray-300 text-black"
+                  : "bg-black border-b-2 border-slate-600 text-white"
               }`}
             >
-              <div
-                className={`py-4 px-3 flex justify-between items-center rounded ${
-                  mode === "light"
-                    ? "bg-gray-300 text-black"
-                    : "bg-black border-b-2 border-slate-600 text-white"
-                }`}
+              <p>Resettle Bet</p>
+              <p
+                onClick={() => {
+                  setActionModalOpen({ status: false, value: {} });
+                  handleNoChange();
+                }}
+                className="bg-red-500 hover:bg-red-600 transition-all duration-300 ease-in px-3 py-1 rounded-md cursor-pointer text-white"
               >
-                <p>Resettle Bet</p>
-                <p
-                  onClick={() =>
-                    setActionModalOpen({ status: false, value: {} })
-                  }
-                  className="bg-red-500 hover:bg-red-600 transition-all duration-300 ease-in px-3 py-1 rounded-md cursor-pointer text-white"
+                Close
+              </p>
+            </div>
+
+            <div className="mt-3 px-3 flex flex-col gap-y-4 ">
+              {/* selection name */}
+              <div className="flex flex-col justify-between gap-2">
+                <label
+                  htmlFor="username"
+                  className={mode === "light" ? "text-black" : "text-white"}
                 >
-                  Close
-                </p>
+                  Selection Name
+                </label>
+                <input
+                  // onChange={(e) => setAmount(e.target.value)}
+                  value={actionModalOpen?.value?.selectionName}
+                  readOnly
+                  type="text"
+                  className={`border border-gray-700 w-[95%] px-5 py-2  rounded-md ${
+                    mode === "light"
+                      ? "bg-white text-black"
+                      : "bg-slate-800 text-white"
+                  }`}
+                  placeholder="Selection Name"
+                />
+              </div>
+              {/* refund */}
+              <div className="flex flex-col justify-between gap-1">
+                <label
+                  htmlFor="refund"
+                  className={`${
+                    mode === "light" ? "text-black" : "text-white"
+                  } text-sm tracking-wider`}
+                >
+                  Refund
+                </label>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <input
+                      onChange={handleYesChange}
+                      className="w-3 h-3 rounded-md cursor-pointer"
+                      type="checkbox"
+                      name=""
+                      id=""
+                      checked={isRefundYesChecked}
+                    />
+                    <p
+                      className={mode === "light" ? "text-black" : "text-white"}
+                    >
+                      Yes
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      onChange={handleNoChange}
+                      className="w-3 h-3 rounded-md cursor-pointer"
+                      type="checkbox"
+                      name=""
+                      id=""
+                      checked={isRefundNoChecked}
+                    />
+                    <p
+                      className={mode === "light" ? "text-black" : "text-white"}
+                    >
+                      No
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="mt-3 px-3 flex flex-col gap-y-4 ">
-                {/* selection name */}
-                <div className="flex flex-col justify-between gap-2">
-                  <label
-                    htmlFor="username"
-                    className={mode === "light" ? "text-black" : "text-white"}
-                  >
-                    Selection Name
-                  </label>
-                  <input
-                    // onChange={(e) => setAmount(e.target.value)}
-                    value={actionModalOpen?.value?.selectionName}
-                    readOnly
-                    type="text"
-                    className={`border border-gray-700 w-[95%] px-5 py-2  rounded-md ${
-                      mode === "light"
-                        ? "bg-white text-black"
-                        : "bg-slate-800 text-white"
-                    }`}
-                    placeholder="Selection Name"
-                  />
-                </div>
-                {/* refund */}
-                <div className="flex flex-col justify-between gap-1">
-                  <label
-                    htmlFor="refund"
-                    className={`${
-                      mode === "light" ? "text-black" : "text-white"
-                    } text-sm tracking-wider`}
-                  >
-                    Refund
-                  </label>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
+              {isRefund === "yes" ? (
+                isOTPSent ? (
+                  <div className="flex flex-col justify-between gap-2">
+                    <label
+                      htmlFor="otp"
+                      className={mode === "light" ? "text-black" : "text-white"}
+                    >
+                      Enter OTP
+                      <p className="text-red-500 font-bold inline">*</p>
+                    </label>
+                    <div
+                      className={`${
+                        mode === "light" ? "bg-white" : "bg-slate-800"
+                      } flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md`}
+                    >
                       <input
-                        onChange={handleYesChange}
-                        className="w-3 h-3 rounded-md cursor-pointer"
-                        type="checkbox"
-                        name=""
-                        id=""
-                        checked={isRefundYesChecked}
+                        onChange={(e) => setOTP(parseInt(e.target.value))}
+                        type="text"
+                        className={`flex-grow outline-none ${
+                          mode === "light"
+                            ? "bg-white text-black"
+                            : "bg-slate-800 text-white"
+                        }`}
+                        placeholder="Enter OTP"
                       />
-                      <p
-                        className={
-                          mode === "light" ? "text-black" : "text-white"
-                        }
-                      >
-                        Yes
-                      </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                  </div>
+                ) : (
+                  <div className="flex flex-col justify-between gap-2">
+                    <label
+                      htmlFor="otp"
+                      className={mode === "light" ? "text-black" : "text-white"}
+                    >
+                      Send OTP
+                      <p className="text-red-500 font-bold inline">*</p>
+                    </label>
+                    <div
+                      className={`${
+                        mode === "light" ? "bg-white" : "bg-slate-800"
+                      } flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md`}
+                    >
                       <input
-                        onChange={handleNoChange}
-                        className="w-3 h-3 rounded-md cursor-pointer"
-                        type="checkbox"
-                        name=""
-                        id=""
-                        checked={isRefundNoChecked}
+                        // onChange={(e) => setOTP(parseInt(e.target.value))}
+                        type="text"
+                        className={`flex-grow outline-none ${
+                          mode === "light"
+                            ? "bg-white text-black"
+                            : "bg-slate-800 text-white"
+                        }`}
+                        placeholder=""
                       />
                       <p
-                        className={
-                          mode === "light" ? "text-black" : "text-white"
-                        }
+                        onClick={handleSendOTP}
+                        className="bg-purple-600 px-3 py-1 rounded-md text-white"
                       >
-                        No
+                        Send
                       </p>
                     </div>
                   </div>
-                </div>
-
-                {isRefund === "yes" ? (
-                  isOTPSent ? (
-                    <div className="flex flex-col justify-between gap-2">
-                      <label
-                        htmlFor="otp"
-                        className={
-                          mode === "light" ? "text-black" : "text-white"
-                        }
-                      >
-                        Enter OTP
-                        <p className="text-red-500 font-bold inline">*</p>
-                      </label>
-                      <div
-                        className={`${
-                          mode === "light" ? "bg-white" : "bg-slate-800"
-                        } flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md`}
-                      >
-                        <input
-                          onChange={(e) => setOTP(parseInt(e.target.value))}
-                          type="text"
-                          className={`flex-grow outline-none ${
-                            mode === "light"
-                              ? "bg-white text-black"
-                              : "bg-slate-800 text-white"
-                          }`}
-                          placeholder="Enter OTP"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col justify-between gap-2">
-                      <label
-                        htmlFor="otp"
-                        className={
-                          mode === "light" ? "text-black" : "text-white"
-                        }
-                      >
-                        Send OTP
-                        <p className="text-red-500 font-bold inline">*</p>
-                      </label>
-                      <div
-                        className={`${
-                          mode === "light" ? "bg-white" : "bg-slate-800"
-                        } flex items-center border border-gray-700 w-[95%] px-5 py-2  rounded-md`}
-                      >
-                        <input
-                          // onChange={(e) => setOTP(parseInt(e.target.value))}
-                          type="text"
-                          className={`flex-grow outline-none ${
-                            mode === "light"
-                              ? "bg-white text-black"
-                              : "bg-slate-800 text-white"
-                          }`}
-                          placeholder=""
-                        />
-                        <p
-                          onClick={handleSendOTP}
-                          className="bg-purple-600 px-3 py-1 rounded-md text-white"
-                        >
-                          Send
-                        </p>
-                      </div>
-                    </div>
-                  )
-                ) : (
-                  <div className="flex flex-col gap-y-4">
-                    {actionModalOpen.value.type === "Fancy" ? (
-                      actionModalOpen.value.gtype === "session" ? (
-                        <div className="flex flex-col justify-between gap-2">
-                          <label
-                            htmlFor="run_or_wickets"
-                            className={
-                              mode === "light" ? "text-black" : "text-white"
-                            }
-                          >
-                            Run or Wickets
-                            <p className="inline text-red-500">*</p>
-                          </label>
-                          <input
-                            type="text"
-                            onChange={(e) =>
-                              setResult(parseInt(e.target.value))
-                            }
-                            className={`border border-gray-700 w-[95%] px-5 py-2 rounded-md ${
-                              mode === "light"
-                                ? "bg-white text-black"
-                                : "bg-slate-800 text-white"
-                            }`}
-                            placeholder="Enter Runs or Wickets"
-                          />
-                        </div>
-                      ) : actionModalOpen.value.gtype === "oddeven" ||
-                        actionModalOpen.value.gtype === "fancy1" ? (
-                        <div className="flex flex-col justify-between gap-1 mt-2">
-                          <label
-                            htmlFor="refund"
-                            className={`${
-                              mode === "light" ? "text-black" : "text-white"
-                            } tracking-wider`}
-                          >
-                            IsWon?
-                          </label>
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                              <input
-                                onChange={handleWinYesChange}
-                                className={`w-3 h-3 rounded-md cursor-pointer ${
-                                  mode === "light"
-                                    ? "bg-white text-black"
-                                    : "bg-slate-800 text-white"
-                                }`}
-                                type="checkbox"
-                                name="isWonYes"
-                                id="isWonYes"
-                                checked={isWinYesChecked}
-                              />
-                              <p
-                                className={
-                                  mode === "light" ? "text-black" : "text-white"
-                                }
-                              >
-                                Yes
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <input
-                                onChange={handleWinNoChange}
-                                className={`w-3 h-3 rounded-md cursor-pointer ${
-                                  mode === "light"
-                                    ? "bg-white text-black"
-                                    : "bg-slate-800 text-white"
-                                }`}
-                                type="checkbox"
-                                name="isWonNo"
-                                id="isWonNo"
-                                checked={isWinNoChecked}
-                              />
-                              <p
-                                className={
-                                  mode === "light" ? "text-black" : "text-white"
-                                }
-                              >
-                                No
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ) : null
-                    ) : null}
-
-                    {(actionModalOpen.value.type === "Match Odds" ||
-                      actionModalOpen.value.type === "Sports Book" ||
-                      actionModalOpen.value.type === "Bookmaker") && (
+                )
+              ) : (
+                <div className="flex flex-col gap-y-4">
+                  {actionModalOpen.value.type === "Fancy" ? (
+                    actionModalOpen.value.gtype === "session" ? (
                       <div className="flex flex-col justify-between gap-2">
                         <label
-                          htmlFor="winner_team"
-                          className={`${
+                          htmlFor="run_or_wickets"
+                          className={
                             mode === "light" ? "text-black" : "text-white"
-                          } text-sm tracking-wider`}
+                          }
                         >
-                          Select Winner Team
+                          Run or Wickets
+                          <p className="inline text-red-500">*</p>
                         </label>
-                        <select
+                        <input
+                          type="text"
                           onChange={(e) => setResult(parseInt(e.target.value))}
                           className={`border border-gray-700 w-[95%] px-5 py-2 rounded-md ${
                             mode === "light"
                               ? "bg-white text-black"
                               : "bg-slate-800 text-white"
                           }`}
-                          placeholder="Enter amount"
+                          placeholder="Enter Runs or Wickets"
+                        />
+                      </div>
+                    ) : actionModalOpen.value.gtype === "oddeven" ||
+                      actionModalOpen.value.gtype === "fancy1" ? (
+                      <div className="flex flex-col justify-between gap-1 mt-2">
+                        <label
+                          htmlFor="refund"
+                          className={`${
+                            mode === "light" ? "text-black" : "text-white"
+                          } tracking-wider`}
                         >
-                          <option
-                            className={
-                              mode === "light"
-                                ? "bg-white text-black"
-                                : "bg-slate-800 text-white"
-                            }
-                            value=""
-                          >
-                            Select Winner
+                          IsWon?
+                        </label>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <input
+                              onChange={handleWinYesChange}
+                              className={`w-3 h-3 rounded-md cursor-pointer ${
+                                mode === "light"
+                                  ? "bg-white text-black"
+                                  : "bg-slate-800 text-white"
+                              }`}
+                              type="checkbox"
+                              name="isWonYes"
+                              id="isWonYes"
+                              checked={isWinYesChecked}
+                            />
+                            <p
+                              className={
+                                mode === "light" ? "text-black" : "text-white"
+                              }
+                            >
+                              Yes
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <input
+                              onChange={handleWinNoChange}
+                              className={`w-3 h-3 rounded-md cursor-pointer ${
+                                mode === "light"
+                                  ? "bg-white text-black"
+                                  : "bg-slate-800 text-white"
+                              }`}
+                              type="checkbox"
+                              name="isWonNo"
+                              id="isWonNo"
+                              checked={isWinNoChecked}
+                            />
+                            <p
+                              className={
+                                mode === "light" ? "text-black" : "text-white"
+                              }
+                            >
+                              No
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null
+                  ) : null}
+
+                  {(actionModalOpen.value.type === "Match Odds" ||
+                    actionModalOpen.value.type === "Sports Book" ||
+                    actionModalOpen.value.type === "Bookmaker") && (
+                    <div className="flex flex-col justify-between gap-2">
+                      <label
+                        htmlFor="winner_team"
+                        className={`${
+                          mode === "light" ? "text-black" : "text-white"
+                        } text-sm tracking-wider`}
+                      >
+                        Select Winner Team
+                      </label>
+                      <select
+                        onChange={(e) => setResult(parseInt(e.target.value))}
+                        className={`border border-gray-700 w-[95%] px-5 py-2 rounded-md ${
+                          mode === "light"
+                            ? "bg-white text-black"
+                            : "bg-slate-800 text-white"
+                        }`}
+                        placeholder="Enter amount"
+                      >
+                        <option
+                          className={
+                            mode === "light"
+                              ? "bg-white text-black"
+                              : "bg-slate-800 text-white"
+                          }
+                          value=""
+                        >
+                          Select Winner
+                        </option>
+                        {actionModalOpen.value.teams.map((team) => (
+                          <option key={team?._id} value={team._id}>
+                            {team.name}
                           </option>
-                          {actionModalOpen.value.teams.map((team) => (
-                            <option key={team?._id} value={team._id}>
-                              {team.name}
-                            </option>
-                          ))}
-                          {/* <option value={actionModalOpen?.value?.teams[0].name}>
+                        ))}
+                        {/* <option value={actionModalOpen?.value?.teams[0].name}>
                             {actionModalOpen?.value?.teams[0].name}
                           </option>
                           <option value={actionModalOpen?.value?.teams[1].name}>
@@ -944,35 +939,35 @@ const SetteBet = () => {
                           {actionModalOpen.value?.sport === "soccer" && (
                             <option value="draw">Draw</option>
                           )} */}
-                        </select>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-10 flex justify-center items-center gap-x-5">
-                <button
-                  onClick={handleDoSettle}
-                  className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
-                >
-                  {isBetPlaceLoading ? (
-                    <p className="text-white font-bold text-lg">Loading..</p>
-                  ) : isOTPSent ? (
-                    <p>Refund</p>
-                  ) : (
-                    <p>Submit</p>
+                      </select>
+                    </div>
                   )}
-                </button>
-                <button
-                  onClick={() =>
-                    setActionModalOpen({ status: false, value: {} })
-                  }
-                  className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
-                >
-                  Cancel
-                </button>
-              </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-10 flex justify-center items-center gap-x-5">
+              <button
+                onClick={handleDoSettle}
+                className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
+              >
+                {isBetPlaceLoading ? (
+                  <p className="text-white font-bold text-lg">Loading..</p>
+                ) : isOTPSent ? (
+                  <p>Refund</p>
+                ) : (
+                  <p>Submit</p>
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  setActionModalOpen({ status: false, value: {} });
+                  handleNoChange();
+                }}
+                className="bg-teal-500 px-6 py-2 rounded-md cursor-pointer text-white hover:scale-105 hover:tracking-widest transition-all duration-300 ease-in"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         )}

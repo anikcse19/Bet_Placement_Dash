@@ -58,12 +58,12 @@ const MobileNav = () => {
       label: "bets",
       icon: <ProfileOutlined />,
       link: "/dashboard/bets/bet-list",
-      active: true,
+      active: false,
       subItems: [
         {
           title: "Bet List",
           link: "/dashboard/bets/bet-list",
-          active: true,
+          active: false,
         },
         {
           title: "Live Bet",

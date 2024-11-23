@@ -269,7 +269,7 @@ const SetteBet = () => {
           <p
             className={`${
               mode === "light" ? "text-black" : "text-white"
-            } self-start`}
+            } self-start lg:self-center`}
           >
             Search:
           </p>
@@ -586,63 +586,57 @@ const SetteBet = () => {
         {/* info modal */}
         {infoModalOpen.status && (
           <div
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setInfoModalOpen({ status: false, value: {} });
-              }
+            style={{
+              boxShadow:
+                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
             }}
-            className="w-full min-h-[100vh] bg-black bg-opacity-80 fixed top-0 right-0 flex justify-center items-center cursor-pointer"
+            className={`w-[95%] mx-auto lg:w-[500px] h-fit pb-5  rounded fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 ${
+              mode === "light"
+                ? "bg-white border-2 border-black"
+                : "bg-slate-800 border-2 border-white"
+            }`}
           >
             <div
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className={`w-[500px] h-fit pb-5  rounded ${
-                mode === "light" ? "bg-white" : "bg-slate-800"
+              className={`py-2 px-3 flex justify-between items-center rounded ${
+                mode === "light"
+                  ? "bg-gray-300 text-black"
+                  : "bg-slate-800 text-white"
               }`}
             >
+              <p>Settlement Information</p>
+              <p
+                onClick={() => setInfoModalOpen({ status: false, value: {} })}
+                className="bg-red-500 hover:bg-red-600 transition-all duration-300 ease-in px-2 py-0.5 rounded-md cursor-pointer text-white"
+              >
+                Close
+              </p>
+            </div>
+
+            <div className="mt-3 px-3 py-3 flex flex-col rounded-md overflow-hidden">
               <div
-                className={`py-2 px-3 flex justify-between items-center rounded ${
+                className={`flex justify-between items-center font-bold text-sm  p-2 rounded-tl-md rounded-tr-md ${
                   mode === "light"
-                    ? "bg-gray-300 text-black"
-                    : "bg-slate-800 text-white"
+                    ? "bg-gray-400 text-black"
+                    : "bg-slate-700 text-white"
                 }`}
               >
-                <p>Settlement Information</p>
-                <p
-                  onClick={() => setInfoModalOpen({ status: false, value: {} })}
-                  className="bg-red-500 hover:bg-red-600 transition-all duration-300 ease-in px-2 py-0.5 rounded-md cursor-pointer text-white"
-                >
-                  Close
-                </p>
+                <div className="w-full text-left">Settled Date</div>
+                <div className="w-full text-left">Settled By</div>
+                <div className="w-full text-left">Result</div>
               </div>
-
-              <div className="mt-3 px-3 py-3 flex flex-col rounded-md overflow-hidden">
-                <div
-                  className={`flex justify-between items-center font-bold text-sm  p-2 rounded-tl-md rounded-tr-md ${
-                    mode === "light"
-                      ? "bg-gray-400 text-black"
-                      : "bg-slate-700 text-white"
-                  }`}
-                >
-                  <div className="w-full text-left">Settled Date</div>
-                  <div className="w-full text-left">Settled By</div>
-                  <div className="w-full text-left">Result</div>
+              <div className="flex justify-between items-left text-sm p-2 rounded-bl-md rounded-br-md bg-gray-300">
+                <div className="w-full text-left">
+                  {formateDate(infoModalOpen?.value?.settleTime)}
                 </div>
-                <div className="flex justify-between items-left text-sm p-2 rounded-bl-md rounded-br-md bg-gray-300">
-                  <div className="w-full text-left">
-                    {formateDate(infoModalOpen?.value?.settleTime)}
-                  </div>
-                  <div className="w-full text-left">
-                    {infoModalOpen?.value?.userBy}
-                  </div>
-                  <div className="w-full text-left">
-                    {infoModalOpen?.value?.result?.result
-                      ? infoModalOpen?.value?.type === "Fancy"
-                        ? infoModalOpen?.value?.result?.result
-                        : infoModalOpen?.value?.result?.winnerName
-                      : "-"}
-                  </div>
+                <div className="w-full text-left">
+                  {infoModalOpen?.value?.userBy}
+                </div>
+                <div className="w-full text-left">
+                  {infoModalOpen?.value?.result?.result
+                    ? infoModalOpen?.value?.type === "Fancy"
+                      ? infoModalOpen?.value?.result?.result
+                      : infoModalOpen?.value?.result?.winnerName
+                    : "-"}
                 </div>
               </div>
             </div>
@@ -652,14 +646,11 @@ const SetteBet = () => {
         {/* action modal */}
         {actionModalOpen.status && (
           <div
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
             style={{
               boxShadow:
                 "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
             }}
-            className={`w-[400px] h-fit pb-5 rounded fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 ${
+            className={`w-[95%] mx-auto lg:w-[400px] h-fit pb-5 rounded fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 ${
               mode === "light"
                 ? "bg-white"
                 : "bg-black border-2 border-gray-400"

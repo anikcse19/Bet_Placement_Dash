@@ -567,7 +567,7 @@ const UnsettleBet = () => {
               boxShadow:
                 "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
             }}
-            className={`fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[400px] h-fit pb-5 rounded ${
+            className={`fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] mx-auto lg:w-[400px] h-fit pb-5 rounded ${
               mode === "light"
                 ? "bg-white"
                 : "bg-black border-2 border-gray-400"

@@ -301,9 +301,13 @@ const BetList = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-5 flex flex-col gap-4 bg-blue-50 p-5 rounded">
+        <div
+          className={`mt-5 flex flex-col gap-4 ${
+            mode === "light" ? "bg-blue-50" : "bg-gray-700"
+          } p-5 rounded`}
+        >
           {/* sport type */}
-          <div>
+          <div className={mode === "light" ? "text-black" : "text-white"}>
             <div className="flex items-center gap-4">
               {/* all sport */}
               <div className="flex items-center gap-x-2">
@@ -373,14 +377,14 @@ const BetList = () => {
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex flex-row flex-wrap xl:items-center gap-3">
-              <div className="flex flex-col xl:flex-row xl:flex-wrap gap-2 w-full">
+              <div className="flex flex-col xl:flex-row  gap-2 w-full">
                 <div className="flex items-center gap-2 w-full xl:w-fit">
                   {/* bet status */}
                   <div className="w-full">
                     <select
                       onChange={(e) => setSelectedBetStatus(e.target.value)}
                       value={selectedBetStatus}
-                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      className={`w-full xl:w-40 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                         mode === "light"
                           ? "text-black bg-transparent"
                           : "text-white bg-[#201F1F]"
@@ -399,7 +403,7 @@ const BetList = () => {
                     <select
                       onChange={(e) => setSearchBetType(e.target.value)}
                       value={searchBetType}
-                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      className={`w-full xl:w-40 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                         mode === "light"
                           ? "text-black bg-transparent"
                           : "text-white bg-[#201F1F]"
@@ -419,7 +423,7 @@ const BetList = () => {
                     <input
                       onChange={(e) => setSearchBetId(e.target.value)}
                       value={searchBetId}
-                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      className={`w-full xl:w-40 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                         mode === "light"
                           ? "text-black bg-transparent"
                           : "text-white bg-[#201F1F]"
@@ -433,7 +437,7 @@ const BetList = () => {
                     <input
                       onChange={(e) => setSearchSettledAt(e.target.value)}
                       value={searchSettledAt}
-                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      className={`w-full xl:w-40 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                         mode === "light"
                           ? "text-black bg-transparent"
                           : "text-white bg-[#201F1F]"
@@ -449,7 +453,7 @@ const BetList = () => {
                     <input
                       onChange={(e) => setSearchSelectionName(e.target.value)}
                       value={searchSelectionName}
-                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      className={`w-full xl:w-40 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                         mode === "light"
                           ? "text-black bg-transparent"
                           : "text-white bg-[#201F1F]"
@@ -463,7 +467,7 @@ const BetList = () => {
                     <input
                       onChange={(e) => setSearchEventTitle(e.target.value)}
                       value={searchEventTitle}
-                      className={`w-full xl:w-52 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                      className={`w-full xl:w-40 px-3 py-2 text-xs xl:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                         mode === "light"
                           ? "text-black bg-transparent"
                           : "text-white bg-[#201F1F]"
@@ -476,36 +480,46 @@ const BetList = () => {
               </div>
               {/* date period */}
               <div className="flex flex-col xl:flex-row xl:items-center gap-2 w-full">
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex items-center gap-2 w-full xl:w-fit">
                   {/* start */}
-                  <div className="flex flex-col xl:flex-row xl:items-center xl:border-2 xl:border-slate-600 xl:px-3 2xl:justify-between gap-2 w-full">
-                    <p className="xl:w-full">Period</p>
+                  <div
+                    className={`flex flex-col xl:flex-row xl:items-center xl:border-2 xl:border-slate-600 xl:px-3 2xl:justify-between gap-2 w-full xl:w-fit ${
+                      mode === "light"
+                        ? "text-black xl:bg-transparent"
+                        : "text-white xl:bg-[#201F1F]"
+                    }`}
+                  >
+                    <p className="xl:w-fit">Period</p>
                     {/* date */}
                     <div
                       onClick={() => {
                         setDatePeriod("period");
                       }}
-                      className="w-full"
+                      className="w-full xl:w-fit"
                     >
-                      <div className="w-full">
-                        <InputDate
-                          className="w-full"
-                          ref={inputDateRef1}
-                          startDate={startDate}
-                          setStartDate={setStartDate}
-                        />
-                      </div>
+                      <InputDate
+                        className="w-fit"
+                        ref={inputDateRef1}
+                        startDate={startDate}
+                        setStartDate={setStartDate}
+                      />
                     </div>
                   </div>
                   {/* end */}
-                  <div className="flex flex-col xl:flex-row xl:items-center xl:border-2 xl:border-slate-600 xl:px-3 2xl:justify-between gap-2 w-full">
-                    <p className="xl:w-full">To</p>
+                  <div
+                    className={`flex flex-col xl:flex-row xl:items-center xl:border-2 xl:border-slate-600 xl:px-3 2xl:justify-between gap-2 w-full ${
+                      mode === "light"
+                        ? "text-black xl:bg-transparent"
+                        : "text-white xl:bg-[#201F1F]"
+                    }`}
+                  >
+                    <p className="xl:w-fit">To</p>
                     {/* date */}
                     <div
                       onClick={() => {
                         setDatePeriod("period");
                       }}
-                      className="relative w-full"
+                      className="relative w-full xl:w-fit"
                     >
                       <InputDate
                         ref={inputDateRef2}
@@ -530,6 +544,8 @@ const BetList = () => {
                         datePeriod === "today"
                           ? "bg-teal-400"
                           : "border-2 border-teal-400"
+                      } ${
+                        mode === "light" ? "text-black" : "text-white"
                       } w-full xl:w-40 px-2 py-1 rounded`}
                     >
                       Just For Today
@@ -550,6 +566,8 @@ const BetList = () => {
                         datePeriod === "yesterday"
                           ? "bg-teal-400"
                           : "border-2 border-teal-400"
+                      } ${
+                        mode === "light" ? "text-black" : "text-white"
                       } w-full xl:w-40 px-2 py-1 rounded`}
                     >
                       From Yesterday

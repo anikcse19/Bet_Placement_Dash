@@ -13,6 +13,7 @@ import { baseUrl } from "../../../config";
 import useStore from "../../zustand/useStore";
 import { FaUsersViewfinder } from "react-icons/fa6";
 import { TbUsersPlus } from "react-icons/tb";
+import { PiBuildingOfficeBold } from "react-icons/pi";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
@@ -73,6 +74,12 @@ const Sidebar2 = () => {
     },
     ...(role === 1
       ? [
+          {
+            title: "Office Shift",
+            icon: <PiBuildingOfficeBold />,
+            link: "/dashboard/office-shift",
+            active: false,
+          },
           {
             title: "User List",
             icon: <FaUsersCog />,

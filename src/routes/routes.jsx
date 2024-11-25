@@ -15,6 +15,7 @@ import ClientList from "../pages/Dashboard/ClientList";
 import CreateClient from "../pages/Dashboard/CreateClient";
 import UpdateClient from "../pages/Dashboard/UpdateClient";
 import TrashList from "../pages/Dashboard/Trashlist";
+import OfficeShiftList from "../pages/Dashboard/OfficeShiftList";
 
 export const routes = createBrowserRouter([
   {
@@ -74,6 +75,14 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <CreateUser />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/office-shift",
+    element: (
+      <PrivateRoute>
+        <OfficeShiftList />
       </PrivateRoute>
     ),
   },

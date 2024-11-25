@@ -83,3 +83,7 @@
 .react-datepicker__input-container {
   width: 100%; /* Ensure full width */
 }
+
+.react-datepicker__calendar-icon {
+  fill: #fff; /* Replace with your desired color */
+}

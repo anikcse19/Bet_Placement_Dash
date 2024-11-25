@@ -13,7 +13,7 @@ const InputDate = ({ startDate, setStartDate, ref }) => {
     <DatePicker
       showIcon
       ref={ref}
-      className={`w-full px-3 py-2 text-xs lg:text-sm rounded-sm text-center  outline-none border-2 border-slate-600 xl:border-0 focus:border-teal-500 bg-blue-400 ${
+      className={`w-full xl:w-32 px-3 py-2 text-xs lg:text-sm rounded-sm text-center outline-none border-2 border-slate-600 xl:border-0 focus:border-teal-500 ${
         mode === "light"
           ? "text-black bg-transparent"
           : "text-white bg-[#201F1F]"

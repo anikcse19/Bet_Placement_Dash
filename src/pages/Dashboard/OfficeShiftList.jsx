@@ -161,12 +161,12 @@ const OfficeShiftList = () => {
                     <td className="px-3 sm:px-6 py-4 flex justify-center">
                       <div className="flex items-center gap-3">
                         <button
-                          onClick={() =>
-                            setOpenUpdateShiftModal({
-                              status: true,
-                              id: shift?.id,
-                            })
-                          }
+                          // onClick={() =>
+                          //   setOpenUpdateShiftModal({
+                          //     status: true,
+                          //     id: shift?.id,
+                          //   })
+                          // }
                           className="bg-teal-500 px-4 py-1 rounded"
                         >
                           Update

@@ -39,6 +39,8 @@ const CreateShiftModal = ({ setOpenCreateShiftModal, fetchOfficeShifts }) => {
       if (response?.data?.status) {
         toast.success("Shift Created Successfully");
         fetchOfficeShifts();
+      } else {
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "An error ocuured");

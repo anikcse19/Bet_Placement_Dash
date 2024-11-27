@@ -16,6 +16,10 @@ import CreateClient from "../pages/Dashboard/CreateClient";
 import UpdateClient from "../pages/Dashboard/UpdateClient";
 import TrashList from "../pages/Dashboard/Trashlist";
 import OfficeShiftList from "../pages/Dashboard/OfficeShiftList";
+import UsersAttendance from "../pages/Dashboard/UsersAttendance";
+import MyAttendance from "../pages/Dashboard/MyAttendance";
+import AssignShift from "../pages/Dashboard/AssignShift";
+import UsersShifts from "../pages/Dashboard/UsersShifts";
 
 export const routes = createBrowserRouter([
   {
@@ -87,6 +91,22 @@ export const routes = createBrowserRouter([
     ),
   },
   {
+    path: "/dashboard/users-shifts",
+    element: (
+      <PrivateRoute>
+        <UsersShifts />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/assign-shift",
+    element: (
+      <PrivateRoute>
+        <AssignShift />
+      </PrivateRoute>
+    ),
+  },
+  {
     path: "/dashboard/users-list",
     element: (
       <PrivateRoute>
@@ -123,6 +143,22 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <UpdateUser />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/users-attendance",
+    element: (
+      <PrivateRoute>
+        <UsersAttendance />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/my-attendance",
+    element: (
+      <PrivateRoute>
+        <MyAttendance />
       </PrivateRoute>
     ),
   },

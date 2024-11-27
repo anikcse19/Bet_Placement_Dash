@@ -3,6 +3,13 @@ import { create } from "zustand"; // Import as a named import
 
 const useStore = create((set) => ({
   mode: localStorage.getItem("mode") || "light",
+  checkInOut: "",
+
+  setCheckInOut: (value) =>
+    set(() => {
+      localStorage.setItem("checkInOut", value);
+      return { checkInOut: value };
+    }),
 
   toggleMode: () =>
     set((state) => {

@@ -6,10 +6,14 @@ import Sidebar2 from "../Shared/Sidebar";
 import { useState } from "react";
 import MobileNav from "../Shared/MobileNav";
 import { FaWindowClose } from "react-icons/fa";
+import CheckInCheckOut from "../Shared/CheckInCheckOut";
+import Cookies from "js-cookie";
 
 const Layout = ({ children }) => {
   const { mode } = useStore();
   // const mode = localStorage.getItem("mode");
+
+  const role = parseInt(Cookies.get("role"));
 
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
@@ -21,7 +25,7 @@ const Layout = ({ children }) => {
 
       {/* children */}
       <div
-        className={`grow self-start flex flex-col  w-[calc(100vw-230px)]  ${
+        className={`grow self-start flex flex-col  w-[calc(100vw-230px)]  relative ${
           mode === "light" ? "bg-gray-200" : "bg-[#201f1f] bg-opacity-100"
         }`}
       >
@@ -31,6 +35,12 @@ const Layout = ({ children }) => {
             mode === "light" ? "text-black" : "text-white"
           } text-2xl font-bold m-3 lg:hidden z-20`}
         />
+        {role === 2 && (
+          <div className="w-full h-16 px-5">
+            <CheckInCheckOut />
+          </div>
+        )}
+
         <div
           className={`p-5 flex-grow min-h-[100vh] flex flex-col content-center `}
         >
@@ -46,7 +56,7 @@ const Layout = ({ children }) => {
           isMobileNavOpen ? "left-0" : "-left-full"
         }`}
       >
-        <div className="flex fixed justify-end w-60 z-[2000] p-2">
+        <div className="flex fixed justify-end w-60 z-[2000] py-2 px-4">
           <FaWindowClose
             className={mode === "light" ? "text-black" : "text-white"}
             onClick={() => setIsMobileNavOpen(false)}

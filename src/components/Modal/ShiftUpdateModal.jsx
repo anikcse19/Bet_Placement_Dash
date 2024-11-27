@@ -75,7 +75,7 @@ const ShiftUpdateModal = ({
     }
   };
   return (
-    <div className="fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[90%] lg:w-[50%] xl:w-[30%] mx-auto h-fit ">
+    <div className="fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-full px-2 lg:px-0 lg:w-[50%] xl:w-[30%] mx-auto h-fit ">
       <div
         style={{
           boxShadow:
@@ -90,17 +90,16 @@ const ShiftUpdateModal = ({
         <p className="text-center font-bold text-teal-300 text-xl">
           Update Shift
         </p>
-
         {/* form */}
         <div className="my-8 w-full flex flex-col gap-y-2">
           {/*shift name */}
-          <div className="w-[80%] mx-auto flex flex-col gap-y-2 relative">
+          <div className="w-full xl:w-[80%] mx-auto  relative">
             {/* <label htmlFor="name">Shift Name</label> */}
             <input
               onChange={(e) => setShiftName(e.target.value)}
               value={shiftName}
               type="text"
-              className={` ${
+              className={`w-full ${
                 mode === "light"
                   ? "bg-gray-300 text-black"
                   : "bg-slate-800 text-white"
@@ -115,18 +114,18 @@ const ShiftUpdateModal = ({
             </p>
           </div>
           {/* start time */}
-
-          <div className="flex items-center gap-4 w-[80%] mx-auto">
-            <div className="w-full flex flex-col items-center gap-y-2 relative">
+          <div className="flex flex-col xl:flex-row xl:items-center gap-2 xl:gap-4 w-full xl:w-[80%] mx-auto">
+            <div className="w-full relative">
+              {/* <label htmlFor="name">Name</label> */}
               <input
                 onChange={(e) => setStartHour(e.target.value)}
                 value={startHour}
                 type="text"
-                className={` ${
+                className={`w-full ${
                   mode === "light"
                     ? "bg-gray-300 text-black"
                     : "bg-slate-800 text-white"
-                } py-2 px-4 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
+                } py-2 px-3 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
               />
               <p
                 className={`absolute top-[50%] left-3 -translate-y-1/2 italic ${
@@ -136,17 +135,17 @@ const ShiftUpdateModal = ({
                 Start Hour:
               </p>
             </div>
-            <div className="w-full  flex flex-col items-center gap-y-2 relative">
+            <div className="w-full relative">
               {/* <label htmlFor="name">Name</label> */}
               <input
                 onChange={(e) => setStartMinute(e.target.value)}
                 value={startMinute}
                 type="text"
-                className={`${
+                className={`w-full ${
                   mode === "light"
                     ? "bg-gray-300 text-black"
                     : "bg-slate-800 text-white"
-                } py-2 px-4 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
+                } py-2 px-3 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
               />
               <p
                 className={`absolute top-[50%] left-3 -translate-y-1/2 italic ${
@@ -158,18 +157,18 @@ const ShiftUpdateModal = ({
             </div>
           </div>
           {/* end time */}
-          <div className="flex items-center gap-4 w-[80%] mx-auto">
-            <div className="w-full  flex flex-col items-center gap-y-2 relative">
+          <div className="flex flex-col xl:flex-row xl:items-center gap-2 xl:gap-4 w-full xl:w-[80%] mx-auto">
+            <div className="w-full relative">
               {/* <label htmlFor="name">Name</label> */}
               <input
                 onChange={(e) => setEndHour(e.target.value)}
                 value={endHour}
                 type="text"
-                className={` ${
+                className={`w-full ${
                   mode === "light"
                     ? "bg-gray-300 text-black"
                     : "bg-slate-800 text-white"
-                } py-2 px-4 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
+                } py-2 px-3 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
               />
               <p
                 className={`absolute top-[50%] left-3 -translate-y-1/2 italic ${
@@ -179,17 +178,17 @@ const ShiftUpdateModal = ({
                 End Hour:
               </p>
             </div>
-            <div className="w-full  flex flex-col items-center gap-y-2 relative">
+            <div className="w-full relative">
               {/* <label htmlFor="name">Name</label> */}
               <input
                 onChange={(e) => setEndMinute(e.target.value)}
                 value={endMinute}
                 type="text"
-                className={`${
+                className={`w-full ${
                   mode === "light"
                     ? "bg-gray-300 text-black"
                     : "bg-slate-800 text-white"
-                } py-2 px-4 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
+                } py-2 px-3 text-right italic outline-none border-b-2 rounded border-slate-600 focus:border-blue-600`}
               />
               <p
                 className={`absolute top-[50%] left-3 -translate-y-1/2 italic ${
@@ -207,7 +206,7 @@ const ShiftUpdateModal = ({
               onClick={handleUpdateShift}
               className="bg-teal-400 hover:bg-teal-500 px-6 py-2 rounded-md"
             >
-              Update
+              Create
             </button>
             <button
               onClick={() => setOpenUpdateShiftModal({ status: false, id: "" })}

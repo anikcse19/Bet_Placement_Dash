@@ -13,7 +13,8 @@ import { baseUrl } from "../../../config";
 import useStore from "../../zustand/useStore";
 import { FaUsersViewfinder } from "react-icons/fa6";
 import { TbUsersPlus } from "react-icons/tb";
-import { PiBuildingOfficeBold } from "react-icons/pi";
+import { PiBuildingOfficeBold, PiTimerBold } from "react-icons/pi";
+import { HiHand } from "react-icons/hi";
 
 const Sidebar2 = () => {
   const navigate = useNavigate();
@@ -72,12 +73,28 @@ const Sidebar2 = () => {
       link: "/dashboard/match-results",
       active: false,
     },
+    ...(role === 2
+      ? [
+          {
+            title: "My Attendance",
+            icon: <HiHand />,
+            link: "/dashboard/my-attendance",
+            active: false,
+          },
+        ]
+      : []),
     ...(role === 1
       ? [
           {
             title: "Office Shift",
             icon: <PiBuildingOfficeBold />,
             link: "/dashboard/office-shift",
+            active: false,
+          },
+          {
+            title: "Users Shift",
+            icon: <PiTimerBold />,
+            link: "/dashboard/users-shifts",
             active: false,
           },
           {
@@ -102,6 +119,12 @@ const Sidebar2 = () => {
             title: "Create Client",
             icon: <TbUsersPlus />,
             link: "/dashboard/create-client",
+            active: false,
+          },
+          {
+            title: "Users Attendance",
+            icon: <HiHand />,
+            link: "/dashboard/users-attendance",
             active: false,
           },
           {

@@ -89,7 +89,7 @@ const ClientList = () => {
       <div className="relative">
         <div className="mt-6 lg:mt-16">
           <h1
-            className={`text-xl  font-bold tracking-widest ${
+            className={`text-xl font-bold border-l-8 border-purple-600 px-3 py-2 ${
               mode === "light" ? "text-black" : "text-white"
             }`}
           >
@@ -184,16 +184,16 @@ const ClientList = () => {
                     }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
                   >
                     <td className="px-6 py-4 text-left text-xs">{i + 1}</td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.name}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.clientId}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.clientSecret}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {user?.clientIp}
                     </td>
 

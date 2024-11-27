@@ -15,6 +15,8 @@ import axios from "axios";
 import { baseUrl } from "../../../config";
 import { FaUsersViewfinder } from "react-icons/fa6";
 import { TbUsersPlus } from "react-icons/tb";
+import { PiBuildingOfficeBold, PiTimerBold } from "react-icons/pi";
+import { HiHand } from "react-icons/hi";
 
 const MobileNav = () => {
   const [isOpenSubMenuItem, setIsOpenSubMenuItem] = useState({
@@ -57,8 +59,8 @@ const MobileNav = () => {
       title: "Bets",
       label: "bets",
       icon: <ProfileOutlined />,
-      link: "/dashboard/bets/bet-list",
-      active: false,
+      // link: "/dashboard/bets/bet-list",
+      active: true,
       subItems: [
         {
           title: "Bet List",
@@ -79,6 +81,17 @@ const MobileNav = () => {
       link: "/dashboard/match-results",
       active: false,
     },
+    ...(role === 2
+      ? [
+          {
+            title: "My Attendance",
+            label: "my-attendance",
+            icon: <HiHand />,
+            link: "/dashboard/my-attendance",
+            active: false,
+          },
+        ]
+      : []),
     ...(role === 1
       ? [
           {
@@ -86,6 +99,20 @@ const MobileNav = () => {
             label: "users-list",
             icon: <FaUsersCog />,
             link: "/dashboard/users-list",
+            active: false,
+          },
+          {
+            title: "Office Shift",
+            label: "office-shift",
+            icon: <PiBuildingOfficeBold />,
+            link: "/dashboard/office-shift",
+            active: false,
+          },
+          {
+            title: "Users Shift",
+            label: "users-shifts",
+            icon: <PiTimerBold />,
+            link: "/dashboard/users-shifts",
             active: false,
           },
           {
@@ -120,7 +147,7 @@ const MobileNav = () => {
       : []),
   ];
   return (
-    <div className="flex flex-col gap-y-5 h-full">
+    <div className="flex flex-col gap-y-5 h-full overflow-y-auto">
       {/* logo */}
       <div className="flex flex-col items-center gap-1.5 ">
         <Link className="flex items-center gap-x-2" to="">
@@ -161,7 +188,8 @@ const MobileNav = () => {
                 </div>
                 <div>
                   {menu?.subItems &&
-                    (isOpenSubMenuItem.status ? (
+                    (isOpenSubMenuItem.status &&
+                    isOpenSubMenuItem.id === menu?.id ? (
                       <FaChevronUp
                         onClick={() =>
                           setIsOpenSubMenuItem({ status: false, id: "" })

@@ -257,7 +257,7 @@ const SetteBet = () => {
       <div className="relative w-full h-full mt-6 lg:mt-16">
         <div className=" flex items-center justify-between">
           <h1
-            className={`text-xl  font-bold border-l-8 border-purple-600 px-3 py-2 ${
+            className={`text-xl  font-bold border-l-8 border-purple-600 px-3 py-2 uppercase ${
               mode === "light" ? "text-black" : "text-white"
             }`}
           >

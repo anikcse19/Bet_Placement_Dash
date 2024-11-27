@@ -101,6 +101,11 @@ const LoginPage = () => {
                 <div className="relative w-full">
                   <input
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleLogin();
+                      }
+                    }}
                     value={password}
                     placeholder="********"
                     className="w-full px-5 py-2 outline-none rounded bg-gray-200 focus:border-2 focus:border-primary"

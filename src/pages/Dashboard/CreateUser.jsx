@@ -187,7 +187,7 @@ const CreateUser = () => {
                   onClick={handleCreateUser}
                   className="bg-blue-200 text-blue-700 px-5 py-2 rounded-md"
                 >
-                  Create New Client
+                  Create New User
                 </button>
               </div>
             </div>

@@ -137,6 +137,13 @@ const MobileNav = () => {
             active: false,
           },
           {
+            title: "Users Attendance",
+            label: "users-attendance",
+            icon: <HiHand />,
+            link: "/dashboard/users-attendance",
+            active: false,
+          },
+          {
             title: "Trash List",
             label: "trash-list",
             icon: <FaTrash />,
@@ -235,7 +242,7 @@ const MobileNav = () => {
         </div>
 
         {/* footer */}
-        <div className="flex flex-col items-center gap-y-5 px-3">
+        <div className="flex flex-col items-center gap-y-5 px-3 mt-8 lg:mt-0">
           <div
             className={`flex items-center  rounded-2xl overflow-hidden border-2 border-slate-700 ${
               mode === "light" ? "bg-gray-100" : "bg-slate-600"

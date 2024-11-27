@@ -80,7 +80,7 @@ const AssignShift = () => {
 
   return (
     <Layout>
-      <div className="mt-16">
+      <div className="mt-6 lg:mt-16">
         <h1
           className={`text-xl font-bold border-l-8 border-purple-600 px-3 py-2 ${
             mode === "light" ? "text-black" : "text-white"

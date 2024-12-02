@@ -130,8 +130,6 @@ const UnsettleBet = () => {
       });
   };
 
-  console.log(result, "result");
-
   const handleDoSettle = async () => {
     if (isRefund === "no" && result === "") {
       toast.error("Filled all field first", {
@@ -263,8 +261,6 @@ const UnsettleBet = () => {
   //     fetchUnSettledBets();
   //   }
   // }, [queryParamss]);
-  console.log(isRefund, "refund");
-  console.log(isRefundYesChecked, "yes", isRefundNoChecked, "no");
 
   return (
     <Layout>

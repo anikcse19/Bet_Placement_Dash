@@ -6,6 +6,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AssignShift = () => {
   const [usersData, setUsersData] = useState([]);
@@ -14,6 +15,7 @@ const AssignShift = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [shiftAssignments, setShiftAssignments] = useState({});
 
+  const navigate = useNavigate();
   const token = Cookies.get("token");
   const { mode } = useStore();
 
@@ -36,6 +38,55 @@ const AssignShift = () => {
       setIsLoading(false);
     }
   };
+
+  const transformData = (apiData) => {
+    if (!apiData || !apiData.data) {
+      console.error("Invalid data structure:", apiData);
+      return;
+    }
+
+    apiData.data.forEach((user) => {
+      if (!user.usershift) {
+        console.warn(`No shift data for user: ${user.id}`);
+        return; // Skip this user if no shift data
+      }
+
+      user.usershift.forEach((shift) => {
+        const { id: userId } = user; // Ensure 'user.id' exists
+        const { weekdays_id: weekdayId, shift_id: shiftId } = shift;
+
+        setShiftAssignments((prev) => ({
+          ...prev,
+          [userId]: {
+            ...(prev[userId] || {}),
+            [weekdayId]: shiftId,
+          },
+        }));
+      });
+    });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await axios
+          .get(`${baseUrl}/api/admin/hr/admin/users-shift`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            if (res?.data?.status) {
+              transformData(res?.data);
+            }
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     fetchUsersAssignsData();
@@ -65,14 +116,20 @@ const AssignShift = () => {
     );
 
     try {
-      await axios.post(
-        `${baseUrl}/api/admin/hr/admin/users-shift`,
-        { dataSet },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      toast.success("Shifts assigned successfully!");
+      await axios
+        .post(
+          `${baseUrl}/api/admin/hr/admin/users-shift`,
+          { dataSet },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          if (res?.data?.status) {
+            toast.success("Shifts assigned successfully!");
+            navigate("/dashboard/users-shifts");
+          }
+        });
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to assign shifts");
     }
@@ -155,7 +212,7 @@ const AssignShift = () => {
                             Number(e.target.value)
                           )
                         }
-                        defaultValue={shiftAssignments[user.id]?.[day.id] || ""}
+                        value={shiftAssignments[user.id]?.[day.id] || ""}
                       >
                         <option value="">Select Shift</option>
                         {shiftsData.map((shift) => (
@@ -175,7 +232,7 @@ const AssignShift = () => {
         <div className="flex justify-center my-4">
           <button
             onClick={handleSubmitShifts}
-            className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded"
+            className="bg-teal-500 hover:bg-teal-600  transition-all duration-300 ease-in  text-white px-6 py-3 rounded"
           >
             Submit Shifts
           </button>

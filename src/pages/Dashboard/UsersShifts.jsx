@@ -41,7 +41,6 @@ const UsersShifts = () => {
   }, []);
 
   useEffect(() => {
-    // Replace with your actual API call
     fetch(`${baseUrl}/api/admin/hr/admin/users-shift`, {
       method: "GET",
       headers: {
@@ -53,8 +52,6 @@ const UsersShifts = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  console.log(data, "data");
-
   return (
     <Layout>
       <div className="mt-6 lg:mt-16">
@@ -65,10 +62,14 @@ const UsersShifts = () => {
         >
           USER SHIFT
         </h1>
-        <div className="flex justify-end my-6">
+        <div className="flex justify-end my-3">
           <button
             onClick={() => navigate("/dashboard/assign-shift")}
-            className="bg-teal-500 px-3 py-2 rounded-md flex items-center gap-3 text-white"
+            className={`${
+              mode === "light"
+                ? "bg-teal-400 hover:bg-teal-500 text-white"
+                : "bg-gray-300 hover:bg-gray-400 text-black"
+            } transition-all duration-300 ease-in px-3 py-2 rounded-md flex items-center gap-3`}
           >
             <MdOutlineCreateNewFolder />
             <p>Assign Shift</p>

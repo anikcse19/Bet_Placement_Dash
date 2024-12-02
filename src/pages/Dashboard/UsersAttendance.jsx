@@ -197,7 +197,19 @@ const UsersAttendance = () => {
                     )}
                   </td>
                   <td className="px-6 py-4 text-center text-xs">
-                    {user?.weekdays_id}
+                    {user?.weekdays_id === 1
+                      ? "Monday"
+                      : user?.weekdays_id === 2
+                      ? "Tuesday"
+                      : user?.weekdays_id === 3
+                      ? "Wednesday"
+                      : user?.weekdays_id === 4
+                      ? "Thursday"
+                      : user?.weekdays_id === 5
+                      ? "Friday"
+                      : user?.weekdays_id === 6
+                      ? "Saturday"
+                      : ""}
                   </td>
                 </tr>
               ))

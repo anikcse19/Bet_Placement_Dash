@@ -33,8 +33,6 @@ const ShiftUpdateModal = ({
 
     if (response?.data?.status) {
       const data = response?.data?.data;
-      console.log(data, "data");
-
       setShiftName(data?.name);
       setStartHour(data?.start_time.split(":")[0]);
       setStartMinute(data?.start_time.split(":")[1]);

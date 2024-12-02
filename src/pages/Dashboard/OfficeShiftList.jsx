@@ -64,7 +64,7 @@ const OfficeShiftList = () => {
         </h1>
       </div>
       {/* cretae shift button */}
-      <div className="flex justify-end my-5 lg:my-10">
+      <div className="flex justify-end my-5">
         <button
           onClick={() => setOpenCreateShiftModal(true)}
           className={`${

@@ -84,6 +84,7 @@ const BetResults = () => {
 
   const paginatedResults = useMemo(
     () =>
+      filteredBetResults.length > 0 &&
       filteredBetResults.slice(
         (pageNo - 1) * ITEMS_PER_PAGE,
         pageNo * ITEMS_PER_PAGE
@@ -123,13 +124,13 @@ const BetResults = () => {
       <div className="flex flex-col items-center  overflow-hidden pb-3">
         {/* Results table */}
         <div className="relative overflow-x-auto  overflow-y-auto my-5 w-full">
-          <table className="w-full text-sm text-left text-white border-l-2 border-r-2 border-black">
+          <table className="w-full text-sm text-left text-white ">
             <thead
               className={`sticky top-0 text-xs uppercase ${
                 mode === "light"
                   ? "bg-blue-300 text-black"
                   : "bg-black text-white"
-              } border-b-2 border-t-2 border-black rounded-md`}
+              }  border-2 border-black rounded-md`}
             >
               <tr>
                 <th className="px-6 py-3 text-left border-r-2 border-black whitespace-nowrap">
@@ -168,6 +169,20 @@ const BetResults = () => {
                     </div>
                   </td>
                 </tr>
+              ) : paginatedResults <= 0 ? (
+                <tr className="text-center">
+                  <td colSpan={7} align="center">
+                    <div className="my-5 flex flex-col justify-center items-center">
+                      <p
+                        className={
+                          mode === "light" ? "text-black" : "text-white"
+                        }
+                      >
+                        No data to show
+                      </p>
+                    </div>
+                  </td>
+                </tr>
               ) : (
                 paginatedResults.map((bet, i) => (
                   <tr
@@ -180,7 +195,7 @@ const BetResults = () => {
                         : mode === "light"
                         ? "bg-blue-100 text-black"
                         : "bg-black text-white"
-                    } text-sm cursor-pointer transition-all duration-500 ease-in border-b-2 border-slate-700`}
+                    } text-sm cursor-pointer transition-all duration-500 ease-in border-2 border-black`}
                   >
                     <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                       {bet?.sportName}

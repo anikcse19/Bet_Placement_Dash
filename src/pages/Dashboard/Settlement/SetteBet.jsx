@@ -265,22 +265,15 @@ const SetteBet = () => {
           </h1>
         </div>
         {/* search box */}
-        <div className="mt-5 flex flex-col lg:flex-row lg:items-center gap-2">
-          <p
-            className={`${
-              mode === "light" ? "text-black" : "text-white"
-            } self-start lg:self-center`}
-          >
-            Search:
-          </p>
-          <div className="flex flex-col xl:flex-row xl:items-center  gap-4">
-            <div className="flex items-center gap-3">
+        <div className="mt-5 flex flex-col xl:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <div className="flex items-center gap-3 w-full">
               <input
                 onChange={(e) => setSearchMarketId(e.target.value)}
                 value={searchMarketId}
                 type="text"
                 placeholder="Search Market Id"
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
@@ -289,25 +282,25 @@ const SetteBet = () => {
                 value={searchEventId}
                 type="text"
                 placeholder="Search Event Id"
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 w-full">
               <input
                 onChange={(e) => setSearchSelectionName(e.target.value)}
                 value={searchSelectionName}
                 type="text"
                 placeholder="Search Selection Name"
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
               <select
                 onChange={(e) => setSelectSportType(e.target.value)}
                 value={selectSportType}
-                className={`w-32 lg:w-52 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm  outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light"
                     ? "text-black bg-transparent"
                     : "text-white bg-[#201F1F]"
@@ -319,29 +312,30 @@ const SetteBet = () => {
                 <option value="tennis">Tennis</option>
               </select>
             </div>
-
-            <div className="flex items-center gap-2">
-              <p
-                style={{
-                  boxShadow:
-                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-                }}
-                className="inline bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-                onClick={handleSearch}
-              >
-                Get Bets
-              </p>
-              <p
-                style={{
-                  boxShadow:
-                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-                }}
-                className="bg-teal-500 text-white font-bold px-3 py-1 rounded cursor-pointer hover:bg-teal-400"
-                onClick={handleClear}
-              >
-                Clear Filter
-              </p>
-            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              style={{
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
+              className="inline bg-teal-500 text-white font-bold px-3 py-2 rounded cursor-pointer hover:bg-teal-400"
+              onClick={handleSearch}
+            >
+              Get Bets
+            </p>
+            <p
+              style={{
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
+              className="bg-teal-500 text-white font-bold px-3 py-2 rounded cursor-pointer hover:bg-teal-400"
+              onClick={(e) => {
+                handleClear(e);
+              }}
+            >
+              Clear Filter
+            </p>
           </div>
         </div>
 
@@ -521,7 +515,7 @@ const SetteBet = () => {
 
           {/* pagination */}
           {pages && pages.length > 0 && (
-            <div className="mt-5 self-start lg:self-center flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-5 self-start lg:self-center flex flex-wrap items-center justify-center gap-3 w-full">
               {parseInt(pageNo) !== 1 && (
                 <p
                   onClick={() => {

@@ -77,13 +77,13 @@ const UsersShifts = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
-        <table className="w-full text-sm text-left rtl:text-right text-white border-l-2 border-r-2 border-black">
+        <table className="w-full text-sm text-left rtl:text-right text-white ">
           <thead
             className={`sticky top-0 text-xs uppercase ${
               mode === "light"
                 ? "bg-blue-300 text-black"
                 : "bg-black text-white"
-            } border-b-2 border-t-2 border-black rounded-md`}
+            } border-2 border-black rounded-md`}
           >
             <tr>
               <th scope="col" className="px-6 py-3 text-left">
@@ -122,7 +122,7 @@ const UsersShifts = () => {
                       : mode === "light"
                       ? "bg-blue-100 text-black"
                       : "bg-black text-white"
-                  }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
+                  }  text-sm cursor-pointer transition-all duration-500 ease-in  border-2 border-black`}
                 >
                   <td className="px-6 py-4 text-left">{user.name}</td>
                   {user?.usershift?.map((shift) => (

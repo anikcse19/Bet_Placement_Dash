@@ -670,6 +670,27 @@ const SetteBet = () => {
             </div>
 
             <div className="mt-3 px-3 flex flex-col gap-y-4 ">
+              {/* event name */}
+              <div className="flex flex-col justify-between gap-2">
+                <label
+                  htmlFor="eventtitle"
+                  className={mode === "light" ? "text-black" : "text-white"}
+                >
+                  Event Title
+                </label>
+                <input
+                  // onChange={(e) => setAmount(e.target.value)}
+                  value={actionModalOpen?.value?.eventTitle}
+                  readOnly
+                  type="text"
+                  className={`border border-gray-700 w-[95%] px-5 py-2  rounded-md ${
+                    mode === "light"
+                      ? "bg-white text-black"
+                      : "bg-slate-800 text-white"
+                  }`}
+                  placeholder="eventtitle"
+                />
+              </div>
               {/* selection name */}
               <div className="flex flex-col justify-between gap-2">
                 <label

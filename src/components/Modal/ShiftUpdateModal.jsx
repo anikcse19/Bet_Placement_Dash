@@ -85,7 +85,7 @@ const ShiftUpdateModal = ({
             : "bg-slate-600 border-white"
         } p-5`}
       >
-        <p className="text-center font-bold text-teal-300 text-xl">
+        <p className="text-center font-bold text-teal-700 text-xl">
           Update Shift
         </p>
         {/* form */}
@@ -204,7 +204,7 @@ const ShiftUpdateModal = ({
               onClick={handleUpdateShift}
               className="bg-teal-400 hover:bg-teal-500 px-6 py-2 rounded-md"
             >
-              Create
+              Update
             </button>
             <button
               onClick={() => setOpenUpdateShiftModal({ status: false, id: "" })}

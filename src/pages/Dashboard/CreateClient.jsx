@@ -43,6 +43,8 @@ const CreateClient = () => {
         if (res?.data?.status) {
           toast.success("Successfully Created");
           navigate("/dashboard/client-list");
+        } else {
+          toast.error(res?.data?.message);
         }
       });
   };

@@ -469,13 +469,21 @@ const SetteBet = () => {
                         {bet?.type}
                       </td>
                       <td className="px-6 py-4 text-left text-xs">
-                        {bet?.type === "Fancy"
-                          ? bet?.result?.isRefund
-                            ? "Abandoned"
-                            : bet?.result?.result
-                          : bet?.result?.isRefund
-                          ? "Abandoned"
-                          : bet?.result?.winnerName}
+                        {bet?.type === "Fancy" ? (
+                          bet?.result?.isRefund ? (
+                            <p className="text-red-600 uppercase font-bold">
+                              Abandoned
+                            </p>
+                          ) : (
+                            bet?.result?.result
+                          )
+                        ) : bet?.result?.isRefund ? (
+                          <p className="text-red-600 uppercase font-bold">
+                            Abandoned
+                          </p>
+                        ) : (
+                          bet?.result?.winnerName
+                        )}
                       </td>
 
                       <td className="px-6 py-4 text-left text-xl">

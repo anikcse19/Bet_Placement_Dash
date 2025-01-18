@@ -346,7 +346,7 @@ const SetteBet = () => {
               <thead
                 className={`sticky top-0 text-xs  uppercase ${
                   mode === "light"
-                    ? "bg-blue-300 text-black"
+                    ? "bg-teal-300 text-black"
                     : "bg-black text-white"
                 }  border-b-2 border-t-2 border-black rounded-md`}
               >
@@ -446,7 +446,7 @@ const SetteBet = () => {
                             ? "bg-white text-black"
                             : "bg-transparent text-white"
                           : mode === "light"
-                          ? "bg-blue-100 text-black"
+                          ? "bg-teal-100 text-black"
                           : "bg-black text-white"
                       }  text-sm cursor-pointer transition-all duration-500 ease-in  border-b-2 border-slate-700`}
                     >

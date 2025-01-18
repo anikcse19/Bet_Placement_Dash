@@ -356,7 +356,7 @@ const UnsettleBet = () => {
               <thead
                 className={`sticky top-0 uppercase ${
                   mode === "light"
-                    ? "bg-blue-300 text-black"
+                    ? "bg-rose-300 text-black"
                     : "bg-black text-white"
                 } border-b-2 border-t-2 border-black`}
               >
@@ -450,7 +450,7 @@ const UnsettleBet = () => {
                             ? "bg-white text-black"
                             : "bg-transparent text-white"
                           : mode === "light"
-                          ? "bg-blue-100 text-black"
+                          ? "bg-rose-100 text-black"
                           : "bg-black text-white"
                       } text-xs sm:text-sm transition-all duration-500 ease-in border-b-2 border-slate-700`}
                     >

@@ -32,22 +32,10 @@ const Sidebar2 = () => {
 
   const menuItemsData = [
     {
-      title: "Settlement",
+      title: "Unsettle Bet",
       icon: <ProfileOutlined />,
       link: "/dashboard/settlement/unsettle-bet",
       active: true,
-      subItems: [
-        {
-          title: "Unsettle Bet",
-          link: "/dashboard/settlement/unsettle-bet",
-          active: true,
-        },
-        {
-          title: "Settle bet",
-          link: "/dashboard/settlement/settle-bet",
-          active: false,
-        },
-      ],
     },
     {
       title: "Bets",
@@ -66,6 +54,12 @@ const Sidebar2 = () => {
           active: false,
         },
       ],
+    },
+    {
+      title: "Settle bet",
+      icon: <ProfileOutlined />,
+      link: "/dashboard/settlement/settle-bet",
+      active: false,
     },
     {
       title: "Match Results",

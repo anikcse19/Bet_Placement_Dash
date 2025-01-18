@@ -151,6 +151,9 @@ const BetResults = () => {
                 <th className="px-6 py-3 text-center border-r-2 border-black">
                   Loosers
                 </th>
+                <th className="px-6 py-3 text-center border-r-2 border-black">
+                  Removers
+                </th>
                 <th className="px-6 py-3 text-left">Event Time</th>
               </tr>
             </thead>
@@ -169,7 +172,7 @@ const BetResults = () => {
                     </div>
                   </td>
                 </tr>
-              ) : paginatedResults <= 0 ? (
+              ) : paginatedResults?.length <= 0 ? (
                 <tr className="text-center">
                   <td colSpan={7} align="center">
                     <div className="my-5 flex flex-col justify-center items-center">
@@ -184,7 +187,7 @@ const BetResults = () => {
                   </td>
                 </tr>
               ) : (
-                paginatedResults.map((bet, i) => (
+                paginatedResults?.map((bet, i) => (
                   <tr
                     key={bet.id}
                     className={`${
@@ -232,12 +235,26 @@ const BetResults = () => {
                     <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black">
                       {`${bet?.winnerDetails?.runnerName} (${bet?.winnerDetails?.selectionId})`}
                     </td>
-                    <td className="px-6 py-4 text-center text-xs flex flex-col gap-y-2 text-red-600 font-medium border-r-2 border-black">
-                      {bet?.loserDetails.map((loser) => (
-                        <p
-                          key={loser?.selectionId}
-                        >{`${loser?.runnerName} (${loser?.selectionId})`}</p>
-                      ))}
+                    <td className="px-6 py-4 text-center text-xs  text-red-600 font-medium border-r-2 border-black">
+                      <div className="flex flex-col gap-y-2">
+                        {Array.isArray(bet?.loserDetails) &&
+                          bet?.loserDetails.map((loser) => (
+                            <p
+                              key={loser?.selectionId}
+                            >{`${loser?.runnerName} (${loser?.selectionId})`}</p>
+                          ))}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center text-xs  text-red-600 font-medium border-r-2 border-black">
+                      <div className="flex flex-col gap-y-2">
+                        {Array.isArray(bet?.removerDetails)
+                          ? bet?.removerDetails.map((remover) => (
+                              <p
+                                key={remover?.selectionId}
+                              >{`${remover?.runnerName} (${remover?.selectionId})`}</p>
+                            ))
+                          : "--"}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-left text-xs">
                       {formatDate(bet?.eventTime)}

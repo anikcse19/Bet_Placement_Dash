@@ -177,6 +177,12 @@ const UsersList = () => {
                   </div>
                 </td>
               </tr>
+            ) : usersList?.length <= 0 ? (
+              <tr className="text-center text-sm">
+                <td colSpan={7} align="center">
+                  <p className="py-2 text-red-500">No data to show.</p>
+                </td>
+              </tr>
             ) : (
               usersList &&
               usersList?.length > 0 &&

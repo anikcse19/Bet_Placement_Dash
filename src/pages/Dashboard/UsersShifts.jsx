@@ -110,6 +110,12 @@ const UsersShifts = () => {
                   </div>
                 </td>
               </tr>
+            ) : data?.length <= 0 ? (
+              <tr className="text-center text-sm">
+                <td colSpan={weekdays.length + 1} align="center">
+                  <p className="py-2 text-red-500">No data to show.</p>
+                </td>
+              </tr>
             ) : (
               data.map((user, i) => (
                 <tr

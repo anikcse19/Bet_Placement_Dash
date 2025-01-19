@@ -238,7 +238,9 @@ const BetResults = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black">
-                      {`${bet?.winnerDetails?.runnerName} (${bet?.winnerDetails?.selectionId})`}
+                      {bet?.winnerDetails === null
+                        ? "--"
+                        : `${bet?.winnerDetails?.runnerName} (${bet?.winnerDetails?.selectionId})`}
                     </td>
                     <td className="px-6 py-4 text-center text-xs  text-red-600 font-medium border-r-2 border-black">
                       <div className="flex flex-col gap-y-2">

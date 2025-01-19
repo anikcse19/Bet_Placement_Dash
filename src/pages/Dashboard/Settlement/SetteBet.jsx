@@ -21,6 +21,7 @@ const SetteBet = () => {
   });
   const [searchMarketId, setSearchMarketId] = useState("");
   const [searchEventId, setSearchEventId] = useState("");
+  const [searchEventTitle, setSearchEventTitle] = useState("");
   const [searchSelectionName, setSearchSelectionName] = useState("");
   const [selectSportType, setSelectSportType] = useState("");
   const [isBetPlaceLoading, setIsBetPlaceLoading] = useState(false);
@@ -201,6 +202,7 @@ const SetteBet = () => {
 
     if (searchMarketId) queryParams.append("marketId", searchMarketId);
     if (searchEventId) queryParams.append("eventId", searchEventId);
+    if (searchEventTitle) queryParams.append("eventTitle", searchEventTitle);
     if (searchSelectionName)
       queryParams.append("selectionName", searchSelectionName);
     if (selectSportType) queryParams.append("sport", selectSportType);
@@ -241,6 +243,7 @@ const SetteBet = () => {
     setQueryParams("");
     setSearchMarketId("");
     setSearchEventId("");
+    setSearchEventTitle("");
     setSearchSelectionName("");
     setSelectSportType("");
     fetchUnSettledBets(true); // or call this in an effect
@@ -252,6 +255,17 @@ const SetteBet = () => {
       fetchUnSettledBets();
     }
   }, [queryParams]);
+
+  const formatDate = (marketDate) => {
+    return new Date(marketDate).toLocaleString(undefined, {
+      timeZoneName: "short",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   return (
     <Layout>
       <div className="relative w-full h-full mt-6 lg:mt-16">
@@ -269,20 +283,29 @@ const SetteBet = () => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="flex items-center gap-3 w-full">
               <input
-                onChange={(e) => setSearchMarketId(e.target.value)}
-                value={searchMarketId}
+                onChange={(e) => setSearchEventId(e.target.value)}
+                value={searchEventId}
                 type="text"
-                placeholder="Search Market Id"
-                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                placeholder="Event Id"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
               <input
-                onChange={(e) => setSearchEventId(e.target.value)}
-                value={searchEventId}
+                onChange={(e) => setSearchMarketId(e.target.value)}
+                value={searchMarketId}
                 type="text"
-                placeholder="Search Event Id"
-                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                placeholder="Market Id"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+              <input
+                onChange={(e) => setSearchEventTitle(e.target.value)}
+                value={searchEventTitle}
+                type="text"
+                placeholder="Event Title"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
@@ -292,8 +315,8 @@ const SetteBet = () => {
                 onChange={(e) => setSearchSelectionName(e.target.value)}
                 value={searchSelectionName}
                 type="text"
-                placeholder="Search Selection Name"
-                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                placeholder="Selection Name"
+                className={`w-full xl:w-42 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
@@ -319,7 +342,7 @@ const SetteBet = () => {
                 boxShadow:
                   "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
               }}
-              className="inline bg-teal-500 text-white font-bold px-3 py-2 rounded cursor-pointer hover:bg-teal-400"
+              className="inline bg-teal-500 text-white text-base md:text-sm lg:text-xs font-bold px-3 py-2 rounded cursor-pointer hover:bg-teal-400"
               onClick={handleSearch}
             >
               Get Bets
@@ -329,7 +352,7 @@ const SetteBet = () => {
                 boxShadow:
                   "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
               }}
-              className="bg-teal-500 text-white font-bold px-3 py-2 rounded cursor-pointer hover:bg-teal-400"
+              className="bg-teal-500 text-white font-bold text-base md:text-sm lg:text-xs px-3 py-2 rounded cursor-pointer hover:bg-teal-400"
               onClick={(e) => {
                 handleClear(e);
               }}
@@ -386,6 +409,18 @@ const SetteBet = () => {
                     className="px-6 py-3 text-left whitespace-nowrap"
                   >
                     Bet Type
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
+                    Market Date
+                  </th>{" "}
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
+                    Created
                   </th>
                   <th
                     scope="col"
@@ -467,6 +502,12 @@ const SetteBet = () => {
                       </td>
                       <td className="px-6 py-4 text-left text-xs">
                         {bet?.type}
+                      </td>
+                      <td className="px-3 sm:px-6 py-4">
+                        {formatDate(bet?.marketDate)}
+                      </td>
+                      <td className="px-3 sm:px-6 py-4">
+                        {formatDate(bet?.created_at)}
                       </td>
                       <td className="px-6 py-4 text-left text-xs">
                         {bet?.type === "Fancy" ? (

@@ -31,6 +31,7 @@ const UnsettleBet = () => {
   const [isOTPSent, setIsOTPSent] = useState(false);
   const [searchMarketId, setSearchMarketId] = useState("");
   const [searchEventId, setSearchEventId] = useState("");
+  const [searchEventTitle, setSearchEventTitle] = useState("");
   const [searchSelectionName, setSearchSelectionName] = useState("");
   const [selectSportType, setSelectSportType] = useState("");
   const [queryParamss, setQueryParamss] = useState("");
@@ -208,6 +209,8 @@ const UnsettleBet = () => {
 
     if (searchMarketId) queryParams.append("marketId", searchMarketId);
     if (searchEventId) queryParams.append("eventId", searchEventId);
+    if (searchEventTitle) queryParams.append("eventTitle", searchEventTitle);
+
     if (searchSelectionName)
       queryParams.append("selectionName", searchSelectionName);
     if (selectSportType !== "") queryParams.append("sport", selectSportType);
@@ -249,6 +252,7 @@ const UnsettleBet = () => {
     setQueryParamss("");
     setSearchMarketId("");
     setSearchEventId("");
+    setSearchEventTitle("");
     setSearchSelectionName("");
     setSelectSportType("");
 
@@ -262,6 +266,16 @@ const UnsettleBet = () => {
   //   }
   // }, [queryParamss]);
 
+  const formatDate = (marketDate) => {
+    return new Date(marketDate).toLocaleString(undefined, {
+      timeZoneName: "short",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   return (
     <Layout>
       <div className="relative w-full h-full mt-6 lg:mt-16">
@@ -279,20 +293,29 @@ const UnsettleBet = () => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="flex items-center gap-3 w-full">
               <input
-                onChange={(e) => setSearchMarketId(e.target.value)}
-                value={searchMarketId}
+                onChange={(e) => setSearchEventId(e.target.value)}
+                value={searchEventId}
                 type="text"
-                placeholder="Search Market Id"
-                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                placeholder="Event Id"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
               <input
-                onChange={(e) => setSearchEventId(e.target.value)}
-                value={searchEventId}
+                onChange={(e) => setSearchMarketId(e.target.value)}
+                value={searchMarketId}
                 type="text"
-                placeholder="Search Event Id"
-                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                placeholder="Market Id"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                  mode === "light" ? "text-black" : "text-white"
+                }`}
+              />
+              <input
+                onChange={(e) => setSearchEventTitle(e.target.value)}
+                value={searchEventTitle}
+                type="text"
+                placeholder="Event Title"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
@@ -302,8 +325,8 @@ const UnsettleBet = () => {
                 onChange={(e) => setSearchSelectionName(e.target.value)}
                 value={searchSelectionName}
                 type="text"
-                placeholder="Search Selection Name"
-                className={`w-full xl:w-40 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                placeholder="Selection Name"
+                className={`w-full xl:w-56 px-3 py-2 text-xs lg:text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
                   mode === "light" ? "text-black" : "text-white"
                 }`}
               />
@@ -401,6 +424,18 @@ const UnsettleBet = () => {
                     scope="col"
                     className="px-3 sm:px-6 py-2 whitespace-nowrap"
                   >
+                    Market Date
+                  </th>{" "}
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
+                    Created
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 sm:px-6 py-2 whitespace-nowrap"
+                  >
                     Action
                   </th>
                   <th
@@ -462,6 +497,13 @@ const UnsettleBet = () => {
                         {bet?.selectionName || "--"}
                       </td>
                       <td className="px-3 sm:px-6 py-4">{bet?.type}</td>
+
+                      <td className="px-3 sm:px-6 py-4">
+                        {formatDate(bet?.marketDate)}
+                      </td>
+                      <td className="px-3 sm:px-6 py-4">
+                        {formatDate(bet?.created_at)}
+                      </td>
                       <td className="px-3 sm:px-6 py-4 text-xl">
                         <AiFillEdit
                           className="cursor-pointer"

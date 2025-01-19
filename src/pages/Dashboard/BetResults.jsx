@@ -55,6 +55,7 @@ const BetResults = () => {
 
   const handleSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
+
     const filteredBets = betResults.filter(
       (bet) =>
         bet?.eventName.toLowerCase().includes(searchValue) ||
@@ -84,11 +85,12 @@ const BetResults = () => {
 
   const paginatedResults = useMemo(
     () =>
-      filteredBetResults.length > 0 &&
-      filteredBetResults.slice(
-        (pageNo - 1) * ITEMS_PER_PAGE,
-        pageNo * ITEMS_PER_PAGE
-      ),
+      filteredBetResults.length > 0
+        ? filteredBetResults.slice(
+            (pageNo - 1) * ITEMS_PER_PAGE,
+            pageNo * ITEMS_PER_PAGE
+          )
+        : [],
     [filteredBetResults, pageNo]
   );
 
@@ -154,13 +156,16 @@ const BetResults = () => {
                 <th className="px-6 py-3 text-center border-r-2 border-black">
                   Removers
                 </th>
-                <th className="px-6 py-3 text-left">Event Time</th>
+                <th className="px-6 py-3 text-left  border-r-2 border-black">
+                  Event Time
+                </th>
+                <th className="px-6 py-3 text-left">Created</th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 <tr className="text-center">
-                  <td colSpan={7} align="center">
+                  <td colSpan={9} align="center">
                     <div className="my-5 flex flex-col justify-center items-center">
                       <Circles
                         height="50"
@@ -174,7 +179,7 @@ const BetResults = () => {
                 </tr>
               ) : paginatedResults?.length <= 0 ? (
                 <tr className="text-center">
-                  <td colSpan={7} align="center">
+                  <td colSpan={9} align="center">
                     <div className="my-5 flex flex-col justify-center items-center">
                       <p
                         className={
@@ -256,8 +261,11 @@ const BetResults = () => {
                           : "--"}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-left text-xs">
+                    <td className="px-6 py-4 text-left text-x  border-r-2 border-black">
                       {formatDate(bet?.eventTime)}
+                    </td>
+                    <td className="px-6 py-4 text-left text-xs">
+                      {formatDate(bet?.created_at)}
                     </td>
                   </tr>
                 ))

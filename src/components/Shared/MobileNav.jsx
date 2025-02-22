@@ -81,6 +81,13 @@ const MobileNav = () => {
       link: "/dashboard/match-results",
       active: false,
     },
+    {
+      title: "Racing Results",
+      label: "racing-results",
+      icon: <VscOutput />,
+      link: "/dashboard/racing-results",
+      active: false,
+    },
     ...(role === 2
       ? [
           {

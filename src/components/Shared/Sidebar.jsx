@@ -67,6 +67,12 @@ const Sidebar2 = () => {
       link: "/dashboard/match-results",
       active: false,
     },
+    {
+      title: "Racing Results",
+      icon: <VscOutput />,
+      link: "/dashboard/racing-results",
+      active: false,
+    },
     ...(role === 2
       ? [
           {

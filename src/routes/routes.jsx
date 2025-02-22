@@ -20,6 +20,7 @@ import UsersAttendance from "../pages/Dashboard/UsersAttendance";
 import MyAttendance from "../pages/Dashboard/MyAttendance";
 import AssignShift from "../pages/Dashboard/AssignShift";
 import UsersShifts from "../pages/Dashboard/UsersShifts";
+import RacingResults from "../pages/Dashboard/RacingResult";
 
 export const routes = createBrowserRouter([
   {
@@ -71,6 +72,14 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <BetResults />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/racing-results",
+    element: (
+      <PrivateRoute>
+        <RacingResults />
       </PrivateRoute>
     ),
   },

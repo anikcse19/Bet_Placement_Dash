@@ -94,6 +94,12 @@ const RacingResults = () => {
     [filteredBetResults, pageNo]
   );
 
+  // console.log(
+  //   "filteredBetResults",
+  //   Array.isArray(JSON.parse(filteredBetResults[0]?.losersDetails))
+  // );
+  console.log(filteredBetResults[0]?.losersDetails, "losersDetails");
+
   return (
     <Layout>
       <div className="flex items-center justify-between mt-6 lg:mt-16">
@@ -208,8 +214,8 @@ const RacingResults = () => {
                         : "bg-black text-white"
                     } text-sm cursor-pointer transition-all duration-500 ease-in border-2 border-black`}
                   >
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                      {bet?.sportName}
+                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black whitespace-nowrap">
+                      {bet?.eventTypeId === "7" ? "Horse Racing" : "Grey Hound"}
                     </td>
                     <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                       {bet?.eventId}
@@ -223,57 +229,44 @@ const RacingResults = () => {
                     <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
                       {bet?.marketName}
                     </td>
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                      <div className="flex justify-between items-center">
-                        <p>
-                          {`${bet?.eventName}   ${
-                            bet?.score !== null
-                              ? bet?.score?.nscore !== null
-                                ? ` || ${bet?.score?.nscore}`
-                                : ""
-                              : ""
-                          }`}
-                        </p>
-                        {bet?.score !== null && bet?.score?.iscoreLink && (
-                          <p>
-                            <FaCaretSquareRight
-                              onClick={() =>
-                                window.open(bet?.score?.iscoreLink, "_blank")
-                              }
-                              className="text-lg"
-                            />
-                          </p>
+
+                    <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black whitespace-nowrap">
+                      {bet?.winnerDetails === "null"
+                        ? "--"
+                        : `${JSON.parse(bet?.winnerDetails)?.runnerName} (${
+                            JSON.parse(bet?.winnerDetails)?.selectionId
+                          })`}
+                    </td>
+                    <td className="px-6 py-4 text-center text-xs text-red-600 font-medium border-r-2 border-black">
+                      <div className="flex flex-col gap-y-2">
+                        {bet?.losersDetails && bet?.losersDetails !== "[]" ? (
+                          JSON.parse(bet?.losersDetails)?.map((loser) => (
+                            <p
+                              key={loser?.selectionId}
+                              className="whitespace-nowrap"
+                            >{`${loser?.runnerName} (${loser?.selectionId})`}</p>
+                          ))
+                        ) : (
+                          <p>--</p>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black">
-                      {bet?.winnerDetails === null
-                        ? "--"
-                        : `${bet?.winnerDetails?.runnerName} (${bet?.winnerDetails?.selectionId})`}
-                    </td>
-                    <td className="px-6 py-4 text-center text-xs  text-red-600 font-medium border-r-2 border-black">
+                    <td className="px-6 py-4 text-center text-xs text-red-600 font-medium border-r-2 border-black">
                       <div className="flex flex-col gap-y-2">
-                        {Array.isArray(bet?.loserDetails) &&
-                          bet?.loserDetails.map((loser) => (
+                        {bet?.removerDetails && bet?.removerDetails !== "[]" ? (
+                          JSON.parse(bet?.removerDetails)?.map((remover) => (
                             <p
-                              key={loser?.selectionId}
-                            >{`${loser?.runnerName} (${loser?.selectionId})`}</p>
-                          ))}
+                              key={remover?.selectionId}
+                              className="whitespace-nowrap"
+                            >{`${remover?.runnerName} (${remover?.selectionId})`}</p>
+                          ))
+                        ) : (
+                          <p>--</p>
+                        )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center text-xs  text-red-600 font-medium border-r-2 border-black">
-                      <div className="flex flex-col gap-y-2">
-                        {Array.isArray(bet?.removerDetails)
-                          ? bet?.removerDetails.map((remover) => (
-                              <p
-                                key={remover?.selectionId}
-                              >{`${remover?.runnerName} (${remover?.selectionId})`}</p>
-                            ))
-                          : "--"}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-left text-x  border-r-2 border-black">
-                      {formatDate(bet?.eventTime)}
+                    <td className="px-6 py-4 text-left text-xs  border-r-2 border-black">
+                      {formatDate(bet?.eventOpenDate)}
                     </td>
                     <td className="px-6 py-4 text-left text-xs">
                       {formatDate(bet?.created_at)}

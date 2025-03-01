@@ -7,6 +7,7 @@ import { Circles } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { IoSettings } from "react-icons/io5";
 
 const ClientList = () => {
   const [clientList, setClientList] = useState([]);
@@ -145,6 +146,9 @@ const ClientList = () => {
                 >
                   Created At
                 </th>
+                <th scope="col" className="px-6 py-3 text-left">
+                  Setting
+                </th>
                 <th scope="col" className="px-6 py-3 text-center">
                   Action
                 </th>
@@ -205,6 +209,14 @@ const ClientList = () => {
 
                     <td className="px-6 py-4 text-left text-xs whitespace-nowrap">
                       {formateDate(user?.created_at)}
+                    </td>
+                    <td className="px-6 py-4 text-left whitespace-nowrap">
+                      <IoSettings
+                        onClick={() =>
+                          navigate(`/dashboard/client/settings/${user.id}`)
+                        }
+                        className="text-xl"
+                      />
                     </td>
 
                     <td className="px-6 py-4 flex justify-center text-sm">

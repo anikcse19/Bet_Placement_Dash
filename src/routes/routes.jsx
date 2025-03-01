@@ -21,6 +21,7 @@ import MyAttendance from "../pages/Dashboard/MyAttendance";
 import AssignShift from "../pages/Dashboard/AssignShift";
 import UsersShifts from "../pages/Dashboard/UsersShifts";
 import RacingResults from "../pages/Dashboard/RacingResult";
+import ClientSettings from "../pages/Dashboard/ClientSettings";
 
 export const routes = createBrowserRouter([
   {
@@ -128,6 +129,14 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <ClientList />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard/client/settings/:id",
+    element: (
+      <PrivateRoute>
+        <ClientSettings />
       </PrivateRoute>
     ),
   },

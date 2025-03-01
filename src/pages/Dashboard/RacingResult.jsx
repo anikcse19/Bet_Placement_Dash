@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import Layout from "../../components/Layout/Layout";
 import useStore from "../../zustand/useStore";
 import { Circles } from "react-loader-spinner";
-import { FaCaretSquareRight } from "react-icons/fa";
 
 const RacingResults = () => {
   const [betResults, setBetResults] = useState([]);
@@ -98,7 +97,6 @@ const RacingResults = () => {
   //   "filteredBetResults",
   //   Array.isArray(JSON.parse(filteredBetResults[0]?.losersDetails))
   // );
-  console.log(filteredBetResults[0]?.losersDetails, "losersDetails");
 
   return (
     <Layout>

@@ -8,13 +8,11 @@ import {
   FaTrash,
   FaUsersCog,
 } from "react-icons/fa";
-import { IoMdPersonAdd } from "react-icons/io";
 import useStore from "../../zustand/useStore";
 import { useState } from "react";
 import axios from "axios";
 import { baseUrl } from "../../../config";
 import { FaUsersViewfinder } from "react-icons/fa6";
-import { TbUsersPlus } from "react-icons/tb";
 import { PiBuildingOfficeBold, PiTimerBold } from "react-icons/pi";
 import { HiHand } from "react-icons/hi";
 
@@ -122,13 +120,7 @@ const MobileNav = () => {
             link: "/dashboard/users-shifts",
             active: false,
           },
-          {
-            title: "Create User",
-            label: "create-user",
-            icon: <IoMdPersonAdd />,
-            link: "/dashboard/create-user",
-            active: false,
-          },
+
           {
             title: "Client List",
             label: "client-list",
@@ -136,13 +128,7 @@ const MobileNav = () => {
             link: "/dashboard/client-list",
             active: false,
           },
-          {
-            title: "Create Client",
-            label: "create-client",
-            icon: <TbUsersPlus />,
-            link: "/dashboard/create-client",
-            active: false,
-          },
+
           {
             title: "Users Attendance",
             label: "users-attendance",

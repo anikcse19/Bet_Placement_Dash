@@ -100,7 +100,7 @@ const UsersList = () => {
   };
   return (
     <Layout>
-      <div className="mt-6 lg:mt-16">
+      <div className="mt-6 lg:mt-16 flex items-center justify-between">
         <h1
           className={`text-xl font-bold border-l-8 border-purple-600 px-3 py-2 uppercase ${
             mode === "light" ? "text-black" : "text-white"
@@ -108,6 +108,12 @@ const UsersList = () => {
         >
           All Users List
         </h1>
+        <button
+          onClick={() => navigate("/dashboard/create-user")}
+          className="bg-blue-50 border-2 border-black hover:border-blue-400 hover:text-slate-700-400 transition-all duration-300 ease-in px-8 py-1 rounded-md"
+        >
+          Create New
+        </button>
       </div>
       {/* search box */}
       {/* <div className="mt-5 flex items-center gap-x-2">

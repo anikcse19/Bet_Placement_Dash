@@ -88,7 +88,7 @@ const ClientList = () => {
   return (
     <Layout>
       <div className="relative">
-        <div className="mt-6 lg:mt-16">
+        <div className="mt-6 lg:mt-16 flex justify-between items-center">
           <h1
             className={`text-xl font-bold border-l-8 border-purple-600 px-3 py-2 ${
               mode === "light" ? "text-black" : "text-white"
@@ -96,6 +96,12 @@ const ClientList = () => {
           >
             All Client List
           </h1>
+          <button
+            onClick={() => navigate("/dashboard/create-client")}
+            className="bg-blue-50 border-2 border-black hover:border-blue-400 hover:text-slate-700-400 transition-all duration-300 ease-in px-8 py-1 rounded-md"
+          >
+            Create New
+          </button>
         </div>
 
         {/* users table */}

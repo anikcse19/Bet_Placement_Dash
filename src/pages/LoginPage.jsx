@@ -64,7 +64,6 @@ const LoginPage = () => {
   return (
     <>
       <div className="login-bg w-ful min-h-screen bg-gray-200 flex items-center justify-center py-20">
-        <iframe src="https://hls-player-html.vercel.app/"></iframe>
         <div
           // style={{
           //   boxShadow:

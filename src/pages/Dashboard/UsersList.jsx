@@ -11,6 +11,9 @@ import toast from "react-hot-toast";
 const UsersList = () => {
   const [usersList, setUsersList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredUsersList, setFilteredUsersList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [userTypeFilter, setUserTypeFilter] = useState("all");
 
   const navigate = useNavigate();
 
@@ -31,6 +34,7 @@ const UsersList = () => {
         .then((res) => {
           if (res?.data?.status) {
             setUsersList(res?.data?.data);
+            setFilteredUsersList(res?.data?.data);
           }
         });
     } catch (error) {
@@ -43,6 +47,35 @@ const UsersList = () => {
   useEffect(() => {
     fetchUsersList();
   }, []);
+  console.log(usersList);
+  const applyFilters = (search = searchTerm, type = userTypeFilter) => {
+    const filtered = usersList.filter((user) => {
+      const matchesSearch =
+        user?.name?.toLowerCase().includes(search.toLowerCase()) ||
+        user?.email?.toLowerCase().includes(search.toLowerCase());
+
+      const matchesType =
+        type === "all" ||
+        (type === "admin" && user?.user_type === 1) ||
+        (type === "editor" && user?.user_type === 2);
+
+      return matchesSearch && matchesType;
+    });
+
+    setFilteredUsersList(filtered);
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    applyFilters(value, userTypeFilter);
+  };
+
+  const handleUserTypeChange = (e) => {
+    const value = e.target.value;
+    setUserTypeFilter(value);
+    applyFilters(searchTerm, value);
+  };
 
   // console.log(usersList, "users");
 
@@ -115,21 +148,38 @@ const UsersList = () => {
           Create New
         </button>
       </div>
-      {/* search box */}
-      {/* <div className="mt-5 flex items-center gap-x-2">
-        <p className={mode === "light" ? "text-black" : "text-white"}>
-          Search:
-        </p>
-        <div className="flex items-center gap-x-4">
-          <input
-            // onChange={(e) => setSearchEventName(e.target.value)}
-            // value={searchEventName}
-            type="text"
-            placeholder="Search Client"
-            className="w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500"
-          />
+      <div>
+        <div className="mt-5 flex items-center gap-x-2">
+          <p className={mode === "light" ? "text-black" : "text-white"}>
+            Search:
+          </p>
+          <div className="flex items-center gap-x-4">
+            <input
+              onChange={handleSearchChange}
+              type="text"
+              placeholder="Search by name or email"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
+            />
+          </div>
+          {/* User type filter */}
+          <select
+            value={userTypeFilter}
+            onChange={handleUserTypeChange}
+            className={`px-3 py-2 text-sm rounded-sm border-2 border-slate-600 focus:border-teal-500   ${
+              mode === "light"
+                ? "text-black bg-white"
+                : "text-white bg-slate-700"
+            }`}
+          >
+            <option value="all">All</option>
+            <option value="admin">Administrator</option>
+            <option value="editor">Editor</option>
+          </select>
         </div>
-      </div> */}
+      </div>
+      {/* search box */}
 
       {/* users table */}
       <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
@@ -183,16 +233,16 @@ const UsersList = () => {
                   </div>
                 </td>
               </tr>
-            ) : usersList?.length <= 0 ? (
+            ) : filteredUsersList?.length <= 0 ? (
               <tr className="text-center text-sm">
                 <td colSpan={7} align="center">
                   <p className="py-2 text-red-500">No data to show.</p>
                 </td>
               </tr>
             ) : (
-              usersList &&
-              usersList?.length > 0 &&
-              usersList?.map((user, i) => (
+              filteredUsersList &&
+              filteredUsersList?.length > 0 &&
+              filteredUsersList?.map((user, i) => (
                 <tr
                   key={user.id}
                   className={`${

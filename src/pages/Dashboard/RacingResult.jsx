@@ -1,3 +1,4 @@
+// RacingResult.jsx
 import axios from "axios";
 import { useEffect, useState, useMemo } from "react";
 import { baseUrl } from "../../../config";
@@ -6,6 +7,14 @@ import toast from "react-hot-toast";
 import Layout from "../../components/Layout/Layout";
 import useStore from "../../zustand/useStore";
 import { Circles } from "react-loader-spinner";
+// ✅ Safe JSON parse helper
+const safeJSONParse = (value) => {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+};
 
 const RacingResults = () => {
   const [betResults, setBetResults] = useState([]);
@@ -199,78 +208,85 @@ const RacingResults = () => {
                   </td>
                 </tr>
               ) : (
-                paginatedResults?.map((bet, i) => (
-                  <tr
-                    key={bet.id}
-                    className={`${
-                      i % 2 === 0
-                        ? mode === "light"
-                          ? "bg-white text-black"
-                          : "bg-transparent text-white"
-                        : mode === "light"
-                        ? "bg-blue-100 text-black"
-                        : "bg-black text-white"
-                    } text-sm cursor-pointer transition-all duration-500 ease-in border-2 border-black`}
-                  >
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black whitespace-nowrap">
-                      {bet?.eventTypeId === "7" ? "Horse Racing" : "Grey Hound"}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                      {bet?.eventId}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                      {bet?.eventName}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                      {bet?.marketId}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs border-r-2 border-black">
-                      {bet?.marketName}
-                    </td>
+                paginatedResults.map((bet, i) => {
+                  const winner = safeJSONParse(bet?.winnerDetails);
+                  const losers = safeJSONParse(bet?.losersDetails);
+                  const removers = safeJSONParse(bet?.removerDetails);
 
-                    <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black whitespace-nowrap">
-                      {bet?.winnerDetails === "null"
-                        ? "--"
-                        : `${JSON.parse(bet?.winnerDetails)?.runnerName} (${
-                            JSON.parse(bet?.winnerDetails)?.selectionId
-                          })`}
-                    </td>
-                    <td className="px-6 py-4 text-center text-xs text-red-600 font-medium border-r-2 border-black">
-                      <div className="flex flex-col gap-y-2">
-                        {bet?.losersDetails && bet?.losersDetails !== "[]" ? (
-                          JSON.parse(bet?.losersDetails)?.map((loser) => (
-                            <p
-                              key={loser?.selectionId}
-                              className="whitespace-nowrap"
-                            >{`${loser?.runnerName} (${loser?.selectionId})`}</p>
-                          ))
-                        ) : (
-                          <p>--</p>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-center text-xs text-red-600 font-medium border-r-2 border-black">
-                      <div className="flex flex-col gap-y-2">
-                        {bet?.removerDetails && bet?.removerDetails !== "[]" ? (
-                          JSON.parse(bet?.removerDetails)?.map((remover) => (
-                            <p
-                              key={remover?.selectionId}
-                              className="whitespace-nowrap"
-                            >{`${remover?.runnerName} (${remover?.selectionId})`}</p>
-                          ))
-                        ) : (
-                          <p>--</p>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs  border-r-2 border-black">
-                      {formatDate(bet?.eventOpenDate)}
-                    </td>
-                    <td className="px-6 py-4 text-left text-xs">
-                      {formatDate(bet?.created_at)}
-                    </td>
-                  </tr>
-                ))
+                  return (
+                    <tr
+                      key={bet.id}
+                      className={`${
+                        i % 2 === 0
+                          ? mode === "light"
+                            ? "bg-white text-black"
+                            : "bg-transparent text-white"
+                          : mode === "light"
+                          ? "bg-blue-100 text-black"
+                          : "bg-black text-white"
+                      } text-sm border-2 border-black`}
+                    >
+                      <td className="px-6 py-4 border-r-2 border-black">
+                        {bet?.eventTypeId === "7"
+                          ? "Horse Racing"
+                          : "Grey Hound"}
+                      </td>
+                      <td className="px-6 py-4 border-r-2 border-black">
+                        {bet?.eventId}
+                      </td>
+                      <td className="px-6 py-4 border-r-2 border-black">
+                        {bet?.eventName}
+                      </td>
+                      <td className="px-6 py-4 border-r-2 border-black">
+                        {bet?.marketId}
+                      </td>
+                      <td className="px-6 py-4 border-r-2 border-black">
+                        {bet?.marketName}
+                      </td>
+
+                      <td className="px-6 py-4 text-center text-xs text-[#3caa52] font-medium border-r-2 border-black">
+                        {winner
+                          ? `${winner?.runnerName} (${winner?.selectionId})`
+                          : "--"}
+                      </td>
+
+                      <td className="px-6 py-4 text-center text-xs text-red-600 font-medium border-r-2 border-black">
+                        <div className="flex flex-col gap-y-2">
+                          {Array.isArray(losers) && losers.length > 0 ? (
+                            losers.map((loser) => (
+                              <p key={loser?.selectionId}>
+                                {`${loser?.runnerName} (${loser?.selectionId})`}
+                              </p>
+                            ))
+                          ) : (
+                            <p>--</p>
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-4 text-center text-xs text-red-600 font-medium border-r-2 border-black">
+                        <div className="flex flex-col gap-y-2">
+                          {Array.isArray(removers) && removers.length > 0 ? (
+                            removers.map((remover) => (
+                              <p key={remover?.selectionId}>
+                                {`${remover?.runnerName} (${remover?.selectionId})`}
+                              </p>
+                            ))
+                          ) : (
+                            <p>--</p>
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-4 border-r-2 border-black">
+                        {formatDate(bet?.eventOpenDate)}
+                      </td>
+                      <td className="px-6 py-4">
+                        {formatDate(bet?.created_at)}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

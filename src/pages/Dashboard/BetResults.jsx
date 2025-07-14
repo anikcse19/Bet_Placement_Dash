@@ -36,11 +36,11 @@ const BetResults = () => {
         }
       );
       if (response?.data?.status) {
-        toast.success(response.data.message);
-        setBetResults(response.data.data);
-        setFilteredBetResults(response.data.data);
+        toast.success(response?.data?.message);
+        setBetResults(response?.data?.data);
+        setFilteredBetResults(response?.data?.data);
       } else {
-        toast.error(response.data.message);
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "An error occurred");

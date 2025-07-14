@@ -11,6 +11,7 @@ import { IoSettings } from "react-icons/io5";
 
 const ClientList = () => {
   const [clientList, setClientList] = useState([]);
+    const [filteredClientList, setFilteredClientList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState({
     status: false,
@@ -36,6 +37,7 @@ const ClientList = () => {
         .then((res) => {
           if (res?.data?.status) {
             setClientList(res?.data?.data);
+            setFilteredClientList(res?.data?.data);
           }
         });
     } catch (error) {
@@ -49,6 +51,19 @@ const ClientList = () => {
     fetchClientList();
   }, []);
 
+  const handleSearch = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+
+    const filteredClients = clientList.filter(
+      (client) =>
+        client?.name.toLowerCase().includes(searchValue) ||
+        client?.clientSecret.toLowerCase().includes(searchValue) ||
+        client?.clientIp.toLowerCase().includes(searchValue) ||
+        client?.clientId.toLowerCase().includes(searchValue)
+    );
+    setFilteredClientList(filteredClients);
+    // setPageNo(1); // Reset to the first page on new search
+  };
   // console.log(usersList, "users");
 
   const formateDate = (marketDate) => {
@@ -103,7 +118,22 @@ const ClientList = () => {
             Create New
           </button>
         </div>
-
+        {/* Search box */}
+        <div className="mt-5 flex items-center gap-x-2">
+          <p className={mode === "light" ? "text-black" : "text-white"}>
+            Search:
+          </p>
+          <div className="flex items-center gap-x-4">
+            <input
+              onChange={handleSearch}
+              type="text"
+              placeholder="Search Result"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
+            />
+          </div>
+        </div>
         {/* users table */}
         <div className="relative overflow-x-auto max-h-screen overflow-y-auto my-5">
           <table className="w-full text-sm text-left rtl:text-right text-white  border-l-2 border-r-2 border-black">
@@ -177,16 +207,16 @@ const ClientList = () => {
                     </div>
                   </td>
                 </tr>
-              ) : clientList?.length <= 0 ? (
+              ) : filteredClientList?.length <= 0 ? (
                 <tr className="text-center text-sm">
                   <td colSpan={7} align="center">
                     <p className="py-2 text-red-500">No data to show.</p>
                   </td>
                 </tr>
               ) : (
-                clientList &&
-                clientList?.length > 0 &&
-                clientList?.map((user, i) => (
+                filteredClientList &&
+                filteredClientList?.length > 0 &&
+                filteredClientList?.map((user, i) => (
                   <tr
                     key={user.id}
                     className={`${

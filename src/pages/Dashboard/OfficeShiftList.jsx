@@ -15,7 +15,7 @@ import { FaRegEdit } from "react-icons/fa";
 const OfficeShiftList = () => {
   const [officeShifts, setOfficeShifts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+    const [filteredOfficeShifts, setFilteredOfficeShifts] = useState([]);
   const [openCreateShiftModal, setOpenCreateShiftModal] = useState(false);
   const [openUpdateShiftModal, setOpenUpdateShiftModal] = useState({
     status: false,
@@ -40,6 +40,7 @@ const OfficeShiftList = () => {
 
       if (response.data.status) {
         setOfficeShifts(response?.data?.data);
+        setFilteredOfficeShifts(response?.data?.data);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "An error occured");
@@ -51,6 +52,17 @@ const OfficeShiftList = () => {
   useEffect(() => {
     fetchOfficeShifts();
   }, []);
+   const handleSearch = (e) => {
+     const searchValue = e.target.value.toLowerCase();
+
+     const filteredOffices = officeShifts.filter(
+       (office) =>
+         office?.name.toLowerCase().includes(searchValue) 
+     );
+     setFilteredOfficeShifts(filteredOffices);
+     // setPageNo(1); // Reset to the first page on new search
+   };
+
 
   return (
     <Layout>
@@ -64,7 +76,22 @@ const OfficeShiftList = () => {
         </h1>
       </div>
       {/* cretae shift button */}
-      <div className="flex justify-end my-5">
+      <div className="flex justify-between my-5">
+        <div className="mt-5 flex items-center gap-x-2">
+          <p className={mode === "light" ? "text-black" : "text-white"}>
+            Search:
+          </p>
+          <div className="flex items-center gap-x-4">
+            <input
+              onChange={handleSearch}
+              type="text"
+              placeholder="Search by shift"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
+            />
+          </div>
+        </div>
         <button
           onClick={() => setOpenCreateShiftModal(true)}
           className={`${
@@ -146,7 +173,7 @@ const OfficeShiftList = () => {
                     </div>
                   </td>
                 </tr>
-              ) : officeShifts?.length <= 0 ? (
+              ) : filteredOfficeShifts?.length <= 0 ? (
                 <tr>
                   <td colSpan={8} className="py-5 text-center">
                     <p
@@ -159,7 +186,7 @@ const OfficeShiftList = () => {
                   </td>
                 </tr>
               ) : (
-                officeShifts?.map((shift, i) => (
+                filteredOfficeShifts?.map((shift, i) => (
                   <tr
                     key={shift.id}
                     className={`${

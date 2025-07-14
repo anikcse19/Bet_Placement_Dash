@@ -11,7 +11,8 @@ import toast from "react-hot-toast";
 const UsersAttendance = () => {
   const [usersAttendanceList, setUsersAttendanceList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+   const [filteredUsersAttendanceList, setFilteredUsersAttendanceList] =
+     useState([]);
   // const navigate = useNavigate();
 
   const { mode } = useStore();
@@ -31,6 +32,7 @@ const UsersAttendance = () => {
         .then((res) => {
           if (res?.data?.status) {
             setUsersAttendanceList(res?.data?.data);
+            setFilteredUsersAttendanceList(res?.data?.data);
           }
         });
     } catch (error) {
@@ -43,7 +45,15 @@ const UsersAttendance = () => {
   useEffect(() => {
     fetchUsersAttendance();
   }, []);
+   const handleSearch = (e) => {
+     const searchValue = e.target.value.toLowerCase();
 
+     const filteredOffices = usersAttendanceList.filter((office) =>
+       office?.name.toLowerCase().includes(searchValue)
+     );
+     setFilteredUsersAttendanceList(filteredOffices);
+     // setPageNo(1); // Reset to the first page on new search
+   };
   // console.log(usersList, "users");
 
   // const formateDate = (date) => {
@@ -84,6 +94,21 @@ const UsersAttendance = () => {
         >
           Users Attendance List
         </h1>
+        <div className="mt-5 flex items-center gap-x-2">
+          <p className={mode === "light" ? "text-black" : "text-white"}>
+            Search:
+          </p>
+          <div className="flex items-center gap-x-4">
+            <input
+              onChange={handleSearch}
+              type="text"
+              placeholder="Search Result"
+              className={`w-52 px-3 py-2 text-sm rounded-sm bg-transparent outline-none border-2 border-slate-600 focus:border-teal-500 ${
+                mode === "light" ? "text-black" : "text-white"
+              }`}
+            />
+          </div>
+        </div>
       </div>
       {/* search box */}
       {/* <div className="mt-5 flex items-center gap-x-2">
@@ -155,16 +180,16 @@ const UsersAttendance = () => {
                   </div>
                 </td>
               </tr>
-            ) : usersAttendanceList?.length <= 0 ? (
+            ) : filteredUsersAttendanceList?.length <= 0 ? (
               <tr className="text-center text-sm">
                 <td colSpan={7} align="center">
                   <p className="py-2 text-red-500">No data to show.</p>
                 </td>
               </tr>
             ) : (
-              usersAttendanceList &&
-              usersAttendanceList?.length > 0 &&
-              usersAttendanceList?.map((user, i) => (
+              filteredUsersAttendanceList &&
+              filteredUsersAttendanceList?.length > 0 &&
+              filteredUsersAttendanceList?.map((user, i) => (
                 <tr
                   key={user.id}
                   className={`${
